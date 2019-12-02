@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appointment Number"
+            android:textStyle="bold"
+            android:textSize="10dp"
+            android:layout_marginTop="90dp"
+            android:id="@+id/dialog_txt_appNo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Customer Name"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/dialog_txt_cusName"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mobile No"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/dialog_txt_mobileNo"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stylist"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="5dp"
+            android:id="@+id/dialog_txt_stylistName"
+            android:textAlignment="center"
+            android:background="#000000"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date Time"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="@android:color/white"
+            android:id="@+id/dialog_txt_dateTime"
+            android:textAlignment="center"
+            android:background="#000000"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@mipmap/ic_launcher_round"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dialog_img_cus"/>
+
+</RelativeLayout>

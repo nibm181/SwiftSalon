@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SalonEditActivity">
+
+    <ImageView
+        android:id="@+id/img_salon_edit"
+        android:layout_width="234dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/blue_btn_bg_color" />
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="465dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_salon_edit"
+        app:layout_constraintVertical_bias="0.714">
+
+        <EditText
+            android:id="@+id/txt_salon_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Salon Name"
+            android:maxLines="1"
+            android:maxLength="20"/>
+
+        <EditText
+            android:id="@+id/txt_add1_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Address Line 1"
+            android:maxLines="1"
+            android:maxLength="20"/>
+
+        <EditText
+            android:id="@+id/txt_add2_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Address Line 2"
+            android:maxLines="1"
+            android:maxLength="20"/>
+
+        <EditText
+            android:id="@+id/txt_city_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="City"
+            android:maxLines="1"
+            android:maxLength="20"/>
+
+        <EditText
+            android:id="@+id/txt_mobile_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Mobile Number"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:maxLength="10"/>
+
+        <Button
+            android:id="@+id/btn_save_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_green_dark"
+            android:text="Save"
+            android:layout_margin="15dp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"/>
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
