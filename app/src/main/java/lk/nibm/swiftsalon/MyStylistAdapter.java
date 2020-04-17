@@ -19,7 +19,7 @@ public class MyStylistAdapter extends ArrayAdapter<String>{
     private Activity context;
 
     public MyStylistAdapter(Activity context, String[] img, String[] name ) {
-        super(context, R.layout.appointment_list, name);
+        super(context, R.layout.stylist_list, name);
         this.context = context;
         this.img = img;
         this.name = name;

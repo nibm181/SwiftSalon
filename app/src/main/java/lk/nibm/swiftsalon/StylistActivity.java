@@ -37,6 +37,9 @@ public class StylistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stylist);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         session = new Session(getApplicationContext());
         salonNo = session.getsalonNo();
         listStylist = findViewById(R.id.list_stylist);
@@ -101,11 +104,9 @@ public class StylistActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                    MyStylistAdapter myStylistAdapter = new MyStylistAdapter(StylistActivity.this, img, name);
-                    listStylist.setAdapter(myStylistAdapter);
                 }
-
+                MyStylistAdapter myStylistAdapter = new MyStylistAdapter(StylistActivity.this, img, name);
+                listStylist.setAdapter(myStylistAdapter);
             }
         }, new Response.ErrorListener() {
             @Override

@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
 
                 alertDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.NORMAL_TYPE);
-                alertDialog.setTitle("Are you sure?");
+                alertDialog.setTitle("Are you sure you want to logout?");
                 alertDialog.setConfirmText("Confirm");
                 alertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
