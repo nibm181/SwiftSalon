@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.config.Session;
+import lk.nibm.swiftsalon.adapter.MyStylistAdapter;
 
 public class StylistActivity extends AppCompatActivity {
 

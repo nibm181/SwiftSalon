@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.modal;
 
 public class Appointment {
 

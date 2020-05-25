@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.config.Session;
 
 public class MainActivity extends AppCompatActivity {
 

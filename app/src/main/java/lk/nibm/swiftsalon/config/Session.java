@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;

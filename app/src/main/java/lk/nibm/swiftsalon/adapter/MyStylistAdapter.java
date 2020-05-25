@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+
+import lk.nibm.swiftsalon.R;
 
 public class MyStylistAdapter extends ArrayAdapter<String>{
 

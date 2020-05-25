@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -20,12 +20,14 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.modal.Appointment;
 
 public class MyAppointmentAdapter extends RecyclerView.Adapter<MyAppointmentAdapter.MyViewHolder> {
 
     Context context;
 
-    List<Appointment> appData;
+    public List<Appointment> appData;
     SweetAlertDialog pDialog;
     Dialog dialog;
 

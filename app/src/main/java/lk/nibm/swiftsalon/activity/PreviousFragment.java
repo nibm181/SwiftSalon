@@ -1,11 +1,10 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,6 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.config.Session;
+import lk.nibm.swiftsalon.adapter.MyAppointmentAdapter;
+import lk.nibm.swiftsalon.modal.Appointment;
 
 public class PreviousFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +23,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import lk.nibm.swiftsalon.adapter.MyAppointmentAdapter;
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.config.Session;
+import lk.nibm.swiftsalon.modal.Appointment;
 
 public class HomeFragment extends Fragment {
 

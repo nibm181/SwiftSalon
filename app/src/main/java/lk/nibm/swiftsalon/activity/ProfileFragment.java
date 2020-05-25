@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.config.Session;
 
 public class ProfileFragment extends Fragment {
 

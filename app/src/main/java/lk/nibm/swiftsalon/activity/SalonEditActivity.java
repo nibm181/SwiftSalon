@@ -1,4 +1,4 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.config.Session;
 
 public class SalonEditActivity extends AppCompatActivity {
 

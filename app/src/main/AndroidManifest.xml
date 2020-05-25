@@ -14,9 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".Just"></activity>
         <activity
-            android:name=".FirstActivity"
+            android:name=".activity.FirstActivity"
             android:theme="@style/MyNoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SalonEditActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".StylistAddActivity" />
-        <activity android:name=".StylistActivity" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.SalonEditActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.StylistAddActivity" />
+        <activity android:name=".activity.StylistActivity" android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>

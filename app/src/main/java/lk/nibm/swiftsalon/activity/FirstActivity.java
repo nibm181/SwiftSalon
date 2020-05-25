@@ -1,11 +1,13 @@
-package lk.nibm.swiftsalon;
+package lk.nibm.swiftsalon.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Window;
+
+import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.config.Session;
 
 public class FirstActivity extends AppCompatActivity {
 
