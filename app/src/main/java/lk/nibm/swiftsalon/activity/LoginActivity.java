@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,7 +26,8 @@ import lk.nibm.swiftsalon.config.Session;
 public class LoginActivity extends AppCompatActivity {
 
     EditText txtUname, txtPwd;
-    Button btnSign;
+    Button btnLogin;
+    TextView btnRegister;
     String salonNo;
     SweetAlertDialog pDialog;
     Session session;
@@ -33,12 +36,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         session = new Session(getApplicationContext());
         txtUname = findViewById(R.id.txt_uname);
         txtPwd = findViewById(R.id.txt_pwd);
-        btnSign = findViewById(R.id.btn_sign);
+        btnLogin = findViewById(R.id.btn_login);
+        btnRegister = findViewById(R.id.btn_register);
 
-        btnSign.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(txtUname.getText().toString().trim().isEmpty()) {
@@ -56,6 +61,15 @@ public class LoginActivity extends AppCompatActivity {
                     checkPwd();
 
                 }
+            }
+        });
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(mainIntent);
+                finish();
             }
         });
     }

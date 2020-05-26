@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.FirstActivity"
-    android:background="@android:color/black">
+    android:background="@color/dark">
 
     <TextView
         android:layout_width="match_parent"
