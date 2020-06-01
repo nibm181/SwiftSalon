@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:layout_margin="5dp"
+    android:id="@+id/appointment_list_id"
+    android:background="@drawable/list_shape">
+
+    <ImageView
+        android:id="@+id/list_img_stylist"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_margin="5dp"
+        />
+
+    <TextView
+        android:id="@+id/list_txt_stylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stylist Name"
+        android:textSize="17dp"
+        android:textColor="@android:color/black"
+        android:gravity="bottom"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        />
+
+</LinearLayout>

@@ -7,12 +7,14 @@
         android:title="Home"
         />
     <item
-        android:id="@+id/nav_promos"
+        android:id="@+id/nav_history"
         android:icon="@drawable/ic_playlist_add_check_black_24dp"
-        android:title="Previous"/>
+        android:title="History"
+        />
     <item
         android:id="@+id/nav_setting"
         android:icon="@drawable/ic_person_black_24dp"
-        android:title="Profile"/>
+        android:title="Profile"
+        />
 
 </menu>
