@@ -33,7 +33,7 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import lk.nibm.swiftsalon.R;
-import lk.nibm.swiftsalon.service.config.Session;
+import lk.nibm.swiftsalon.util.Session;
 
 public class StylistAddActivity extends AppCompatActivity {
 
@@ -43,7 +43,7 @@ public class StylistAddActivity extends AppCompatActivity {
     Button btnAdd;
     ImageButton btnImgAdd;
     ImageView imgPhoto;
-    String salonNo;
+    int salonId;
     SweetAlertDialog alertDialog, pDialog;
     Session session;
 
@@ -66,7 +66,7 @@ public class StylistAddActivity extends AppCompatActivity {
         btnImgAdd = findViewById(R.id.btn_img_add);
         imgPhoto = findViewById(R.id.img_stylist_add);
 
-        salonNo = session.getSalonNo();
+        salonId = session.getSalonId();
 
         rdoMale.setChecked(true);
 
@@ -155,7 +155,7 @@ public class StylistAddActivity extends AppCompatActivity {
                 map.put("name", txtName.getText().toString().trim());
                 map.put("age", txtAge.getText().toString().trim());
                 map.put("gender", selectedRdo.getText().toString().trim());
-                map.put("salonNo", salonNo);
+                map.put("salonNo", String.valueOf(salonId));
 
                 return map;
             }

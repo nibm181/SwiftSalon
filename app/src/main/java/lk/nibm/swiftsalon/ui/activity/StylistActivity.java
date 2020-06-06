@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import lk.nibm.swiftsalon.R;
-import lk.nibm.swiftsalon.service.config.Session;
+import lk.nibm.swiftsalon.util.Session;
 import lk.nibm.swiftsalon.ui.adapter.StylistAdapter;
 
 public class StylistActivity extends AppCompatActivity {
@@ -33,7 +33,7 @@ public class StylistActivity extends AppCompatActivity {
     String [] img, name, hsNo, gender, age;
     SweetAlertDialog pDialog;
     Session session;
-    String salonNo;
+    int salonId;
 
 
     @Override
@@ -44,7 +44,7 @@ public class StylistActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         session = new Session(getApplicationContext());
-        salonNo = session.getSalonNo();
+        salonId = session.getSalonId();
         listStylist = findViewById(R.id.list_stylist);
         btnAdd = findViewById(R.id.stylist_btn_add);
 
@@ -83,7 +83,7 @@ public class StylistActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        JsonArrayRequest req = new JsonArrayRequest("https://newswiftsalon.000webhostapp.com/hairStylist.php?salonNo="+salonNo, new Response.Listener<JSONArray>() {
+        JsonArrayRequest req = new JsonArrayRequest("https://newswiftsalon.000webhostapp.com/hairStylist.php?salonNo="+salonId, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 pDialog.dismiss();

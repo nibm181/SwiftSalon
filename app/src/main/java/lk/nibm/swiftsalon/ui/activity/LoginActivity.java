@@ -33,8 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import lk.nibm.swiftsalon.R;
-import lk.nibm.swiftsalon.common.CustomDialog;
-import lk.nibm.swiftsalon.service.config.Session;
+import lk.nibm.swiftsalon.util.CustomDialog;
+import lk.nibm.swiftsalon.util.Session;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     RelativeLayout btnLogin;
     TextView btnRegister, txtLogin;
     ProgressBar prgLogin;
-    String salonNo;
+    int salonId;
     CustomDialog dialog;
     Session session;
 
@@ -163,7 +163,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    salonNo = response.getString("salonNo");
+                    salonId = Integer.valueOf(response.getString("salonNo"));
+
                     if(response.getString("salonNo").matches("0")){
                         dialog.showAlert("Incorrect email or password.");
 
@@ -171,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                         prgLogin.setVisibility(View.GONE);
                     }
                     else {
-                        session.setSalonNo(salonNo);
+                        session.setSalonId(salonId);
                         session.setSignedIn(true);
 
                         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);

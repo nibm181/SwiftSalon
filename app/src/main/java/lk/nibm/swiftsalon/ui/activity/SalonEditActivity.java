@@ -30,14 +30,14 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import lk.nibm.swiftsalon.R;
-import lk.nibm.swiftsalon.service.config.Session;
+import lk.nibm.swiftsalon.util.Session;
 
 public class SalonEditActivity extends AppCompatActivity {
 
     EditText txtName, txtAddr1, txtAddr2, txtCity, txtMobile;
     ImageView imgPic;
     Button btnSave;
-    String salonNo;
+    int salonId;
     String imgUrl;
     SweetAlertDialog pDialog;
     Session session;
@@ -55,7 +55,7 @@ public class SalonEditActivity extends AppCompatActivity {
         imgPic = findViewById(R.id.img_salon_edit);
         btnSave = findViewById(R.id.btn_save_edit);
 
-        salonNo = session.getSalonNo();
+        salonId = session.getSalonId();
 
         getData();
 
@@ -87,7 +87,7 @@ public class SalonEditActivity extends AppCompatActivity {
     private void getData() {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        String url = "https://newswiftsalon.000webhostapp.com/Salon.php?single="+salonNo;
+        String url = "https://newswiftsalon.000webhostapp.com/Salon.php?single="+salonId;
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -149,7 +149,7 @@ public class SalonEditActivity extends AppCompatActivity {
                 map.put("addr2", txtAddr2.getText().toString().trim());
                 map.put("city", txtCity.getText().toString().trim());
                 map.put("mobileNo", txtMobile.getText().toString().trim());
-                map.put("salonNo", salonNo);
+                map.put("salonNo", String.valueOf(salonId));
                 return map;
             }
         };

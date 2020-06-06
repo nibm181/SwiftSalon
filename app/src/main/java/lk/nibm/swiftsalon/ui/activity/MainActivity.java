@@ -20,14 +20,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import lk.nibm.swiftsalon.R;
-import lk.nibm.swiftsalon.service.config.Session;
+import lk.nibm.swiftsalon.util.Session;
 import lk.nibm.swiftsalon.ui.fragment.HistoryFragment;
 import lk.nibm.swiftsalon.ui.fragment.HomeFragment;
-import lk.nibm.swiftsalon.ui.fragment.ProfileFragment;
+import lk.nibm.swiftsalon.ui.fragment.DashboardFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    String salonNo;
+    int salonId;
     public String url, txtSalon, txtImg;
     Session session;
 
@@ -35,12 +35,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         session = new Session(getApplication());
+        salonId = session.getSalonId();
+        getSalon();
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        salonNo=session.getSalonNo();
-        getSalon();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+
+        if(savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        }
     }
 
     @Override
@@ -63,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFrag = new HistoryFragment();
                             break;
                         case R.id.nav_setting:
-                            selectedFrag = new ProfileFragment();
+                            selectedFrag = new DashboardFragment();
                             break;
                     }
 
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     void getSalon() {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        url = "https://newswiftsalon.000webhostapp.com/salonInfo.php?no="+salonNo;
+        url = "https://newswiftsalon.000webhostapp.com/salonInfo.php?no="+salonId;
         StringRequest req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

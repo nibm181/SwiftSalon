@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/list_shape"
+    android:background="@drawable/list2_shape"
     android:padding="5dp"
     android:layout_margin="5dp"
     android:id="@+id/layout_app_list"
@@ -28,8 +28,8 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="FirstName (12345)"
-            android:textSize="16dp"
-            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textColor="@color/white"
             android:maxLines="1"
             android:ellipsize="end"/>
 
@@ -39,24 +39,44 @@
             android:layout_height="wrap_content"
             android:text="2020:12:12 11.30-24.40"
             android:alpha="0.5"
-            android:textSize="14dp"
-            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:textColor="@color/white"
             android:maxLines="1"/>
 
     </LinearLayout>
 
-    <Button
+    <RelativeLayout
         android:id="@+id/btn_accept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:layout_marginStart="200dp"
-        android:background="@drawable/button_shape"
-        android:backgroundTint="@color/grey"
-        android:text="Accept"
-        android:textAllCaps="false"
-        android:textColor="@color/dark"
-        android:textSize="17sp"
-        android:textStyle="bold" />
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/button2_shape"
+        >
+
+        <TextView
+            android:id="@+id/btn_accept_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Accept"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+
+        <ProgressBar
+            android:id="@+id/btn_accept_progress"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            style="?android:attr/progressBarStyleSmall"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/purple"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
 
 </LinearLayout>

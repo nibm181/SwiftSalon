@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     android:background="@drawable/list_shape"
     android:padding="6dp"
+    android:backgroundTint="@color/light_grey"
     android:layout_margin="5dp"
     >
 

@@ -1,13 +1,14 @@
 package lk.nibm.swiftsalon.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
 import lk.nibm.swiftsalon.R;
-import lk.nibm.swiftsalon.service.config.Session;
+import lk.nibm.swiftsalon.util.Session;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class FirstActivity extends AppCompatActivity {
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(session.getSalonNo().isEmpty())
+                if(session.getSalonId() == 0)
                 {
                     Intent stylistIntent = new Intent(FirstActivity.this, LoginActivity.class);
                     startActivity(stylistIntent);
