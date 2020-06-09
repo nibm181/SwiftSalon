@@ -1,6 +1,12 @@
 package lk.nibm.swiftsalon.request.response;
 
+import android.util.Log;
+
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.concurrent.TimeoutException;
+
 import retrofit2.Response;
 
 /**
@@ -8,9 +14,20 @@ import retrofit2.Response;
  * @param <T>
  */
 public class ApiResponse<T> {
+    private static final String TAG = "ApiResponse";
 
     public ApiResponse<T> create(Throwable error){
-        return new ApiErrorResponse<>(!error.getMessage().equals("") ? error.getMessage() : "Unknown error\nCheck network connection");
+        String message = "";
+        if(error instanceof SocketTimeoutException) {
+            message = "Time out. Check your connection and try again.";
+        }
+        else if(error instanceof UnknownHostException) {
+            message = "Oops! something went wrong.";
+        }
+        else {
+            Log.d(TAG, "create: " + error.getLocalizedMessage());
+        }
+        return new ApiErrorResponse<>(!message.equals("") ? message : "Check your connection and try again.");
     }
 
     public ApiResponse<T> create(Response<T> response){

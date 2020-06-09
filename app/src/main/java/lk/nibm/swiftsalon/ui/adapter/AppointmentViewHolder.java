@@ -1,10 +1,10 @@
 package lk.nibm.swiftsalon.ui.adapter;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +16,14 @@ import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Appointment;
 
 import static lk.nibm.swiftsalon.util.Constants.NEW_APPOINTMENT;
+import static lk.nibm.swiftsalon.util.Constants.NORMAL_APPOINTMENT;
 
 public class AppointmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private TextView appointmentData, dateTime;
-    private ImageView image;
+    private TextView txtAppointmentData, txtDateTime, txtStatus;
+    private ImageView imgCustomer;
     private RelativeLayout btnAccept;
+
     private OnAppointmentListener onAppointmentListener;
     private RequestManager requestManager;
     private String type;
@@ -33,9 +35,9 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder implements Vi
         this.requestManager = requestManager;
         this.type = type;
 
-        appointmentData = itemView.findViewById(R.id.txt_app_data);
-        dateTime = itemView.findViewById(R.id.txt_date_time);
-        image = itemView.findViewById(R.id.img_customer);
+        txtAppointmentData = itemView.findViewById(R.id.txt_app_data);
+        txtDateTime = itemView.findViewById(R.id.txt_date_time);
+        imgCustomer = itemView.findViewById(R.id.img_customer);
 
         itemView.setOnClickListener(this);
 
@@ -44,20 +46,34 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder implements Vi
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Clicked", Toast.LENGTH_SHORT).show();
+                    onAppointmentListener.onAppointmentAccept(getAdapterPosition());
                 }
             });
+        }
+
+        if(type.equals(NORMAL_APPOINTMENT)) {
+            txtStatus = itemView.findViewById(R.id.txt_status);
+            txtStatus.setVisibility(View.VISIBLE);
         }
     }
 
     public void onBind(Appointment appointment) {
-        appointmentData.setText(appointment.getCustomerFirstName());
-        dateTime.setText(appointment.getDate());
+
+        String appointmentData = appointment.getCustomerFirstName() + " (" + appointment.getId() + ")";
+        String dateTime = appointment.getDate() + " " + appointment.getTime();
+        String status = appointment.getStatus();
+
+        txtAppointmentData.setText(appointmentData);
+        txtDateTime.setText(dateTime);
+
+        if(type.equals(NORMAL_APPOINTMENT)) {
+            txtStatus.setText(status);
+        }
 
         requestManager
                 .load(appointment.getCustomerImage())
                 .apply(RequestOptions.circleCropTransform())
-                .into(image);
+                .into(imgCustomer);
     }
 
     @Override

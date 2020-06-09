@@ -2,6 +2,7 @@ package lk.nibm.swiftsalon.request;
 
 import java.util.concurrent.TimeUnit;
 
+import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.util.Constants;
 import lk.nibm.swiftsalon.util.LiveDataCallAdapterFactory;
 import okhttp3.OkHttpClient;
@@ -38,7 +39,13 @@ public class ServiceGenerator {
 
     private static AppointmentApi appointmentApi = retrofit.create(AppointmentApi.class);
 
+    private static SalonApi salonApi = retrofit.create(SalonApi.class);
+
     public static AppointmentApi getAppointmentApi() {
         return appointmentApi;
+    }
+
+    public static SalonApi getSalonApi() {
+        return salonApi;
     }
 }

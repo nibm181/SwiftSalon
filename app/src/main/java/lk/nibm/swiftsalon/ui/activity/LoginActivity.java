@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,19 +36,22 @@ import org.json.JSONObject;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.util.CustomDialog;
 import lk.nibm.swiftsalon.util.Session;
+import lk.nibm.swiftsalon.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText txtEmail, txtPwd;
-    RelativeLayout btnLogin;
-    TextView btnRegister, txtLogin;
-    ProgressBar prgLogin;
-    int salonId;
-    CustomDialog dialog;
-    Session session;
+    private EditText txtEmail, txtPwd;
+    private RelativeLayout btnLogin;
+    private TextView btnRegister, txtLogin;
+    private ProgressBar prgLogin;
+    private int salonId;
+    private CustomDialog dialog;
+    private Session session;
 
-    ConstraintLayout constraintLayout;
-    ConstraintSet currentConstraintSet;
+    private ConstraintLayout constraintLayout;
+    private ConstraintSet currentConstraintSet;
+
+    private LoginViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,8 @@ public class LoginActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.login_parent_layout);
         currentConstraintSet = new ConstraintSet();
         currentConstraintSet.clone(constraintLayout);
+
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         btnLogin.setEnabled(false);
 

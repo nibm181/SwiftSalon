@@ -1,16 +1,12 @@
 package lk.nibm.swiftsalon.viewmodel;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-
 import java.util.List;
-
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.repository.AppointmentRepository;
 import lk.nibm.swiftsalon.util.Resource;
@@ -18,8 +14,12 @@ import lk.nibm.swiftsalon.util.Resource;
 public class HomeViewModel extends AndroidViewModel {
 
     private AppointmentRepository repository;
+
     private MediatorLiveData<Resource<List<Appointment>>> newAppointments = new MediatorLiveData<>();
     private MediatorLiveData<Resource<List<Appointment>>> ongoingAppointments = new MediatorLiveData<>();
+
+    private MediatorLiveData<Integer> countNewAppointments = new MediatorLiveData<>();
+    private MediatorLiveData<Integer> countOngoingAppointments = new MediatorLiveData<>();
 
     private boolean isFetchingNew, isFetchingOngoing;
 
@@ -34,6 +34,14 @@ public class HomeViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<Appointment>>> getOngoingAppointments() {
         return ongoingAppointments;
+    }
+
+    public LiveData<Integer> getCountNewAppointments() {
+        return countNewAppointments;
+    }
+
+    public LiveData<Integer> getCountOngoingAppointments() {
+        return countOngoingAppointments;
     }
 
     public void newAppointmentApi() {
@@ -65,6 +73,10 @@ public class HomeViewModel extends AndroidViewModel {
                         isFetchingOngoing = false;
                         ongoingAppointments.removeSource(repositorySource);
                     }
+
+                    if(listResource.data != null) {
+                        countOngoingAppointments.setValue(listResource.data.size());
+                    }
                 }
                 else {
                     ongoingAppointments.removeSource(repositorySource);
@@ -83,6 +95,7 @@ public class HomeViewModel extends AndroidViewModel {
             public void onChanged(Resource<List<Appointment>> listResource) {
                 if(listResource != null) {
                     newAppointments.setValue(listResource);
+
                     if(listResource.status == Resource.Status.SUCCESS) {
                         isFetchingNew = false;
                     }
@@ -90,11 +103,19 @@ public class HomeViewModel extends AndroidViewModel {
                         isFetchingNew = false;
                         newAppointments.removeSource(repositorySource);
                     }
+
+                    if(listResource.data != null) {
+                        countNewAppointments.setValue(listResource.data.size());
+                    }
                 }
                 else {
                     newAppointments.removeSource(repositorySource);
                 }
             }
         });
+    }
+
+    public void acceptAppointment(Appointment appointment) {
+        repository.acceptAppointmentApi(appointment);
     }
 }

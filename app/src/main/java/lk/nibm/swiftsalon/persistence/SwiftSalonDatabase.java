@@ -5,10 +5,14 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import lk.nibm.swiftsalon.model.Appointment;
+import lk.nibm.swiftsalon.model.AppointmentDetail;
+import lk.nibm.swiftsalon.model.Salon;
 
-@Database(entities = {Appointment.class}, version = 1)
+@Database(entities = {Appointment.class, AppointmentDetail.class, Salon.class}, version = 3)
+@TypeConverters({Converter.class})
 public abstract class SwiftSalonDatabase extends RoomDatabase {
 
     public static final String DATABASE_NAME = "swiftsalon";
@@ -21,7 +25,9 @@ public abstract class SwiftSalonDatabase extends RoomDatabase {
                     context.getApplicationContext(),
                     SwiftSalonDatabase.class,
                     DATABASE_NAME
-            ).build();
+            )
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return instance;
     }

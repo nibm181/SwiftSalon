@@ -3,28 +3,73 @@ package lk.nibm.swiftsalon.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Time;
 
+@Entity(tableName = "tbl_salon")
 public class Salon implements Parcelable {
 
+    @PrimaryKey
+    @NonNull
+    @SerializedName("id")
     private int id;
+
+    @ColumnInfo(name = "email")
+    @SerializedName("email")
     private String email;
+
+    @ColumnInfo(name = "name")
+    @SerializedName("name")
     private String name;
+
+    @ColumnInfo(name = "type")
+    @SerializedName("type")
     private  String type;
+
+    @ColumnInfo(name = "mobile_no")
+    @SerializedName("mobile_no")
     private String mobileNo;
+
+    @ColumnInfo(name = "addr1")
+    @SerializedName("addr1")
     private String addr1;
+
+    @ColumnInfo(name = "addr2")
+    @SerializedName("addr2")
     private String addr2;
+
+    @ColumnInfo(name = "longitude")
+    @SerializedName("longitude")
     private Double longitude;
+
+    @ColumnInfo(name = "latitude")
+    @SerializedName("latitude")
     private Double latitude;
-    private Time open_time;
+
+    @ColumnInfo(name = "open_time")
+    @SerializedName("open_time")
+    private Time openTime;
+
+    @ColumnInfo(name = "close_time")
+    @SerializedName("close_time")
     private Time close_time;
+
+    @ColumnInfo(name = "image")
+    @SerializedName("image")
     private String image;
 
     public Salon() {
     }
 
-    public Salon(int id, String email, String name, String type, String mobileNo, String addr1, String addr2,
-                 Double longitude, Double latitude, Time open_time, Time close_time, String image) {
+    public Salon(int id, String email, String name, String type, String mobileNo, String addr1,
+                 String addr2, Double longitude, Double latitude, Time openTime, Time close_time, String image) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -34,43 +79,10 @@ public class Salon implements Parcelable {
         this.addr2 = addr2;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.open_time = open_time;
+        this.openTime = openTime;
         this.close_time = close_time;
         this.image = image;
     }
-
-    protected Salon(Parcel in) {
-        id = in.readInt();
-        email = in.readString();
-        name = in.readString();
-        type = in.readString();
-        mobileNo = in.readString();
-        addr1 = in.readString();
-        addr2 = in.readString();
-        if (in.readByte() == 0) {
-            longitude = null;
-        } else {
-            longitude = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            latitude = null;
-        } else {
-            latitude = in.readDouble();
-        }
-        image = in.readString();
-    }
-
-    public static final Creator<Salon> CREATOR = new Creator<Salon>() {
-        @Override
-        public Salon createFromParcel(Parcel in) {
-            return new Salon(in);
-        }
-
-        @Override
-        public Salon[] newArray(int size) {
-            return new Salon[size];
-        }
-    };
 
     public int getId() {
         return id;
@@ -144,12 +156,12 @@ public class Salon implements Parcelable {
         this.latitude = latitude;
     }
 
-    public Time getOpen_time() {
-        return open_time;
+    public Time getOpenTime() {
+        return openTime;
     }
 
-    public void setOpen_time(Time open_time) {
-        this.open_time = open_time;
+    public void setOpenTime(Time openTime) {
+        this.openTime = openTime;
     }
 
     public Time getClose_time() {
@@ -168,28 +180,25 @@ public class Salon implements Parcelable {
         this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return "Salon{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", mobileNo='" + mobileNo + '\'' +
-                ", addr1='" + addr1 + '\'' +
-                ", addr2='" + addr2 + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                ", open_time=" + open_time +
-                ", close_time=" + close_time +
-                ", image='" + image + '\'' +
-                '}';
-    }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
+    protected Salon(Parcel in) {
+        id = in.readInt();
+        email = in.readString();
+        name = in.readString();
+        type = in.readString();
+        mobileNo = in.readString();
+        addr1 = in.readString();
+        addr2 = in.readString();
+        if (in.readByte() == 0) {
+            longitude = null;
+        } else {
+            longitude = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            latitude = null;
+        } else {
+            latitude = in.readDouble();
+        }
+        image = in.readString();
     }
 
     @Override
@@ -215,4 +224,21 @@ public class Salon implements Parcelable {
         }
         dest.writeString(image);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Salon> CREATOR = new Creator<Salon>() {
+        @Override
+        public Salon createFromParcel(Parcel in) {
+            return new Salon(in);
+        }
+
+        @Override
+        public Salon[] newArray(int size) {
+            return new Salon[size];
+        }
+    };
 }

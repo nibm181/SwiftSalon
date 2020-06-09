@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="Home"
+        app:labelVisibilityMode="unlabeled"
         />
     <item
         android:id="@+id/nav_history"
         android:icon="@drawable/ic_playlist_add_check_black_24dp"
         android:title="History"
+        app:labelVisibilityMode="unlabeled"
         />
     <item
         android:id="@+id/nav_setting"
         android:icon="@drawable/ic_person_black_24dp"
         android:title="Profile"
+        app:labelVisibilityMode="unlabeled"
         />
 
 </menu>

@@ -7,6 +7,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 import java.util.List;
 import lk.nibm.swiftsalon.model.Appointment;
+import lk.nibm.swiftsalon.model.AppointmentDetail;
+import lk.nibm.swiftsalon.model.Salon;
 
 import static androidx.room.OnConflictStrategy.IGNORE;
 import static androidx.room.OnConflictStrategy.REPLACE;
@@ -14,6 +16,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface SwiftSalonDao {
 
+    // Appointment
     @Insert(onConflict = IGNORE)
     long[] insertAppointments(Appointment... appointments);
 
@@ -37,4 +40,18 @@ public interface SwiftSalonDao {
 
     @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId AND status = 'on schedule'")
     LiveData<List<Appointment>> getOngoingAppointments(int salonId);
+
+    // Appointment Detail
+    @Insert(onConflict = REPLACE)
+    void insertAppointmentDetails(AppointmentDetail... details);
+
+    @Query("SELECT * FROM tbl_appointment_detail WHERE appointment_id = :appointmentId")
+    LiveData<List<AppointmentDetail>> getAppointmentDetails(int appointmentId);
+
+    // Salon
+    @Insert(onConflict = REPLACE)
+    void insertSalon(Salon salon);
+
+    @Query("SELECT * FROM tbl_salon WHERE id = :id")
+    LiveData<Salon> getSalon(int id);
 }

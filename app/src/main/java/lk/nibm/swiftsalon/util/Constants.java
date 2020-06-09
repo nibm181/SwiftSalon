@@ -14,4 +14,5 @@ public class Constants {
     //for appointment viewHolders
     public static final String NORMAL_APPOINTMENT = "normal";
     public static final String NEW_APPOINTMENT = "new";
+    public static final String SCHEDULED_APPOINTMENT = "scheduled";
 }

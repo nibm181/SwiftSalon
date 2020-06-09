@@ -3,6 +3,11 @@ package lk.nibm.swiftsalon.ui.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,7 +24,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
 import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.service.SyncWorker;
 import lk.nibm.swiftsalon.util.Session;
 import lk.nibm.swiftsalon.ui.fragment.HistoryFragment;
 import lk.nibm.swiftsalon.ui.fragment.HomeFragment;
@@ -28,7 +36,6 @@ import lk.nibm.swiftsalon.ui.fragment.DashboardFragment;
 public class MainActivity extends AppCompatActivity {
 
     int salonId;
-    public String url, txtSalon, txtImg;
     Session session;
 
     @Override
@@ -38,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         session = new Session(getApplication());
         salonId = session.getSalonId();
-        getSalon();
+
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(SyncWorker.class, 2, TimeUnit.SECONDS)
+                .setConstraints(constraints).build();
+        WorkManager.getInstance(this).enqueue(request);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -48,11 +59,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        getSalon();
-    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -78,29 +84,4 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-    void getSalon() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        url = "https://newswiftsalon.000webhostapp.com/salonInfo.php?no="+salonId;
-        StringRequest req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject obj = new JSONObject(response);
-                    txtSalon = obj.getString("salonName");
-                    txtImg = obj.getString("image");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Connection error", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        requestQueue.add(req);
-    }
 }

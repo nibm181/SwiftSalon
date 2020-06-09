@@ -152,4 +152,8 @@ public class HistoryFragment extends Fragment implements OnAppointmentListener {
 
         startActivity(intent);
     }
+
+    @Override
+    public void onAppointmentAccept(int position) {
+    }
 }

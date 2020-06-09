@@ -1,10 +1,30 @@
 package lk.nibm.swiftsalon.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "tbl_appointment_detail")
 public class AppointmentDetail {
 
+    @PrimaryKey
+    @NonNull
+    @SerializedName("id")
     private int id;
+
+    @ColumnInfo(name = "appointment_id")
+    @SerializedName("appointment_id")
     private int appointmentId;
+
+    @ColumnInfo(name = "job_id")
+    @SerializedName("job_id")
     private int jobId;
+
+    @ColumnInfo(name = "price")
+    @SerializedName("price")
     private float price;
 
     public AppointmentDetail() {

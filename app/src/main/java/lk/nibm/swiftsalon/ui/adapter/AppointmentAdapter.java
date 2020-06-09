@@ -11,6 +11,7 @@ import com.bumptech.glide.RequestManager;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Appointment;
 
+import static lk.nibm.swiftsalon.util.Constants.NEW_APPOINTMENT;
 import static lk.nibm.swiftsalon.util.Constants.NORMAL_APPOINTMENT;
 
 public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.ViewHolder> {
@@ -42,11 +43,11 @@ public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.Vi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(type.equals(NORMAL_APPOINTMENT)) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_appointment, parent, false);
+        if(type.equals(NEW_APPOINTMENT)) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_new_appointment, parent, false);
         }
         else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_new_appointment, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_appointment, parent, false);
         }
         return new AppointmentViewHolder(view, onAppointmentListener, requestManager, type);
     }

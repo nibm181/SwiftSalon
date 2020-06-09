@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,14 +16,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
-
 import java.util.List;
-
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.ui.activity.AppointmentActivity;
@@ -35,21 +32,24 @@ import lk.nibm.swiftsalon.viewmodel.HomeViewModel;
 
 import static lk.nibm.swiftsalon.util.Constants.NEW_APPOINTMENT;
 import static lk.nibm.swiftsalon.util.Constants.NORMAL_APPOINTMENT;
+import static lk.nibm.swiftsalon.util.Constants.SCHEDULED_APPOINTMENT;
 
 public class HomeFragment extends Fragment implements OnAppointmentListener {
 
     private static final String TAG = "HomeFragment";
 
-    private List<Appointment> newAppointments, ongoingAppointments;
     private RecyclerView rvNewApp, rvOngoingApp;
     private TextView txtNewApp, txtOngoingApp, txtSalonName;
     private LinearLayout layoutNewApp, layoutOngoingApp;
+    private RelativeLayout layoutEmpty;
     private ShimmerFrameLayout shimmerNewApp, shimmerOngoingApp;
 
     private CustomDialog dialog;
     private AppointmentAdapter newAppointmentAdapter, ongoingAppointmentAdapter;
 
     private HomeViewModel viewModal;
+
+    private boolean isNew, isOn;
 
     @Nullable
     @Override
@@ -66,15 +66,22 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
         shimmerOngoingApp = view.findViewById(R.id.shimmer_ongoing_app);
         layoutNewApp = view.findViewById(R.id.layout_new_app);
         layoutOngoingApp = view.findViewById(R.id.layout_ongoing_app);
+        layoutEmpty = view.findViewById(R.id.layout_empty);
 
         dialog = new CustomDialog(getContext());
         viewModal = new ViewModelProvider(this).get(HomeViewModel.class);
 
         initRecyclerView();
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         subscribeObservers();
         newAppointmentApi();
         ongoingAppointmentApi();
-        return view;
     }
 
     private RequestManager initGlide() {
@@ -92,7 +99,7 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
         rvNewApp.setAdapter(newAppointmentAdapter);
 
         rvOngoingApp.setLayoutManager(new LinearLayoutManager(getContext()));
-        ongoingAppointmentAdapter = new AppointmentAdapter(this, initGlide(), NORMAL_APPOINTMENT);
+        ongoingAppointmentAdapter = new AppointmentAdapter(this, initGlide(), SCHEDULED_APPOINTMENT);
         rvOngoingApp.setAdapter(ongoingAppointmentAdapter);
     }
 
@@ -118,14 +125,41 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
         }
     }
 
+    private void emptyNewRecyclerView() {
+        layoutNewApp.setVisibility(View.GONE);
+    }
+
+    private void showRecyclerView(boolean newApp, boolean onApp) {
+        if(!newApp && !onApp) {
+            layoutEmpty.setVisibility(View.VISIBLE);
+            layoutNewApp.setVisibility(View.GONE);
+            layoutOngoingApp.setVisibility(View.GONE);
+        }
+        else if(!newApp) {
+            layoutEmpty.setVisibility(View.GONE);
+            layoutNewApp.setVisibility(View.GONE);
+            layoutOngoingApp.setVisibility(View.VISIBLE);
+        }
+        else if(!onApp) {
+            layoutEmpty.setVisibility(View.GONE);
+            layoutNewApp.setVisibility(View.VISIBLE);
+            layoutOngoingApp.setVisibility(View.GONE);
+        }
+        else {
+            layoutEmpty.setVisibility(View.GONE);
+            layoutNewApp.setVisibility(View.VISIBLE);
+            layoutOngoingApp.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void subscribeObservers() {
         viewModal.getNewAppointments().observe(getViewLifecycleOwner(), new Observer<Resource<List<Appointment>>>() {
             @Override
             public void onChanged(Resource<List<Appointment>> listResource) {
                 if(listResource != null) {
-                    Log.d(TAG, "onChanged: status: " + listResource.status);
+
                     if(listResource.data != null) {
-                        Log.d(TAG, "onChanged: data: " + listResource.data);
+
                         switch (listResource.status) {
 
                             case LOADING: {
@@ -135,7 +169,6 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
 
                             case ERROR: {
                                 showNewRecyclerView(true);
-                                Log.d(TAG, "onChanged: error: " + listResource.message);
                                 dialog.showToast(listResource.message);
                                 newAppointmentAdapter.submitList(listResource.data);
                                 break;
@@ -144,11 +177,8 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
                             case SUCCESS: {
                                 if(listResource.data.size() > 0) {
                                     showNewRecyclerView(true);
-                                    newAppointmentAdapter.submitList(listResource.data);
                                 }
-                                else {
-
-                                }
+                                newAppointmentAdapter.submitList(listResource.data);
                                 break;
                             }
                         }
@@ -161,9 +191,9 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
             @Override
             public void onChanged(Resource<List<Appointment>> listResource) {
                 if(listResource != null) {
-                    Log.d(TAG, "onChanged: status: " + listResource.status);
+
                     if(listResource.data != null) {
-                        Log.d(TAG, "onChanged: data: " + listResource.data);
+
                         switch (listResource.status) {
 
                             case LOADING: {
@@ -172,8 +202,7 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
                             }
 
                             case ERROR: {
-                                showOngoingRecyclerView(true);
-                                Log.d(TAG, "onChanged: error: " + listResource.message);
+                                showOngoingRecyclerView(true);;
                                 dialog.showToast(listResource.message);
                                 ongoingAppointmentAdapter.submitList(listResource.data);
                                 break;
@@ -194,6 +223,40 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
                 }
             }
         });
+
+        viewModal.getCountNewAppointments().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer count) {
+
+                if(count <= 0) {
+                    txtNewApp.setText("-");
+                    isNew = false;
+                }
+                else {
+                    txtNewApp.setText("" + count);
+                    isNew = true;
+                }
+
+                showRecyclerView(isNew, isOn);
+            }
+        });
+
+        viewModal.getCountOngoingAppointments().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer count) {
+
+                if(count <= 0) {
+                    txtOngoingApp.setText("-");
+                    isOn = false;
+                }
+                else {
+                    txtOngoingApp.setText("" + count);
+                    isOn = true;
+                }
+
+                showRecyclerView(isNew, isOn);
+            }
+        });
     }
 
     private void newAppointmentApi() {
@@ -211,9 +274,15 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
             intent.putExtra("appointment", newAppointmentAdapter.getSelectedAppointment(position));
             startActivity(intent);
         }
-        else if(type.equals(NORMAL_APPOINTMENT)) {
+        else if(type.equals(SCHEDULED_APPOINTMENT)) {
             intent.putExtra("appointment", ongoingAppointmentAdapter.getSelectedAppointment(position));
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onAppointmentAccept(int position) {
+        dialog.showToast("Clicked: " + newAppointmentAdapter.getSelectedAppointment(position).getCustomerFirstName());
+        viewModal.acceptAppointment(newAppointmentAdapter.getSelectedAppointment(position));
     }
 }

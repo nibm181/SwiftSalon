@@ -37,7 +37,7 @@ public class CustomDialog extends Dialog {
 
         Toast toast = new Toast(context);
         toast.setView(layout);
-        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setDuration(Toast.LENGTH_SHORT);
         toast.show();
     }
 }

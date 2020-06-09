@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
@@ -19,23 +20,25 @@ public class AppointmentActivity extends AppCompatActivity {
 
     private static final String TAG = "AppointmentActivity";
 
-    private TextView title, dateTime, status, customer;
+    private TextView txtTitle, txtDateTime, txtStatus, txtCustomer;
     private ImageView image;
     private RecyclerView recyclerViewJobs;
     private ImageButton back;
+    private LinearLayout layoutButtons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment);
 
-        title = findViewById(R.id.txt_title);
-        dateTime = findViewById(R.id.txt_date_time);
-        status = findViewById(R.id.txt_status);
-        customer = findViewById(R.id.txt_customer);
+        txtTitle = findViewById(R.id.txt_title);
+        txtDateTime = findViewById(R.id.txt_date_time);
+        txtStatus = findViewById(R.id.txt_status);
+        txtCustomer = findViewById(R.id.txt_customer);
         image = findViewById(R.id.img_customer);
         recyclerViewJobs = findViewById(R.id.rv_jobs);
         back = findViewById(R.id.btn_back);
+        layoutButtons = findViewById(R.id.layout_buttons);
 
         getIncomingIntent();
 
@@ -49,12 +52,19 @@ public class AppointmentActivity extends AppCompatActivity {
 
     private void getIncomingIntent() {
         if(getIntent().hasExtra("appointment")) {
+
             Appointment appointment = getIntent().getParcelableExtra("appointment");
+
+            String title = appointment.getCustomerFirstName() + " (" + appointment.getId() + ")";
+            String dateTime = appointment.getDate() + " " + appointment.getTime();
+            String status = appointment.getStatus();
+            String customer = appointment.getCustomerFirstName() + " " + appointment.getCustomerLastName();
+
             if(appointment != null) {
-                title.setText(appointment.getCustomerFirstName() + "(" + appointment.getId() + ")");
-                dateTime.setText(appointment.getDate());
-                status.setText(appointment.getStatus());
-                customer.setText(appointment.getCustomerFirstName());
+                txtTitle.setText(title);
+                txtDateTime.setText(dateTime);
+                txtStatus.setText(status);
+                txtCustomer.setText(customer);
             }
         }
     }
