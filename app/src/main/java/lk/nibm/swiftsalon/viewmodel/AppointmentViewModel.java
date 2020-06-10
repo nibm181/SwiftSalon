@@ -1,18 +1,14 @@
 package lk.nibm.swiftsalon.viewmodel;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
-
 import java.util.List;
-
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
-import lk.nibm.swiftsalon.persistence.SwiftSalonDao;
 import lk.nibm.swiftsalon.repository.AppointmentRepository;
 import lk.nibm.swiftsalon.util.Resource;
 

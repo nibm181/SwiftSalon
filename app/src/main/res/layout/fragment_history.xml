@@ -55,13 +55,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/shimmer_placeholder" />
-            <include layout="@layout/shimmer_placeholder" />
-            <include layout="@layout/shimmer_placeholder" />
-            <include layout="@layout/shimmer_placeholder" />
-            <include layout="@layout/shimmer_placeholder" />
-            <include layout="@layout/shimmer_placeholder" />
-            <include layout="@layout/shimmer_placeholder" />
+            <include layout="@layout/shimmer_appointment" />
+            <include layout="@layout/shimmer_appointment" />
+            <include layout="@layout/shimmer_appointment" />
+            <include layout="@layout/shimmer_appointment" />
+            <include layout="@layout/shimmer_appointment" />
+            <include layout="@layout/shimmer_appointment" />
+            <include layout="@layout/shimmer_appointment" />
 
         </LinearLayout>
 

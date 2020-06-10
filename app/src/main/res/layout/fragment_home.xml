@@ -8,9 +8,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="@drawable/home_titlebar"
         android:layout_marginBottom="2dp"
-        >
+        android:background="@drawable/home_titlebar">
 
         <TextView
             android:id="@+id/txt_salon_name"
@@ -136,11 +135,11 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <include layout="@layout/shimmer_placeholder" />
+                        <include layout="@layout/shimmer_appointment" />
 
-                        <include layout="@layout/shimmer_placeholder" />
+                        <include layout="@layout/shimmer_appointment" />
 
-                        <include layout="@layout/shimmer_placeholder" />
+                        <include layout="@layout/shimmer_appointment" />
 
                     </LinearLayout>
 
@@ -185,11 +184,11 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <include layout="@layout/shimmer_placeholder" />
+                        <include layout="@layout/shimmer_appointment" />
 
-                        <include layout="@layout/shimmer_placeholder" />
+                        <include layout="@layout/shimmer_appointment" />
 
-                        <include layout="@layout/shimmer_placeholder" />
+                        <include layout="@layout/shimmer_appointment" />
 
                     </LinearLayout>
 
