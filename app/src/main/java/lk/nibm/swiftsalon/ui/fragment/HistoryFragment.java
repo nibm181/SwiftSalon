@@ -30,6 +30,7 @@ import lk.nibm.swiftsalon.ui.adapter.AppointmentAdapter;
 import lk.nibm.swiftsalon.ui.adapter.OnAppointmentListener;
 import lk.nibm.swiftsalon.util.CustomDialog;
 import lk.nibm.swiftsalon.util.Resource;
+import lk.nibm.swiftsalon.util.VerticalSpacingItemDecorator;
 import lk.nibm.swiftsalon.viewmodel.HistoryViewModel;
 
 import static lk.nibm.swiftsalon.util.Constants.NORMAL_APPOINTMENT;
@@ -56,7 +57,7 @@ public class HistoryFragment extends Fragment implements OnAppointmentListener {
         shimmer = view.findViewById(R.id.layout_shimmer);
         layoutEmpty = view.findViewById(R.id.layout_empty);
 
-        dialog = new CustomDialog(getContext());
+        dialog = CustomDialog.getInstance(getContext());
         viewModal = new ViewModelProvider(this).get(HistoryViewModel.class);
 
         initRecyclerView();
@@ -140,9 +141,13 @@ public class HistoryFragment extends Fragment implements OnAppointmentListener {
     }
 
     private void initRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AppointmentAdapter(this, initGlide(), NORMAL_APPOINTMENT);
+        VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(20);
+
+        recyclerView.addItemDecoration(itemDecorator);
         recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
     }
 
     @Override

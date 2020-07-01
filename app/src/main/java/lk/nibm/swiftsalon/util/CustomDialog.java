@@ -12,10 +12,19 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import lk.nibm.swiftsalon.R;
 
 public class CustomDialog extends Dialog {
-    Context context;
-    SweetAlertDialog alert;
 
-    public CustomDialog(Context context) {
+    private Context context;
+    private SweetAlertDialog alert;
+    private static CustomDialog instance;
+
+    public static CustomDialog getInstance(Context context) {
+        if(instance == null) {
+            instance = new CustomDialog(context);
+        }
+        return instance;
+    }
+
+    private CustomDialog(Context context) {
         super(context);
         this.context = context;
     }

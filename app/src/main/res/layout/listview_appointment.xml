@@ -1,59 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_app_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@drawable/list_shape"
-    android:padding="5dp"
-    android:layout_margin="7dp"
-    android:id="@+id/layout_app_list"
-    >
-
-    <ImageView
-        android:id="@+id/img_customer"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:src="@mipmap/ic_launcher_round" />
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:elevation="6dp"
+    app:cardCornerRadius="15dp">
 
     <LinearLayout
+        android:background="@drawable/list_shape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="15dp">
+        android:orientation="horizontal"
+        android:padding="5dp"
+        >
 
-        <TextView
-            android:id="@+id/txt_app_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Customer Name"
-            android:textSize="16sp"
-            android:textColor="@color/white"/>
+        <ImageView
+            android:id="@+id/img_customer"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:src="@mipmap/ic_launcher_round" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="15dp">
 
             <TextView
-                android:id="@+id/txt_date_time"
+                android:id="@+id/txt_app_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date Time"
-                android:textSize="14sp"
-                android:textColor="@color/grey"/>
+                android:text="Customer Name"
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
 
-            <TextView
-                android:id="@+id/txt_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                android:layout_alignParentEnd="true"
-                android:textSize="14sp"
-                android:textColor="@color/grey"
-                android:visibility="gone"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/txt_date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date Time"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"/>
+
+                <TextView
+                    android:id="@+id/txt_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

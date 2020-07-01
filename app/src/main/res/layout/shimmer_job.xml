@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@color/light_grey"
+    android:layout_margin="5dp"
     android:padding="12dp">
 
     <TextView
@@ -23,6 +24,6 @@
         android:background="@drawable/input_shape"
         android:gravity="center_vertical"
         android:text="             "
-        android:textSize="17sp" />
+        android:textSize="14sp" />
 
 </RelativeLayout>

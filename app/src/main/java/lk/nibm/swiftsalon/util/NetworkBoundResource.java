@@ -1,6 +1,7 @@
 package lk.nibm.swiftsalon.util;
 
 import android.util.Log;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +17,7 @@ import lk.nibm.swiftsalon.request.response.ApiResponse;
 public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     private static final String TAG = "NetworkBoundResource";
-    private  AppExecutor appExecutor;
+    private AppExecutor appExecutor;
     private MediatorLiveData<Resource<CacheObject>> results = new MediatorLiveData<>();
 
     public NetworkBoundResource(AppExecutor appExecutor) {
@@ -37,11 +38,10 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
                 results.removeSource(dbSource);
 
-                if(shouldFetch(cacheObject)) {
+                if (shouldFetch(cacheObject)) {
                     //get data from network
                     fetchFromNetwork(dbSource);
-                }
-                else {
+                } else {
                     results.addSource(dbSource, new Observer<CacheObject>() {
                         @Override
                         public void onChanged(CacheObject cacheObject) {
@@ -59,6 +59,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
      * 3) stop observing the local db
      * 4) insert new data into local db
      * 5) begin observing local db again to see the refreshed data from network
+     *
      * @param dbSource
      */
     private void fetchFromNetwork(final LiveData<CacheObject> dbSource) {
@@ -87,7 +88,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                        3) ApiEmptyResponse
                  */
 
-                if(requestObjectApiResponse instanceof ApiResponse.ApiSuccessResponse) {
+                if (requestObjectApiResponse instanceof ApiResponse.ApiSuccessResponse) {
                     Log.d(TAG, "onChanged: ApiSuccessResponse");
 
                     appExecutor.diskIO().execute(new Runnable() {
@@ -110,8 +111,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                             });
                         }
                     });
-                }
-                else if(requestObjectApiResponse instanceof ApiResponse.ApiEmptyResponse) {
+                } else if (requestObjectApiResponse instanceof ApiResponse.ApiEmptyResponse) {
                     Log.d(TAG, "onChanged: ApiEmptyResponse");
 
                     appExecutor.mainThread().execute(new Runnable() {
@@ -125,14 +125,13 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                             });
                         }
                     });
-                }
-                else if(requestObjectApiResponse instanceof ApiResponse.ApiErrorResponse) {
+                } else if (requestObjectApiResponse instanceof ApiResponse.ApiErrorResponse) {
                     Log.d(TAG, "onChanged: ApiErrorResponse");
 
                     results.addSource(dbSource, new Observer<CacheObject>() {
                         @Override
                         public void onChanged(CacheObject cacheObject) {
-                            setValue(Resource.error( ((ApiResponse.ApiErrorResponse) requestObjectApiResponse).getErrorMessage(), cacheObject ));
+                            setValue(Resource.error(((ApiResponse.ApiErrorResponse) requestObjectApiResponse).getErrorMessage(), cacheObject));
                         }
                     });
                 }
@@ -145,7 +144,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     }
 
     private void setValue(Resource<CacheObject> newValue) {
-        if(results.getValue() != newValue) {
+        if (results.getValue() != newValue) {
             results.setValue(newValue);
         }
     }
@@ -160,16 +159,19 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     protected abstract boolean shouldFetch(@Nullable CacheObject data);
 
     // Called to get the cached data from the database.
-    @NonNull @MainThread
+    @NonNull
+    @MainThread
     protected abstract LiveData<CacheObject> loadFromDb();
 
     // Called to create the API call.
-    @NonNull @MainThread
+    @NonNull
+    @MainThread
     protected abstract LiveData<ApiResponse<RequestObject>> createCall();
 
     // Returns a LiveData object that represents the resource that's implemented
     // in the base class.
-    public final LiveData<Resource<CacheObject>> getAsLiveData(){
+    public final LiveData<Resource<CacheObject>> getAsLiveData() {
         return results;
-    };
+    }
+
 }

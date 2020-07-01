@@ -1,57 +1,80 @@
 package lk.nibm.swiftsalon.service;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.util.Log;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import lk.nibm.swiftsalon.R;
-import lk.nibm.swiftsalon.ui.activity.MainActivity;
+import java.io.IOException;
+import java.util.List;
+
+import lk.nibm.swiftsalon.model.Appointment;
+import lk.nibm.swiftsalon.persistence.SwiftSalonDao;
+import lk.nibm.swiftsalon.persistence.SwiftSalonDatabase;
+import lk.nibm.swiftsalon.request.ServiceGenerator;
+import lk.nibm.swiftsalon.request.response.GenericResponse;
+import lk.nibm.swiftsalon.util.Session;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class SyncWorker extends Worker {
 
     private static final String TAG = "SyncWorker";
-    Context context;
+    private SwiftSalonDao swiftSalonDao;
+    private Session session;
+    private int salonId;
 
     public SyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        this.context = context;
+        swiftSalonDao = SwiftSalonDatabase.getInstance(context).getDao();
+
+        session = new Session(context);
+        salonId = session.getSalonId();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public Result doWork() {
-        syncAppointments();
-        Log.d(TAG, "doWork: running.");
-        return Result.success();
+        return syncAppointments();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void syncAppointments() {
+    private Result syncAppointments() {
 
-        String channelId = "my_channel_1";
+        try {
+            Call<GenericResponse<List<Appointment>>> call = ServiceGenerator.getAppointmentApi().getWorkerNewAppointments(salonId);
+            Response<GenericResponse<List<Appointment>>> response = call.execute();
 
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(channelId, "my_channel", NotificationManager.IMPORTANCE_HIGH);
-        channel.enableLights(true);
-        manager.createNotificationChannel(channel);
+            if (response.isSuccessful()) {
+                if (response.body().getStatus() == 1) {
 
-        Notification.Builder notification = new Notification.Builder(context, channelId)
-                .setContentTitle("Test Notification")
-                .setContentText("Hello there, this is a test notification for yourself.")
-                .setSmallIcon(R.drawable.ic_launcher_circular);
+                    if (response.body().getContent() != null) {
 
-        manager.notify(0, notification.build());
+                        Appointment[] appointments = new Appointment[response.body().getContent().size()];
+
+                        int index = 0;
+                        for (long rowId : swiftSalonDao.insertAppointments((Appointment[]) (response.body().getContent().toArray(appointments)))) {
+
+                            if (rowId == -1) {
+                                swiftSalonDao.updateAppointmentStatus(
+                                        appointments[index].getId(),
+                                        appointments[index].getStatus(),
+                                        appointments[index].getModifiedOn());
+                            }
+                            index++;
+                        }
+
+                        return Result.success();
+                    }
+
+                }
+            }
+            return Result.failure();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.retry();
+        }
     }
 
 }

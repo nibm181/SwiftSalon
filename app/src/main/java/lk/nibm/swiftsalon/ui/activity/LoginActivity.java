@@ -4,47 +4,41 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import lk.nibm.swiftsalon.R;
+import lk.nibm.swiftsalon.model.Salon;
+import lk.nibm.swiftsalon.request.response.GenericResponse;
 import lk.nibm.swiftsalon.util.CustomDialog;
+import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.util.Session;
 import lk.nibm.swiftsalon.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
+
     private EditText txtEmail, txtPwd;
     private RelativeLayout btnLogin;
     private TextView btnRegister, txtLogin;
     private ProgressBar prgLogin;
-    private int salonId;
     private CustomDialog dialog;
     private Session session;
 
@@ -70,7 +64,9 @@ public class LoginActivity extends AppCompatActivity {
         currentConstraintSet = new ConstraintSet();
         currentConstraintSet.clone(constraintLayout);
 
+        dialog = CustomDialog.getInstance(LoginActivity.this);
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        subscribeObserver();
 
         btnLogin.setEnabled(false);
 
@@ -113,13 +109,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                txtLogin.setVisibility(View.GONE);
-                prgLogin.setVisibility(View.VISIBLE);
-
-                isLogin();
+                loginApi();
             }
         });
 
@@ -159,58 +151,88 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void isLogin() {
-
-        dialog = new CustomDialog(LoginActivity.this);
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = "https://newswiftsalon.000webhostapp.com/signInSalon.php?userName="+txtEmail.getText().toString()+"&pwd="+txtPwd.getText().toString();
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void subscribeObserver() {
+        viewModel.getSalon().observe(this, new Observer<Resource<GenericResponse<Salon>>>() {
             @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    salonId = Integer.valueOf(response.getString("salonNo"));
+            public void onChanged(Resource<GenericResponse<Salon>> resource) {
+                Log.d(TAG, "onChanged: resource: " + resource.status);
+                switch (resource.status) {
 
-                    if(response.getString("salonNo").matches("0")){
-                        dialog.showAlert("Incorrect email or password.");
+                    case LOADING: {
+                        Log.d(TAG, "onChanged: LOADING");
 
-                        txtLogin.setVisibility(View.VISIBLE);
-                        prgLogin.setVisibility(View.GONE);
-                    }
-                    else {
-                        session.setSalonId(salonId);
-                        session.setSignedIn(true);
-
-                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(mainIntent);
-                        finish();
+                        showProgressBar(true);
+                        break;
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    case ERROR: {
+                        Log.d(TAG, "onChanged: ERROR");
+                        Log.d(TAG, "onChanged: ERROR MSG: " + resource.message);
+
+                        showProgressBar(false);
+
+                        if(resource.data != null) {
+                            dialog.showAlert(resource.data.getMessage());
+                        }
+                        else {
+                            dialog.showToast("Oops! Something went wrong. Try again later.");
+                        }
+                        break;
+                    }
+
+                    case SUCCESS: {
+                        Log.d(TAG, "onChanged: SUCCESS");
+
+                        if(resource.data.getStatus() == 1) {
+
+                            if(resource.data.getContent() != null) {
+                                session.setSalonId(resource.data.getContent().getId());
+                                session.setSignedIn(true);
+
+                                Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(mainIntent);
+                                finish();
+                            }
+                            else {
+                                showProgressBar(false);
+                                dialog.showAlert("Oops! Something went wrong. Please try again.");
+                            }
+
+                        }
+                        else {
+                            dialog.showAlert("Incorrect email or password.");
+                        }
+                        break;
+                    }
+
                 }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dialog.showAlert("Oops! We are unable to connect you with us.");
-
-                txtLogin.setVisibility(View.VISIBLE);
-                prgLogin.setVisibility(View.GONE);
             }
         });
+    }
 
+    private void loginApi() {
         if(isOnline()) {
-            requestQueue.add(req);
+            String email = txtEmail.getText().toString().trim();
+            String password = txtPwd.getText().toString();
+            viewModel.loginApi(email, password);
         }
         else {
+            showProgressBar(false);
             dialog.showToast("Check your connection and try again.");
+        }
 
+    }
+
+    private void showProgressBar(boolean show) {
+        if(show) {
+            txtLogin.setVisibility(View.GONE);
+            prgLogin.setVisibility(View.VISIBLE);
+        }
+        else {
             txtLogin.setVisibility(View.VISIBLE);
             prgLogin.setVisibility(View.GONE);
         }
-
     }
 
     public boolean isOnline() {

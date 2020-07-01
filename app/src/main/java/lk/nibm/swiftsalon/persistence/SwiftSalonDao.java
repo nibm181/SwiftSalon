@@ -8,6 +8,7 @@ import androidx.room.Update;
 import java.util.List;
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
+import lk.nibm.swiftsalon.model.Job;
 import lk.nibm.swiftsalon.model.Salon;
 
 import static androidx.room.OnConflictStrategy.IGNORE;
@@ -54,4 +55,23 @@ public interface SwiftSalonDao {
 
     @Query("SELECT * FROM tbl_salon WHERE id = :id")
     LiveData<Salon> getSalon(int id);
+
+    @Query("SELECT * FROM tbl_salon WHERE id = :id")
+    Salon getRawSalon(int id);
+
+    // Job
+    @Insert(onConflict = IGNORE)
+    long[] insertJobs(Job... jobs);
+
+    @Insert(onConflict = REPLACE)
+    void insertJob(Job job);
+
+    @Query("SELECT * FROM tbl_job WHERE salon_id = :salonId")
+    LiveData<List<Job>> getJobs(int salonId);
+
+    @Query("SELECT * FROM tbl_job WHERE id = :id")
+    LiveData<Job> getJob(int id);
+
+    @Query("UPDATE tbl_job SET name = :name, duration = :duration, price = :price WHERE id = :id")
+    void updateJob(int id, String name, int duration, float price);
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/light_grey"
+    tools:targetApi="LOLLIPOP">
+
+    <item android:gravity="center">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" /> <!-- background color -->
+        </shape>
+    </item>
+
+
+</ripple>

@@ -80,28 +80,46 @@
             android:layout_height="2sp"
             android:background="@color/light_grey"/>
 
+        <TextView
+            android:id="@+id/txt_stylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_face_light"
+            android:textSize="17sp"
+            android:textColor="@color/dark"
+            android:layout_marginTop="3sp"
+            android:layout_marginBottom="3sp"
+            android:layout_marginStart="32dp"
+            />
+
+        <View
+            android:layout_margin="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:background="@color/light_grey"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="5sp">
 
-        <ImageView
-            android:id="@+id/img_customer"
-            android:layout_marginStart="5dp"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_below="@+id/app_titlebar"/>
+            <ImageView
+                android:id="@+id/img_customer"
+                android:layout_marginStart="5dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/app_titlebar"/>
 
-        <TextView
-            android:id="@+id/txt_customer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:text=""
-            android:textColor="@color/dark"
-            android:textSize="17sp" />
+            <TextView
+                android:id="@+id/txt_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:text=""
+                android:textColor="@color/dark"
+                android:textSize="17sp" />
 
         </LinearLayout>
 
@@ -110,6 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="2sp"
             android:background="@color/light_grey"/>
+
 
     </LinearLayout>
 
@@ -154,7 +173,7 @@
         android:layout_marginTop="4dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_jobs"
+            android:id="@+id/rv_appointment_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"/>
@@ -162,6 +181,7 @@
     </ScrollView>
 
     <LinearLayout
+        android:animateLayoutChanges="true"
         android:id="@+id/layout_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -169,30 +189,68 @@
         android:orientation="horizontal"
         android:visibility="gone">
 
-        <Button
+        <RelativeLayout
+            android:clickable="true"
             android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_weight="1"
             android:background="@color/dark"
-            android:layout_weight="1"
-            android:text="Cancel"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            android:textColor="@color/grey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            >
+            <TextView
+                android:id="@+id/btn_cancel_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"
+                android:layout_centerInParent="true"/>
 
-        <Button
+            <ProgressBar
+                android:id="@+id/btn_cancel_progress"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                style="?android:attr/progressBarStyleSmall"
+                android:indeterminate="true"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="@color/purple"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:clickable="true"
             android:id="@+id/btn_accept"
-            android:background="@color/dark_purple"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
             android:layout_weight="1"
-            android:text="Accept"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:background="@color/dark_purple"
+            >
+            <TextView
+                android:id="@+id/btn_accept_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accept"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                />
+
+            <ProgressBar
+                android:id="@+id/btn_accept_progress"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                style="?android:attr/progressBarStyleSmall"
+                android:indeterminate="true"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="@color/purple"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
 
     </LinearLayout>
 

@@ -1,8 +1,6 @@
 package lk.nibm.swiftsalon.request;
 
 import java.util.concurrent.TimeUnit;
-
-import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.util.Constants;
 import lk.nibm.swiftsalon.util.LiveDataCallAdapterFactory;
 import okhttp3.OkHttpClient;

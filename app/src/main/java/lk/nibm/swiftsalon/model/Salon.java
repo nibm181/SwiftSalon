@@ -55,11 +55,11 @@ public class Salon implements Parcelable {
 
     @ColumnInfo(name = "open_time")
     @SerializedName("open_time")
-    private Time openTime;
+    private String openTime;
 
     @ColumnInfo(name = "close_time")
     @SerializedName("close_time")
-    private Time close_time;
+    private String closeTime;
 
     @ColumnInfo(name = "image")
     @SerializedName("image")
@@ -69,7 +69,7 @@ public class Salon implements Parcelable {
     }
 
     public Salon(int id, String email, String name, String type, String mobileNo, String addr1,
-                 String addr2, Double longitude, Double latitude, Time openTime, Time close_time, String image) {
+                 String addr2, Double longitude, Double latitude, String openTime, String closeTime, String image) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -80,9 +80,44 @@ public class Salon implements Parcelable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.openTime = openTime;
-        this.close_time = close_time;
+        this.closeTime = closeTime;
         this.image = image;
     }
+
+    protected Salon(Parcel in) {
+        id = in.readInt();
+        email = in.readString();
+        name = in.readString();
+        type = in.readString();
+        mobileNo = in.readString();
+        addr1 = in.readString();
+        addr2 = in.readString();
+        if (in.readByte() == 0) {
+            longitude = null;
+        } else {
+            longitude = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            latitude = null;
+        } else {
+            latitude = in.readDouble();
+        }
+        openTime = in.readString();
+        closeTime = in.readString();
+        image = in.readString();
+    }
+
+    public static final Creator<Salon> CREATOR = new Creator<Salon>() {
+        @Override
+        public Salon createFromParcel(Parcel in) {
+            return new Salon(in);
+        }
+
+        @Override
+        public Salon[] newArray(int size) {
+            return new Salon[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -156,20 +191,20 @@ public class Salon implements Parcelable {
         this.latitude = latitude;
     }
 
-    public Time getOpenTime() {
+    public String getOpenTime() {
         return openTime;
     }
 
-    public void setOpenTime(Time openTime) {
+    public void setOpenTime(String openTime) {
         this.openTime = openTime;
     }
 
-    public Time getClose_time() {
-        return close_time;
+    public String getCloseTime() {
+        return closeTime;
     }
 
-    public void setClose_time(Time close_time) {
-        this.close_time = close_time;
+    public void setCloseTime(String closeTime) {
+        this.closeTime = closeTime;
     }
 
     public String getImage() {
@@ -180,25 +215,9 @@ public class Salon implements Parcelable {
         this.image = image;
     }
 
-    protected Salon(Parcel in) {
-        id = in.readInt();
-        email = in.readString();
-        name = in.readString();
-        type = in.readString();
-        mobileNo = in.readString();
-        addr1 = in.readString();
-        addr2 = in.readString();
-        if (in.readByte() == 0) {
-            longitude = null;
-        } else {
-            longitude = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            latitude = null;
-        } else {
-            latitude = in.readDouble();
-        }
-        image = in.readString();
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -222,23 +241,26 @@ public class Salon implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeDouble(latitude);
         }
+        dest.writeString(openTime);
+        dest.writeString(closeTime);
         dest.writeString(image);
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return "Salon{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
+                ", addr1='" + addr1 + '\'' +
+                ", addr2='" + addr2 + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", openTime='" + openTime + '\'' +
+                ", closeTime='" + closeTime + '\'' +
+                ", image='" + image + '\'' +
+                '}';
     }
-
-    public static final Creator<Salon> CREATOR = new Creator<Salon>() {
-        @Override
-        public Salon createFromParcel(Parcel in) {
-            return new Salon(in);
-        }
-
-        @Override
-        public Salon[] newArray(int size) {
-            return new Salon[size];
-        }
-    };
 }

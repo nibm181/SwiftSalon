@@ -3,15 +3,12 @@
     <color name="colorPrimary">#1C1F30</color>
     <color name="colorPrimaryDark">#1F1C1F</color>
     <color name="colorAccent">#1F1C1F</color>
-    <color name="black_overlay">#66000000</color>
 
     <color name="white">#FFFFFF</color>
     <color name="dark">#1C1F30</color>
-    <color name="light_purple">#BFA0CD</color>
     <color name="purple">#A615E4</color>
     <color name="dark_purple">#5B1A82</color>
     <color name="light_grey">#EDEDED</color>
     <color name="grey">#AFAFAF</color>
-    <color name="dark_grey">#757575</color>
     <color name="disable">#3C415A</color>
 </resources>

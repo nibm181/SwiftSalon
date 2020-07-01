@@ -1,12 +1,9 @@
 package lk.nibm.swiftsalon.request.response;
 
 import android.util.Log;
-
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeoutException;
-
 import retrofit2.Response;
 
 /**
@@ -35,15 +32,8 @@ public class ApiResponse<T> {
         if(response.isSuccessful()){
             T body = response.body();
 
-            if(body instanceof GenericListResponse) {
-                if(!CheckToken.isTokenValid((GenericListResponse) body)) {
-                    String errorMsg = "Token expired.";
-                    return new ApiErrorResponse<>(errorMsg);
-                }
-            }
-
-            if(body instanceof GenericObjectResponse) {
-                if(!CheckToken.isTokenValid((GenericObjectResponse) body)) {
+            if(body instanceof GenericResponse) {
+                if(!CheckToken.isTokenValid((GenericResponse) body)) {
                     String errorMsg = "Token expired.";
                     return new ApiErrorResponse<>(errorMsg);
                 }

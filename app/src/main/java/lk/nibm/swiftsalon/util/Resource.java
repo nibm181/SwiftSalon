@@ -32,5 +32,5 @@ public class Resource<T> {
         return new Resource<>(Status.LOADING, data, null);
     }
 
-    public enum Status { SUCCESS, ERROR, LOADING}
+    public enum Status {SUCCESS, ERROR, LOADING}
 }

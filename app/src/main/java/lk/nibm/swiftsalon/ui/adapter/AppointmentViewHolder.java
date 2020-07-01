@@ -1,6 +1,5 @@
 package lk.nibm.swiftsalon.ui.adapter;
 
-import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -41,7 +40,7 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder implements Vi
 
         itemView.setOnClickListener(this);
 
-        if(type.equals(NEW_APPOINTMENT)) {
+        if (type.equals(NEW_APPOINTMENT)) {
             btnAccept = itemView.findViewById(R.id.btn_accept);
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -51,7 +50,7 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder implements Vi
             });
         }
 
-        if(type.equals(NORMAL_APPOINTMENT)) {
+        if (type.equals(NORMAL_APPOINTMENT)) {
             txtStatus = itemView.findViewById(R.id.txt_status);
             txtStatus.setVisibility(View.VISIBLE);
         }
@@ -66,7 +65,7 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder implements Vi
         txtAppointmentData.setText(appointmentData);
         txtDateTime.setText(dateTime);
 
-        if(type.equals(NORMAL_APPOINTMENT)) {
+        if (type.equals(NORMAL_APPOINTMENT)) {
             txtStatus.setText(status);
         }
 

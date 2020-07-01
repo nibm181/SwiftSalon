@@ -23,6 +23,10 @@ public class AppointmentDetail {
     @SerializedName("job_id")
     private int jobId;
 
+    @ColumnInfo(name = "job_name")
+    @SerializedName("job_name")
+    private String jobName;
+
     @ColumnInfo(name = "price")
     @SerializedName("price")
     private float price;
@@ -30,10 +34,11 @@ public class AppointmentDetail {
     public AppointmentDetail() {
     }
 
-    public AppointmentDetail(int id, int appointmentId, int jobId, float price) {
+    public AppointmentDetail(int id, int appointmentId, int jobId, String jobName, float price) {
         this.id = id;
         this.appointmentId = appointmentId;
         this.jobId = jobId;
+        this.jobName = jobName;
         this.price = price;
     }
 
@@ -61,6 +66,14 @@ public class AppointmentDetail {
         this.jobId = jobId;
     }
 
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
     public float getPrice() {
         return price;
     }
@@ -75,6 +88,7 @@ public class AppointmentDetail {
                 "id=" + id +
                 ", appointmentId=" + appointmentId +
                 ", jobId=" + jobId +
+                ", jobName='" + jobName + '\'' +
                 ", price=" + price +
                 '}';
     }

@@ -6,33 +6,53 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
+
+import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.repository.SalonRepository;
+import lk.nibm.swiftsalon.request.response.GenericResponse;
+import lk.nibm.swiftsalon.util.Resource;
 
 public class LoginViewModel extends AndroidViewModel {
 
     private SalonRepository repository;
-    private MediatorLiveData<Boolean> isLoggedIn = new MediatorLiveData<>();
+    private MediatorLiveData<Resource<GenericResponse<Salon>>> salon = new MediatorLiveData<>();
+
+    private boolean isFetching;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
         repository = SalonRepository.getInstance(application);
     }
 
-    public LiveData<Boolean> isLoggedIn(String email, String password) {
-        final LiveData<Boolean> repositorySource = repository.loginApi(email, password);
+    public LiveData<Resource<GenericResponse<Salon>>> getSalon() {
+        return salon;
+    }
 
-        isLoggedIn.addSource(repositorySource, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean != null) {
-                    isLoggedIn.setValue(aBoolean);
+    public void loginApi(String email, String password) {
+        if(!isFetching) {
+            executeLogin(email, password);
+        }
+    }
+
+    private void executeLogin(String email, String password) {
+        isFetching = true;
+
+        final LiveData<Resource<GenericResponse<Salon>>> repositorySource = repository.getLoginApi(email, password);
+
+        salon.addSource(repositorySource, resource -> {
+            if(resource != null) {
+                salon.setValue(resource);
+                if(resource.status == Resource.Status.SUCCESS ) {
+                    isFetching = false;
                 }
-                else {
-                    isLoggedIn.setValue(false);
+                else if(resource.status == Resource.Status.ERROR){
+                    isFetching = false;
+                    salon.removeSource(repositorySource);
                 }
             }
+            else {
+                salon.removeSource(repositorySource);
+            }
         });
-
-        return isLoggedIn;
     }
 }

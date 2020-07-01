@@ -1,6 +1,8 @@
 package lk.nibm.swiftsalon.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -8,15 +10,22 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 import java.util.List;
 import lk.nibm.swiftsalon.model.Appointment;
+import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.repository.AppointmentRepository;
+import lk.nibm.swiftsalon.repository.SalonRepository;
 import lk.nibm.swiftsalon.util.Resource;
+import lk.nibm.swiftsalon.util.Session;
 
 public class HomeViewModel extends AndroidViewModel {
 
-    private AppointmentRepository repository;
+    private static final String TAG = "HomeViewModel";
+    private AppointmentRepository appointmentRepository;
+    private SalonRepository salonRepository;
+    private Session session;
 
     private MediatorLiveData<Resource<List<Appointment>>> newAppointments = new MediatorLiveData<>();
     private MediatorLiveData<Resource<List<Appointment>>> ongoingAppointments = new MediatorLiveData<>();
+    private MediatorLiveData<Resource<Salon>> salon = new MediatorLiveData<>();
 
     private MediatorLiveData<Integer> countNewAppointments = new MediatorLiveData<>();
     private MediatorLiveData<Integer> countOngoingAppointments = new MediatorLiveData<>();
@@ -25,7 +34,9 @@ public class HomeViewModel extends AndroidViewModel {
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
-        repository = AppointmentRepository.getInstance(application);
+        session = new Session(application);
+        appointmentRepository = AppointmentRepository.getInstance(application);
+        salonRepository = SalonRepository.getInstance(application);
     }
 
     public LiveData<Resource<List<Appointment>>> getNewAppointments() {
@@ -44,6 +55,10 @@ public class HomeViewModel extends AndroidViewModel {
         return countOngoingAppointments;
     }
 
+    public LiveData<Resource<Salon>> getSalon() {
+        return salon;
+    }
+
     public void newAppointmentApi() {
         if(!isFetchingNew) {
             executeFetchNewAppointments();
@@ -59,7 +74,7 @@ public class HomeViewModel extends AndroidViewModel {
     private void executeFetchOngoingAppointments() {
         isFetchingOngoing = true;
 
-        final LiveData<Resource<List<Appointment>>> repositorySource = repository.getOngoingAppointmentApi();
+        final LiveData<Resource<List<Appointment>>> repositorySource = appointmentRepository.getOngoingAppointmentApi();
 
         ongoingAppointments.addSource(repositorySource, new Observer<Resource<List<Appointment>>>() {
             @Override
@@ -88,7 +103,7 @@ public class HomeViewModel extends AndroidViewModel {
     private void executeFetchNewAppointments() {
         isFetchingNew = true;
 
-        final LiveData<Resource<List<Appointment>>> repositorySource = repository.getNewAppointmentApi();
+        final LiveData<Resource<List<Appointment>>> repositorySource = appointmentRepository.getNewAppointmentApi();
 
         newAppointments.addSource(repositorySource, new Observer<Resource<List<Appointment>>>() {
             @Override
@@ -115,7 +130,29 @@ public class HomeViewModel extends AndroidViewModel {
         });
     }
 
+    public void getSalonApi() {
+        final LiveData<Resource<Salon>> repositorySource = salonRepository.getSalonApi(session.getSalonId());
+
+        salon.addSource(repositorySource, new Observer<Resource<Salon>>() {
+            @Override
+            public void onChanged(Resource<Salon> salonResource) {
+                if(salonResource != null) {
+                    salon.setValue(salonResource);
+                    Log.d(TAG, "onChanged: resource: " + salonResource.message);
+
+                    if(salonResource.status == Resource.Status.ERROR) {
+                        salon.removeSource(repositorySource);
+                    }
+                }
+                else {
+                    salon.removeSource(repositorySource);
+                }
+            }
+        });
+
+    }
+
     public void acceptAppointment(Appointment appointment) {
-        repository.acceptAppointmentApi(appointment);
+        appointmentRepository.acceptAppointmentApi(appointment);
     }
 }

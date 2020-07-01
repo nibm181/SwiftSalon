@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "892345891132",
+    "firebase_url": "https://swift-salon.firebaseio.com",
+    "project_id": "swift-salon",
+    "storage_bucket": "swift-salon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892345891132:android:8153aa9c6acfdc41740639",
+        "android_client_info": {
+          "package_name": "lk.nibm.swiftsalon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892345891132-o2qkaq5651k82r3qpv2cg409ej6fbl0m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq-i8YsME5lEo5rR5V1uPaItzOnRyAmRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892345891132-o2qkaq5651k82r3qpv2cg409ej6fbl0m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

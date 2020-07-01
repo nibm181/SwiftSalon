@@ -23,7 +23,6 @@ public class HistoryViewModel extends AndroidViewModel {
         repository = AppointmentRepository.getInstance(application);
     }
 
-
     public LiveData<Resource<List<Appointment>>> getAppointments() {
         return appointments;
     }

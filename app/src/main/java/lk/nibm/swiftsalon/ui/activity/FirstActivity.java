@@ -24,7 +24,7 @@ public class FirstActivity extends AppCompatActivity {
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(session.getSalonId() == 0)
+                if(session.getSalonId() == 0 && !session.isSignedIn())
                 {
                     Intent stylistIntent = new Intent(FirstActivity.this, LoginActivity.class);
                     startActivity(stylistIntent);

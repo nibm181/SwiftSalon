@@ -3,16 +3,18 @@ package lk.nibm.swiftsalon.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.RequestManager;
+
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Appointment;
 
 import static lk.nibm.swiftsalon.util.Constants.NEW_APPOINTMENT;
-import static lk.nibm.swiftsalon.util.Constants.NORMAL_APPOINTMENT;
 
 public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.ViewHolder> {
 
@@ -34,6 +36,7 @@ public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.Vi
         public boolean areItemsTheSame(@NonNull Appointment oldItem, @NonNull Appointment newItem) {
             return oldItem.getId() == newItem.getId();
         }
+
         @Override
         public boolean areContentsTheSame(@NonNull Appointment oldItem, @NonNull Appointment newItem) {
             return oldItem.getStatus().equals(newItem.getStatus());
@@ -43,10 +46,9 @@ public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.Vi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(type.equals(NEW_APPOINTMENT)) {
+        if (type.equals(NEW_APPOINTMENT)) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_new_appointment, parent, false);
-        }
-        else {
+        } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_appointment, parent, false);
         }
         return new AppointmentViewHolder(view, onAppointmentListener, requestManager, type);
@@ -55,12 +57,12 @@ public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.Vi
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         appointment = getItem(position);
-        ((AppointmentViewHolder)holder).onBind(appointment);
+        ((AppointmentViewHolder) holder).onBind(appointment);
     }
 
     public Appointment getSelectedAppointment(int position) {
         appointment = getItem(position);
-        if(appointment != null) {
+        if (appointment != null) {
             return appointment;
         }
         return null;
