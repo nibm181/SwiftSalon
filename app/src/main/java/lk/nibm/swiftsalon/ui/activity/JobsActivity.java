@@ -6,10 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,14 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Job;
 import lk.nibm.swiftsalon.ui.adapter.JobAdapter;
 import lk.nibm.swiftsalon.ui.adapter.OnItemListener;
 import lk.nibm.swiftsalon.util.CustomDialog;
-import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.util.VerticalSpacingItemDecorator;
 import lk.nibm.swiftsalon.viewmodel.JobsViewModel;
 
@@ -54,12 +50,13 @@ public class JobsActivity extends AppCompatActivity implements OnItemListener {
         txtEmpty = findViewById(R.id.txt_empty);
 
         viewModel = new ViewModelProvider(this).get(JobsViewModel.class);
-        dialog = CustomDialog.getInstance(JobsActivity.this);
+        dialog = new CustomDialog(JobsActivity.this);
 
         btnBack.setOnClickListener(v -> finish());
 
         btnAdd.setOnClickListener(v -> {
-
+            Intent addJob = new Intent(JobsActivity.this, AddJobActivity.class);
+            startActivity(addJob);
         });
 
         initRecyclerView();
@@ -67,9 +64,10 @@ public class JobsActivity extends AppCompatActivity implements OnItemListener {
         jobsApi();
     }
 
+
     private void initRecyclerView() {
         adapter = new JobAdapter(this);
-        VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(20);
+        VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(15);
 
         recyclerView.addItemDecoration(itemDecorator);
         recyclerView.setAdapter(adapter);
@@ -109,6 +107,8 @@ public class JobsActivity extends AppCompatActivity implements OnItemListener {
                                 txtEmpty.setText("There are no jobs. Please add jobs to view your business to clients.");
                                 showEmpty();
                             } else {
+                                Log.d(TAG, "subscribeObservers: SUBMITTED");
+                                Log.d(TAG, "subscribeObservers: DATA: " + listResource.data.size());
                                 showRecyclerView(true);
                                 adapter.submitList(listResource.data);
                             }

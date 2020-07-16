@@ -14,11 +14,18 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -64,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         currentConstraintSet = new ConstraintSet();
         currentConstraintSet.clone(constraintLayout);
 
-        dialog = CustomDialog.getInstance(LoginActivity.this);
+        dialog = new CustomDialog(LoginActivity.this);
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         subscribeObserver();
 
@@ -152,61 +159,60 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void subscribeObserver() {
-        viewModel.getSalon().observe(this, new Observer<Resource<GenericResponse<Salon>>>() {
-            @Override
-            public void onChanged(Resource<GenericResponse<Salon>> resource) {
-                Log.d(TAG, "onChanged: resource: " + resource.status);
-                switch (resource.status) {
+        viewModel.getSalon().observe(this, resource -> {
+            Log.d(TAG, "onChanged: resource: " + resource.status);
+            switch (resource.status) {
 
-                    case LOADING: {
-                        Log.d(TAG, "onChanged: LOADING");
+                case LOADING: {
+                    Log.d(TAG, "onChanged: LOADING");
 
-                        showProgressBar(true);
-                        break;
-                    }
-
-                    case ERROR: {
-                        Log.d(TAG, "onChanged: ERROR");
-                        Log.d(TAG, "onChanged: ERROR MSG: " + resource.message);
-
-                        showProgressBar(false);
-
-                        if(resource.data != null) {
-                            dialog.showAlert(resource.data.getMessage());
-                        }
-                        else {
-                            dialog.showToast("Oops! Something went wrong. Try again later.");
-                        }
-                        break;
-                    }
-
-                    case SUCCESS: {
-                        Log.d(TAG, "onChanged: SUCCESS");
-
-                        if(resource.data.getStatus() == 1) {
-
-                            if(resource.data.getContent() != null) {
-                                session.setSalonId(resource.data.getContent().getId());
-                                session.setSignedIn(true);
-
-                                Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(mainIntent);
-                                finish();
-                            }
-                            else {
-                                showProgressBar(false);
-                                dialog.showAlert("Oops! Something went wrong. Please try again.");
-                            }
-
-                        }
-                        else {
-                            dialog.showAlert("Incorrect email or password.");
-                        }
-                        break;
-                    }
-
+                    showProgressBar(true);
+                    break;
                 }
+
+                case ERROR: {
+                    Log.d(TAG, "onChanged: ERROR");
+                    Log.d(TAG, "onChanged: ERROR MSG: " + resource.data);
+
+                    showProgressBar(false);
+
+                    if(resource.data != null) {
+                        dialog.showAlert(resource.data.getMessage());
+                    }
+                    else {
+                        dialog.showToast("Oops! Something went wrong. Try again later.");
+                    }
+                    break;
+                }
+
+                case SUCCESS: {
+                    Log.d(TAG, "onChanged: SUCCESS");
+
+                    if(resource.data.getStatus() == 1) {
+
+                        if(resource.data.getContent() != null) {
+                            session.setSalonId(resource.data.getContent().getId());
+                            session.setSignedIn(true);
+
+                            viewModel.updateToken();
+
+                            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(mainIntent);
+                            finish();
+                        }
+                        else {
+                            showProgressBar(false);
+                            dialog.showAlert("Oops! Something went wrong. Please try again.");
+                        }
+
+                    }
+                    else {
+                        dialog.showAlert("Incorrect email or password.");
+                    }
+                    break;
+                }
+
             }
         });
     }

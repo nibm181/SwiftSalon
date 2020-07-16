@@ -2,14 +2,19 @@ package lk.nibm.swiftsalon.persistence;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
 import java.util.List;
+
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
 import lk.nibm.swiftsalon.model.Job;
 import lk.nibm.swiftsalon.model.Salon;
+import lk.nibm.swiftsalon.model.Stylist;
+import lk.nibm.swiftsalon.model.StylistJob;
 
 import static androidx.room.OnConflictStrategy.IGNORE;
 import static androidx.room.OnConflictStrategy.REPLACE;
@@ -28,19 +33,25 @@ public interface SwiftSalonDao {
     void updateAppointment(Appointment appointment);
 
     @Query("UPDATE tbl_appointment SET status = :status, modified_on = :modifiedOn WHERE id = :id")
-    void updateAppointmentStatus(int id, String status, int modifiedOn);
+    void updateAppointmentStatus(int id, String status, String modifiedOn);
 
     @Query("SELECT * FROM tbl_appointment WHERE id = :id")
     LiveData<Appointment> getAppointment(int id);
 
-    @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId")
+    @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId ORDER BY date DESC, time DESC")
     LiveData<List<Appointment>> getAppointments(int salonId);
 
-    @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId AND status = 'pending'")
+    @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId AND status = 'pending' ORDER BY date DESC, time DESC")
     LiveData<List<Appointment>> getNewAppointments(int salonId);
 
-    @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId AND status = 'on schedule'")
+    @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId AND status = 'on schedule' ORDER BY date DESC, time DESC")
     LiveData<List<Appointment>> getOngoingAppointments(int salonId);
+
+    @Query("SELECT * FROM tbl_appointment WHERE salon_id = :salonId AND status IN ('completed', 'canceled') ORDER BY date DESC, time DESC")
+    LiveData<List<Appointment>> getOldAppointments(int salonId);
+
+    @Update
+    void updateAppointmentLoading(Appointment appointment);
 
     // Appointment Detail
     @Insert(onConflict = REPLACE)
@@ -74,4 +85,42 @@ public interface SwiftSalonDao {
 
     @Query("UPDATE tbl_job SET name = :name, duration = :duration, price = :price WHERE id = :id")
     void updateJob(int id, String name, int duration, float price);
+
+    @Delete
+    void deleteJob(Job job);
+
+    @Query("DELETE FROM tbl_job")
+    void deleteJobs();
+
+    // Stylist
+    @Insert(onConflict = IGNORE)
+    long[] insertStylists(Stylist... stylists);
+
+    @Insert(onConflict = REPLACE)
+    void insertStylist(Stylist stylist);
+
+    @Query("UPDATE tbl_stylist SET salon_id = :salonId, name = :name, gender = :gender, image = :image, status = :status WHERE id = :id")
+    void updateStylist(int id, int salonId, String name, String gender, String image, int status);
+
+    @Query("SELECT * FROM tbl_stylist WHERE salon_id = :salonId")
+    LiveData<List<Stylist>> getStylists(int salonId);
+
+    @Query("SELECT * FROM tbl_stylist WHERE id = :id")
+    LiveData<Stylist> getStylist(int id);
+
+    @Delete
+    void deleteStylist(Stylist stylist);
+
+    @Query("DELETE FROM tbl_stylist WHERE salon_id = :salonId")
+    void deleteStylists(int salonId);
+
+    // StylistJob
+    @Insert(onConflict = REPLACE)
+    void insertStylistJobs(StylistJob... stylistJobs);
+
+    @Query("DELETE FROM tbl_stylist_job WHERE stylist_id = :stylistId")
+    void deleteStylistJobsByStylist(int stylistId);
+
+    @Query("SELECT J.* FROM tbl_job J INNER JOIN tbl_stylist_job SJ ON J.id = SJ.job_id WHERE SJ.stylist_id = :stylistId")
+    LiveData<List<Job>> getJobsByStylist(int stylistId);
 }

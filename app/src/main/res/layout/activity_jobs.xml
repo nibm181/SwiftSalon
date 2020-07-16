@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".ui.activity.JobsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,13 +43,14 @@
     <ScrollView
         android:layout_marginTop="55dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
         >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_jobs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             />
 
     </ScrollView>
@@ -57,7 +59,8 @@
         android:id="@+id/txt_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:textAlignment="center"
+        android:layout_gravity="center"
         android:visibility="gone"
         android:text="We could not load the jobs. Please check your connection."
         />

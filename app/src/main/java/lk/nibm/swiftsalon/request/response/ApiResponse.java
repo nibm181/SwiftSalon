@@ -1,52 +1,57 @@
 package lk.nibm.swiftsalon.request.response;
 
 import android.util.Log;
+
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+
 import retrofit2.Response;
 
 /**
  * Generic class for handling responses from Retrofit
+ *
  * @param <T>
  */
 public class ApiResponse<T> {
     private static final String TAG = "ApiResponse";
 
-    public ApiResponse<T> create(Throwable error){
+    public ApiResponse<T> create(Throwable error) {
         String message = "";
-        if(error instanceof SocketTimeoutException) {
+        if (error instanceof SocketTimeoutException) {
             message = "Time out. Check your connection and try again.";
-        }
-        else if(error instanceof UnknownHostException) {
+        } else if (error instanceof UnknownHostException) {
+            message = "Oops! something went wrong.";
+        } else if(error instanceof IllegalStateException) {
             message = "Oops! something went wrong.";
         }
         else {
             Log.d(TAG, "create: " + error.getLocalizedMessage());
         }
-        return new ApiErrorResponse<>(!message.equals("") ? message : "Check your connection and try again.");
+        return new ApiErrorResponse<>(!message.equals("") ? message : "We are unable to connect you with us.");
     }
 
-    public ApiResponse<T> create(Response<T> response){
+    public ApiResponse<T> create(Response<T> response) {
 
-        if(response.isSuccessful()){
+        if (response.isSuccessful()) {
             T body = response.body();
 
-            if(body instanceof GenericResponse) {
-                if(!CheckToken.isTokenValid((GenericResponse) body)) {
+            if (body instanceof GenericResponse) {
+                if (!CheckToken.isTokenValid((GenericResponse) body)) {
                     String errorMsg = "Token expired.";
                     return new ApiErrorResponse<>(errorMsg);
                 }
             }
 
-            if(body == null || response.code() == 204){ // 204 is empty response
+            if (body == null || response.code() == 204) { // 204 is empty response
                 return new ApiEmptyResponse<>();
-            }
-            else{
+            } else {
+                Log.d(TAG, "create: BODY: " + body.toString());
                 return new ApiSuccessResponse<>(body);
             }
-        }
-        else{
+        } else {
             String errorMsg = "";
             try {
                 errorMsg = response.errorBody().string();
@@ -54,12 +59,19 @@ public class ApiResponse<T> {
                 e.printStackTrace();
                 errorMsg = response.message();
             }
+            Log.d(TAG, "create: ERROR MSG: " + errorMsg);
+            if(errorMsg.length() > 100) {
+                errorMsg = "Something went wrong. Try again later.";
+            }
             return new ApiErrorResponse<>(errorMsg);
         }
     }
 
+
+
     /**
      * Generic success response from api
+     *
      * @param <T>
      */
     public class ApiSuccessResponse<T> extends ApiResponse<T> {
@@ -78,6 +90,7 @@ public class ApiResponse<T> {
 
     /**
      * Generic Error response from API
+     *
      * @param <T>
      */
     public class ApiErrorResponse<T> extends ApiResponse<T> {
@@ -98,5 +111,6 @@ public class ApiResponse<T> {
     /**
      * separate class for HTTP 204 resposes so that we can make ApiSuccessResponse's body non-null.
      */
-    public class ApiEmptyResponse<T> extends ApiResponse<T> { }
+    public class ApiEmptyResponse<T> extends ApiResponse<T> {
+    }
 }

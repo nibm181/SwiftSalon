@@ -10,5 +10,7 @@
     <color name="dark_purple">#5B1A82</color>
     <color name="light_grey">#EDEDED</color>
     <color name="grey">#AFAFAF</color>
-    <color name="disable">#3C415A</color>
+    <color name="dark_grey">#4C4B4B</color>
+    <color name="disable">#535C68</color>
+    <color name="red">#A43C26</color>
 </resources>

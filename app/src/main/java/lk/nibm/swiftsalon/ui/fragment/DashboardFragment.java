@@ -2,6 +2,7 @@ package lk.nibm.swiftsalon.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import lk.nibm.swiftsalon.model.SliderItem;
 import lk.nibm.swiftsalon.ui.activity.JobsActivity;
 import lk.nibm.swiftsalon.ui.activity.LoginActivity;
 import lk.nibm.swiftsalon.ui.activity.ProfileActivity;
+import lk.nibm.swiftsalon.ui.activity.StylistsActivity;
 import lk.nibm.swiftsalon.ui.adapter.SliderAdapter;
 import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.util.Session;
@@ -39,7 +41,7 @@ import lk.nibm.swiftsalon.viewmodel.DashboardViewModel;
 public class DashboardFragment extends Fragment {
 
     private SliderView imageSlider;
-    private CardView btnProfile, btnJobs, btnStylists, btnPromotions, btnEarnings, btnLogOut;
+    private CardView btnProfile, btnJobs, btnStylists, btnPromotions, btnEarnings;
     private TextView txtSalon;
     private ImageView imgSalon;
 
@@ -57,18 +59,9 @@ public class DashboardFragment extends Fragment {
         btnStylists = view.findViewById(R.id.btn_stylists);
         btnPromotions = view.findViewById(R.id.btn_promotions);
         btnEarnings = view.findViewById(R.id.btn_earnings);
-        btnLogOut = view.findViewById(R.id.btn_logout);
         txtSalon = view.findViewById(R.id.txt_salon);
         imgSalon = view.findViewById(R.id.img_salon);
         imageSlider = view.findViewById(R.id.image_slider);
-
-        btnLogOut.setOnClickListener(v -> {
-            Session session = new Session(getContext());
-            session.clearSession();
-
-            Intent login = new Intent(getContext(), LoginActivity.class);
-            startActivity(login);
-        });
 
         btnProfile.setOnClickListener(v -> {
             Intent profile = new Intent(getContext(), ProfileActivity.class);
@@ -78,6 +71,11 @@ public class DashboardFragment extends Fragment {
         btnJobs.setOnClickListener(v -> {
             Intent jobs = new Intent(getContext(), JobsActivity.class);
             startActivity(jobs);
+        });
+
+        btnStylists.setOnClickListener(v -> {
+            Intent stylists = new Intent(getContext(), StylistsActivity.class);
+            startActivity(stylists);
         });
 
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -98,6 +96,7 @@ public class DashboardFragment extends Fragment {
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.sample_salon)
                 .error(R.drawable.sample_salon)
+                .dontAnimate()
                 .optionalCircleCrop();
 
         return Glide.with(getContext())
@@ -115,7 +114,7 @@ public class DashboardFragment extends Fragment {
 
     private List<SliderItem> addItemToSlider() {
         List<SliderItem> items = new ArrayList<>();
-        SliderItem item = new SliderItem("", "https://mywestford.com/wp-content/uploads/2016/01/promotional-tools-1200x621.jpg");
+        SliderItem item = new SliderItem("", "https://www.softwaresuggest.com/blog/wp-content/uploads/2019/10/salon-business-1.png");
         items.add(item);
 
         item = new SliderItem("", "https://www.coredna.com/web_images/blogs/71/961/ecommerce-promotion-strategies-discounts-coupons.png");

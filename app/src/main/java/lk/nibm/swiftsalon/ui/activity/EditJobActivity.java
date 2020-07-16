@@ -68,7 +68,7 @@ public class EditJobActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btn_back);
 
         viewModel = new ViewModelProvider(this).get(EditJobViewModel.class);
-        dialog = CustomDialog.getInstance(EditJobActivity.this);
+        dialog = new CustomDialog(EditJobActivity.this);
 
         btnBack.setOnClickListener(v -> finish());
 
@@ -121,55 +121,52 @@ public class EditJobActivity extends AppCompatActivity {
     }
 
     private void subscribeObservers() {
-        viewModel.updateJob().observe(this, new Observer<Resource<GenericResponse<Job>>>() {
-            @Override
-            public void onChanged(Resource<GenericResponse<Job>> resource) {
-                if (resource != null) {
+        viewModel.updateJob().observe(this, resource -> {
+            if (resource != null) {
 
-                    switch (resource.status) {
+                switch (resource.status) {
 
-                        case LOADING: {
-                            Log.d(TAG, "onChanged: LOADING");
-                            showProgressBar(true);
-                            break;
-                        }
+                    case LOADING: {
+                        Log.d(TAG, "onChanged: LOADING");
+                        showProgressBar(true);
+                        break;
+                    }
 
-                        case ERROR: {
-                            Log.d(TAG, "onChanged: ERROR");
-                            showProgressBar(false);
-                            dialog.showToast(resource.message);
-                            break;
-                        }
+                    case ERROR: {
+                        Log.d(TAG, "onChanged: ERROR");
+                        showProgressBar(false);
+                        dialog.showToast(resource.message);
+                        break;
+                    }
 
-                        case SUCCESS: {
-                            Log.d(TAG, "onChanged: SUCCESS");
+                    case SUCCESS: {
+                        Log.d(TAG, "onChanged: SUCCESS");
 
-                            if (resource.data.getStatus() == 1) {
+                        if (resource.data.getStatus() == 1) {
 
-                                if (resource.data.getContent() != null) {
-                                    dialog.showToast("Successfully updated");
+                            if (resource.data.getContent() != null) {
+                                dialog.showToast("Successfully updated");
 
-                                    Intent data = new Intent();
-                                    data.putExtra("edit", edit);
-                                    data.putExtra("job", job);
+                                Intent data = new Intent();
+                                data.putExtra("edit", edit);
+                                data.putExtra("job", job);
 
-                                    setResult(RESULT_OK, data);
-                                    finish();
-                                } else {
-                                    showProgressBar(false);
-                                    dialog.showAlert("Oops! Something went wrong. Please try again.");
-                                }
-
+                                setResult(RESULT_OK, data);
+                                finish();
                             } else {
                                 showProgressBar(false);
-                                dialog.showAlert(resource.data.getMessage());
+                                dialog.showAlert("Oops! Something went wrong. Try again later.");
                             }
-                            break;
-                        }
 
+                        } else {
+                            showProgressBar(false);
+                            dialog.showAlert(resource.data.getMessage());
+                        }
+                        break;
                     }
 
                 }
+
             }
         });
     }

@@ -8,10 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
+import lk.nibm.swiftsalon.model.Salon;
+import lk.nibm.swiftsalon.model.Stylist;
 import lk.nibm.swiftsalon.persistence.SwiftSalonDao;
 import lk.nibm.swiftsalon.persistence.SwiftSalonDatabase;
 import lk.nibm.swiftsalon.request.ServiceGenerator;
@@ -19,6 +24,7 @@ import lk.nibm.swiftsalon.request.response.ApiResponse;
 import lk.nibm.swiftsalon.request.response.GenericResponse;
 import lk.nibm.swiftsalon.util.AppExecutor;
 import lk.nibm.swiftsalon.util.NetworkBoundResource;
+import lk.nibm.swiftsalon.util.NetworkOnlyBoundResource;
 import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.util.Session;
 
@@ -31,9 +37,6 @@ public class AppointmentRepository {
     private static AppointmentRepository instance;
     private SwiftSalonDao swiftSalonDao;
 
-    private int salonId;
-    private Session session;
-
     public static AppointmentRepository getInstance(Context context) {
         if (instance == null) {
             instance = new AppointmentRepository(context);
@@ -43,9 +46,6 @@ public class AppointmentRepository {
 
     private AppointmentRepository(Context context) {
         swiftSalonDao = SwiftSalonDatabase.getInstance(context).getDao();
-
-        session = new Session(context);
-        salonId = session.getSalonId();
     }
 
     public LiveData<Resource<Appointment>> getAppointmentApi(int id) {
@@ -63,7 +63,15 @@ public class AppointmentRepository {
                 int currentTime = (int) (System.currentTimeMillis() / 1000);
 
                 if (data != null) {
-                    if ((currentTime - data.getModifiedOn()) >= REFRESH_TIME) {
+                    try {
+                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.getModifiedOn());
+                        int modified = (int) datetime.getTime() / 1000;
+                        if ((currentTime - modified) >= REFRESH_TIME) {
+                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
+                            return true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                         return true;
                     }
                 } else {
@@ -87,7 +95,7 @@ public class AppointmentRepository {
         }.getAsLiveData();
     }
 
-    public LiveData<Resource<List<Appointment>>> getAllAppointmentApi() {
+    public LiveData<Resource<List<Appointment>>> getAllAppointmentApi(int salonId) {
         return new NetworkBoundResource<List<Appointment>, GenericResponse<List<Appointment>>>(AppExecutor.getInstance()) {
             @Override
             protected void saveCallResult(@NonNull GenericResponse<List<Appointment>> item) {
@@ -96,7 +104,7 @@ public class AppointmentRepository {
                     Appointment[] appointments = new Appointment[item.getContent().size()];
 
                     int index = 0;
-                    for (long rowId : swiftSalonDao.insertAppointments((Appointment[]) (item.getContent().toArray(appointments)))) {
+                    for (long rowId : swiftSalonDao.insertAppointments(item.getContent().toArray(appointments))) {
                         Log.d(TAG, "saveCallResult: data: " + appointments[index].getCustomerFirstName());
                         if (rowId == -1) {
                             Log.d(TAG, "saveCallResult: CONFLICT... This appointment is already in the cache");
@@ -118,10 +126,19 @@ public class AppointmentRepository {
                 if (data.size() > 0) {
                     Log.d(TAG, "shouldFetch: current time: " + currentTime);
                     Log.d(TAG, "shouldFetch: last refresh: " + data.get(data.size() - 1).getModifiedOn());
-                    if ((currentTime - data.get(data.size() - 1).getModifiedOn()) >= REFRESH_TIME) {
-                        Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
+
+                    try {
+                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
+                        int modified = (int) datetime.getTime() / 1000;
+                        if ((currentTime - modified) >= REFRESH_TIME) {
+                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
+                            return true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                         return true;
                     }
+
                 } else {
                     return true;
                 }
@@ -144,7 +161,73 @@ public class AppointmentRepository {
         }.getAsLiveData();
     }
 
-    public LiveData<Resource<List<Appointment>>> getNewAppointmentApi() {
+    public LiveData<Resource<List<Appointment>>> getOldAppointmentApi(int salonId) {
+        return new NetworkBoundResource<List<Appointment>, GenericResponse<List<Appointment>>>(AppExecutor.getInstance()) {
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<List<Appointment>> item) {
+                if (item.getContent() != null) {
+                    Log.d(TAG, "saveCallResult: count: " + item.getContent().size());
+                    Appointment[] appointments = new Appointment[item.getContent().size()];
+
+                    int index = 0;
+                    for (long rowId : swiftSalonDao.insertAppointments(item.getContent().toArray(appointments))) {
+                        Log.d(TAG, "saveCallResult: data: " + appointments[index].getCustomerFirstName());
+                        if (rowId == -1) {
+                            Log.d(TAG, "saveCallResult: CONFLICT... This appointment is already in the cache");
+                            swiftSalonDao.updateAppointmentStatus(
+                                    appointments[index].getId(),
+                                    appointments[index].getStatus(),
+                                    appointments[index].getModifiedOn());
+                        }
+                        index++;
+                    }
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Appointment> data) {
+                int currentTime = (int) (System.currentTimeMillis() / 1000);
+                Log.d(TAG, "shouldFetch: Data: " + data);
+
+                if (data.size() > 0) {
+                    Log.d(TAG, "shouldFetch: current time: " + currentTime);
+                    Log.d(TAG, "shouldFetch: last refresh: " + data.get(data.size() - 1).getModifiedOn());
+
+                    try {
+                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
+                        int modified = (int) datetime.getTime() / 1000;
+                        if ((currentTime - modified) >= REFRESH_TIME) {
+                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
+                            return true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return true;
+                    }
+
+                } else {
+                    return true;
+                }
+                Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + false);
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Appointment>> loadFromDb() {
+                return swiftSalonDao.getOldAppointments(salonId);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<List<Appointment>>>> createCall() {
+                return ServiceGenerator.getAppointmentApi()
+                        .getOldAppointments(salonId);
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<List<Appointment>>> getNewAppointmentApi(int salonId) {
         return new NetworkBoundResource<List<Appointment>, GenericResponse<List<Appointment>>>(AppExecutor.getInstance()) {
 
             @Override
@@ -153,7 +236,7 @@ public class AppointmentRepository {
                     Appointment[] appointments = new Appointment[item.getContent().size()];
 
                     int index = 0;
-                    for (long rowId : swiftSalonDao.insertAppointments((Appointment[]) (item.getContent().toArray(appointments)))) {
+                    for (long rowId : swiftSalonDao.insertAppointments(item.getContent().toArray(appointments))) {
 
                         if (rowId == -1) {
                             swiftSalonDao.updateAppointmentStatus(
@@ -171,7 +254,15 @@ public class AppointmentRepository {
                 int currentTime = (int) (System.currentTimeMillis() / 1000);
 
                 if (data.size() > 0) {
-                    if ((currentTime - data.get(data.size() - 1).getModifiedOn()) >= REFRESH_TIME) {
+                    try {
+                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
+                        int modified = (int) datetime.getTime() / 1000;
+                        if ((currentTime - modified) >= REFRESH_TIME) {
+                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
+                            return true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                         return true;
                     }
                 } else {
@@ -196,7 +287,7 @@ public class AppointmentRepository {
     }
 
 
-    public LiveData<Resource<List<Appointment>>> getOngoingAppointmentApi() {
+    public LiveData<Resource<List<Appointment>>> getOngoingAppointmentApi(int salonId) {
         return new NetworkBoundResource<List<Appointment>, GenericResponse<List<Appointment>>>(AppExecutor.getInstance()) {
 
             @Override
@@ -205,7 +296,7 @@ public class AppointmentRepository {
                     Appointment[] appointments = new Appointment[item.getContent().size()];
 
                     int index = 0;
-                    for (long rowId : swiftSalonDao.insertAppointments((Appointment[]) (item.getContent().toArray(appointments)))) {
+                    for (long rowId : swiftSalonDao.insertAppointments(item.getContent().toArray(appointments))) {
 
                         if (rowId == -1) {
                             swiftSalonDao.updateAppointmentStatus(
@@ -223,7 +314,15 @@ public class AppointmentRepository {
                 int currentTime = (int) (System.currentTimeMillis() / 1000);
 
                 if (data.size() > 0) {
-                    if ((currentTime - data.get(data.size() - 1).getModifiedOn()) >= REFRESH_TIME) {
+                    try {
+                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
+                        int modified = (int) datetime.getTime() / 1000;
+                        if ((currentTime - modified) >= REFRESH_TIME) {
+                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
+                            return true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                         return true;
                     }
                 } else {
@@ -242,7 +341,7 @@ public class AppointmentRepository {
             @Override
             protected LiveData<ApiResponse<GenericResponse<List<Appointment>>>> createCall() {
                 return ServiceGenerator.getAppointmentApi()
-                        .getAppointmentsByStatus(salonId, "onSchedule");
+                        .getAppointmentsByStatus(salonId, "on schedule");
             }
         }.getAsLiveData();
     }
@@ -254,18 +353,13 @@ public class AppointmentRepository {
             protected void saveCallResult(@NonNull GenericResponse<List<AppointmentDetail>> item) {
                 if (item.getContent() != null) {
                     AppointmentDetail[] details = new AppointmentDetail[item.getContent().size()];
-                    swiftSalonDao.insertAppointmentDetails((AppointmentDetail[]) item.getContent().toArray(details));
+                    swiftSalonDao.insertAppointmentDetails(item.getContent().toArray(details));
                 }
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<AppointmentDetail> data) {
-
-                if (data.isEmpty()) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return true;
             }
 
             @NonNull
@@ -283,24 +377,69 @@ public class AppointmentRepository {
         }.getAsLiveData();
     }
 
-    public void acceptAppointmentApi(Appointment appointment) {
-        new AcceptAppointment(swiftSalonDao).execute(appointment);
+    public LiveData<Resource<GenericResponse<Appointment>>> acceptAppointmentApi(Appointment appointment) {
+        return new NetworkOnlyBoundResource<Appointment, GenericResponse<Appointment>>(AppExecutor.getInstance()) {
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Appointment>>> createCall() {
+                return ServiceGenerator.getAppointmentApi().updateAppointmentStatus(appointment);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Appointment> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertAppointment(item.getContent());
+                }
+            }
+        }.getAsLiveData();
     }
 
-    private static class AcceptAppointment extends AsyncTask<Appointment, Void, Void> {
+    public LiveData<Resource<GenericResponse<Appointment>>> cancelAppointmentApi(Appointment appointment) {
+        return new NetworkOnlyBoundResource<Appointment, GenericResponse<Appointment>>(AppExecutor.getInstance()) {
 
-        private SwiftSalonDao swiftSalonDao;
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Appointment>>> createCall() {
+                return ServiceGenerator.getAppointmentApi().updateAppointmentStatus(appointment);
+            }
 
-        private AcceptAppointment(SwiftSalonDao swiftSalonDao) {
-            this.swiftSalonDao = swiftSalonDao;
-        }
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Appointment> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertAppointment(item.getContent());
+                }
+            }
+        }.getAsLiveData();
+    }
 
-        @Override
-        protected Void doInBackground(Appointment... appointments) {
-            int currentTime = (int) (System.currentTimeMillis() / 1000);
-            swiftSalonDao.updateAppointmentStatus(appointments[0].getId(), "on schedule", currentTime);
-            return null;
-        }
+    public LiveData<Resource<Stylist>> getStylistApi(int stylistId) {
+        return new NetworkBoundResource<Stylist, GenericResponse<Stylist>>(AppExecutor.getInstance()) {
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Stylist> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertStylist(item.getContent());
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable Stylist data) {
+                return data == null;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Stylist> loadFromDb() {
+                return swiftSalonDao.getStylist(stylistId);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Stylist>>> createCall() {
+                return ServiceGenerator.getSalonApi().getStylist(stylistId);
+            }
+        }.getAsLiveData();
     }
 
 }

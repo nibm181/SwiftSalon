@@ -9,8 +9,11 @@ import lk.nibm.swiftsalon.model.AppointmentDetail;
 import lk.nibm.swiftsalon.request.response.ApiResponse;
 import lk.nibm.swiftsalon.request.response.GenericResponse;
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface AppointmentApi {
@@ -23,6 +26,10 @@ public interface AppointmentApi {
     @GET("Appointment")
     LiveData<ApiResponse<GenericResponse<List<Appointment>>>> getAllAppointments(@Query("salon_id") int salonId);
 
+    // get all appointments
+    @GET("Appointment?old=old")
+    LiveData<ApiResponse<GenericResponse<List<Appointment>>>> getOldAppointments(@Query("salon_id") int salonId);
+
     // get new appointments
     @GET("Appointment")
     LiveData<ApiResponse<GenericResponse<List<Appointment>>>> getAppointmentsByStatus(@Query("salon_id") int salonId, @Query("status") String status);
@@ -32,5 +39,8 @@ public interface AppointmentApi {
 
     @GET("Appointment?status=pending")
     Call<GenericResponse<List<Appointment>>> getWorkerNewAppointments(@Query("salon_id") int salon_id);
+
+    @PUT("Appointment")
+    LiveData<ApiResponse<GenericResponse<Appointment>>> updateAppointmentStatus(@Body Appointment appointment);
 
 }

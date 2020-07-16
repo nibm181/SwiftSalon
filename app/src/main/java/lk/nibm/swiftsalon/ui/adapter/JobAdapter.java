@@ -1,6 +1,5 @@
 package lk.nibm.swiftsalon.ui.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +27,7 @@ public class JobAdapter extends ListAdapter<Job, RecyclerView.ViewHolder> {
     private static final DiffUtil.ItemCallback<Job> DIFF_CALLBACK = new DiffUtil.ItemCallback<Job>() {
         @Override
         public boolean areItemsTheSame(@NonNull Job oldItem, @NonNull Job newItem) {
-            return oldItem.getSalon_id() == newItem.getSalon_id() &&
-                    oldItem.getId() == newItem.getId();
+            return oldItem.getId() == newItem.getId();
         }
 
         @Override

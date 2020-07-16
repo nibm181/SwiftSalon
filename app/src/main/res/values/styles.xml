@@ -19,4 +19,36 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="MaterialOutlinedInputField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@drawable/material_textfield_outline_color</item>
+        <item name="hintTextColor">@color/dark</item>
+        <item name="textColor">@color/dark</item>
+        <item name="boxStrokeWidth">2sp</item>
+        <item name="boxCornerRadiusBottomEnd">50sp</item>
+        <item name="boxCornerRadiusBottomStart">50sp</item>
+        <item name="boxCornerRadiusTopStart">50sp</item>
+        <item name="boxCornerRadiusTopEnd">50sp</item>
+        <item name="errorTextColor">@color/dark_grey</item>
+        <item name="errorEnabled">true</item>
+    </style>
+
+    <style name="MaterialOutlinedDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@drawable/material_textfield_outline_color</item>
+        <item name="hintTextColor">@color/dark</item>
+        <item name="textColor">@color/dark</item>
+        <item name="boxStrokeWidth">2sp</item>
+        <item name="boxCornerRadiusBottomEnd">50sp</item>
+        <item name="boxCornerRadiusBottomStart">50sp</item>
+        <item name="boxCornerRadiusTopStart">50sp</item>
+        <item name="boxCornerRadiusTopEnd">50sp</item>
+        <item name="errorTextColor">@color/dark_grey</item>
+        <item name="errorEnabled">true</item>
+    </style>
+
+    <style name="CalenderTheme" parent="Theme.MaterialComponents.Light.Bridge">
+        <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen</item>
+        <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>
+    </style>
+
 </resources>

@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:text="On going appointments : "
+            android:text="Scheduled appointments : "
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,8 +89,8 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:layout_centerVertical="true"
-            android:text="You have no appointments yet. Promote your jobs to get appointments."
-            android:textSize="17sp" />
+            android:text="You have no new appointments yet. Promote your jobs to get appointments."
+            />
 
     </RelativeLayout>
 

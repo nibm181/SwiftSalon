@@ -56,6 +56,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
                 .setDefaultRequestOptions(options)
                 .load(sliderItem.getImageUrl())
                 .fitCenter()
+                .dontAnimate()
                 .into(viewHolder.imageViewBackground);
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

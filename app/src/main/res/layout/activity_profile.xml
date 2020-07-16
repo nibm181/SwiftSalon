@@ -50,14 +50,14 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_width="82dp"
-                android:layout_height="82dp"
-                android:layout_margin="10dp" >
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_margin="15dp" >
 
                 <ImageView
                     android:id="@+id/img_salon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
                     android:transitionName="image"
                     />
 
@@ -68,8 +68,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_baseline_edit_24"
-                    android:background="@drawable/white_circle"
-                    android:backgroundTint="@color/dark_purple"
+                    android:background="@drawable/circle_with_border"
                     />
 
             </RelativeLayout>
@@ -88,24 +87,25 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="vertical"
-                android:padding="13dp">
+                android:padding="15dp">
 
                 <TextView
                     android:id="@+id/title_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:transitionName="title"
-                    android:text="Name" />
+                    android:text="Name"
+                    android:textColor="@color/grey"
+                    android:transitionName="title" />
 
                 <TextView
                     android:id="@+id/txt_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:ellipsize="end"
                     android:lines="1"
                     android:textColor="@color/dark"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:layout_marginStart="10dp" />
 
             </LinearLayout>
 
@@ -113,7 +113,7 @@
                 android:id="@+id/btn_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
+                android:padding="15dp"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_background"
@@ -124,6 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:transitionName="title"
+                    android:textColor="@color/grey"
                     android:text="Salon Type"/>
 
                 <lk.nibm.swiftsalon.util.CapitalizedTextView
@@ -134,7 +135,7 @@
                     android:ellipsize="end"
                     android:textSize="16sp"
                     android:textColor="@color/dark"
-                    android:layout_marginStart="10dp" />
+                    android:layout_marginStart="10dp"/>
 
             </LinearLayout>
 
@@ -142,7 +143,7 @@
                 android:id="@+id/btn_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
+                android:padding="15dp"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_background"
@@ -153,6 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:transitionName="title"
+                    android:textColor="@color/grey"
                     android:text="Email"/>
 
                 <TextView
@@ -171,7 +173,7 @@
                 android:id="@+id/btn_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
+                android:padding="15dp"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_background"
@@ -182,6 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:transitionName="title"
+                    android:textColor="@color/grey"
                     android:text="Mobile Number"/>
 
                 <TextView
@@ -200,7 +203,7 @@
                 android:id="@+id/btn_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
+                android:padding="15dp"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_background"
@@ -211,7 +214,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:transitionName="title"
-                    android:text="Address"/>
+                    android:textColor="@color/grey"
+                    android:text="Billing Address"/>
 
                 <TextView
                     android:id="@+id/txt_address"
@@ -229,7 +233,7 @@
                 android:id="@+id/btn_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
+                android:padding="15dp"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_background"
@@ -240,7 +244,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:transitionName="title"
-                    android:text="Location"/>
+                    android:textColor="@color/grey"
+                    android:text="Location on Map"/>
 
                 <TextView
                     android:id="@+id/txt_location"
@@ -258,7 +263,7 @@
                 android:id="@+id/btn_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
+                android:padding="15dp"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_background"
@@ -269,6 +274,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:transitionName="title"
+                    android:textColor="@color/grey"
                     android:text="Working Hours"/>
 
                 <TextView
@@ -287,7 +293,7 @@
                 android:id="@+id/btn_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
+                android:padding="15dp"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_background"
@@ -298,6 +304,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:transitionName="title"
+                    android:textColor="@color/grey"
                     android:text="Password"/>
 
                 <TextView
@@ -310,6 +317,37 @@
                     android:textSize="16sp"
                     android:textColor="@color/dark"
                     android:layout_marginStart="10dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2sp"
+                android:background="@color/light_grey"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <LinearLayout
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:background="@drawable/ripple_background"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="  Logout"
+                    android:layout_gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:drawableLeft="@drawable/ic_logout"
+                    android:textColor="@color/dark_purple"
+                    />
 
             </LinearLayout>
 

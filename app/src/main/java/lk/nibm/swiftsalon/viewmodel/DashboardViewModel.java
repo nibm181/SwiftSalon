@@ -41,21 +41,18 @@ public class DashboardViewModel extends AndroidViewModel {
 
         final LiveData<Resource<Salon>> repositorySource = repository.getSalonApi(session.getSalonId());
 
-        salon.addSource(repositorySource, new Observer<Resource<Salon>>() {
-            @Override
-            public void onChanged(Resource<Salon> salonResource) {
-                if(salonResource != null) {
-                    salon.setValue(salonResource);
+        salon.addSource(repositorySource, salonResource -> {
+            if(salonResource != null) {
+                salon.setValue(salonResource);
 
-                    isFetching = false;
+                isFetching = false;
 
-                    if(salonResource.status == Resource.Status.ERROR) {
-                        salon.removeSource(repositorySource);
-                    }
-                }
-                else {
+                if(salonResource.status == Resource.Status.ERROR) {
                     salon.removeSource(repositorySource);
                 }
+            }
+            else {
+                salon.removeSource(repositorySource);
             }
         });
 

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -14,13 +15,12 @@ import com.google.gson.annotations.SerializedName;
 public class Job implements Parcelable {
 
     @PrimaryKey
-    @NonNull
     @SerializedName("id")
     private int id;
 
     @ColumnInfo(name = "salon_id")
     @SerializedName("salon_id")
-    private int salon_id;
+    private int salonId;
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
@@ -37,26 +37,48 @@ public class Job implements Parcelable {
     public Job() {
     }
 
-    public Job(int id, int salon_id, String name, int duration, float price) {
+    public Job(int id, int salonId, String name, int duration, float price) {
         this.id = id;
-        this.salon_id = salon_id;
+        this.salonId = salonId;
         this.name = name;
         this.duration = duration;
         this.price = price;
     }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Job)) return false;
+        if(this.getId() == ((Job) obj).getId()) {
+            return true;
+        }
+        return false;
+    }
+
     protected Job(Parcel in) {
         id = in.readInt();
-        salon_id = in.readInt();
+        salonId = in.readInt();
         name = in.readString();
         duration = in.readInt();
         price = in.readFloat();
     }
 
     @Override
+    public String toString() {
+        return "Job{" +
+                "id=" + id +
+                ", salon_id=" + salonId +
+                ", name='" + name + '\'' +
+                ", duration=" + duration +
+                ", price=" + price +
+                '}';
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeInt(salon_id);
+        dest.writeInt(salonId);
         dest.writeString(name);
         dest.writeInt(duration);
         dest.writeFloat(price);
@@ -87,12 +109,12 @@ public class Job implements Parcelable {
         this.id = id;
     }
 
-    public int getSalon_id() {
-        return salon_id;
+    public int getSalonId() {
+        return salonId;
     }
 
-    public void setSalon_id(int salon_id) {
-        this.salon_id = salon_id;
+    public void setSalonId(int salon_id) {
+        this.salonId = salon_id;
     }
 
     public String getName() {

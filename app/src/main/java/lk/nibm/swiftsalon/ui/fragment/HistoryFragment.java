@@ -57,7 +57,7 @@ public class HistoryFragment extends Fragment implements OnAppointmentListener {
         shimmer = view.findViewById(R.id.layout_shimmer);
         layoutEmpty = view.findViewById(R.id.layout_empty);
 
-        dialog = CustomDialog.getInstance(getContext());
+        dialog = new CustomDialog(getContext());
         viewModal = new ViewModelProvider(this).get(HistoryViewModel.class);
 
         initRecyclerView();
@@ -129,6 +129,7 @@ public class HistoryFragment extends Fragment implements OnAppointmentListener {
 
     private RequestManager initGlide() {
         RequestOptions options = new RequestOptions()
+                .circleCrop()
                 .placeholder(R.drawable.sample_avatar)
                 .error(R.drawable.sample_avatar);
 

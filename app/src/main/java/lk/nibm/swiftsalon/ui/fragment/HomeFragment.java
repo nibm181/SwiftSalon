@@ -1,12 +1,16 @@
 package lk.nibm.swiftsalon.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,8 +32,10 @@ import java.util.List;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.Salon;
+import lk.nibm.swiftsalon.request.response.GenericResponse;
 import lk.nibm.swiftsalon.ui.activity.AppointmentActivity;
 import lk.nibm.swiftsalon.ui.adapter.AppointmentAdapter;
+import lk.nibm.swiftsalon.ui.adapter.AppointmentViewHolder;
 import lk.nibm.swiftsalon.ui.adapter.OnAppointmentListener;
 import lk.nibm.swiftsalon.util.CustomDialog;
 import lk.nibm.swiftsalon.util.Resource;
@@ -73,7 +79,7 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
         layoutOngoingApp = view.findViewById(R.id.layout_ongoing_app);
         layoutEmpty = view.findViewById(R.id.layout_empty);
 
-        dialog = CustomDialog.getInstance(getContext());
+        dialog = new CustomDialog(getContext());
         viewModal = new ViewModelProvider(this).get(HomeViewModel.class);
 
         initRecyclerView();
@@ -92,6 +98,8 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
 
     private RequestManager initGlide() {
         RequestOptions options = new RequestOptions()
+                .circleCrop()
+                .dontAnimate()
                 .placeholder(R.drawable.sample_avatar)
                 .error(R.drawable.sample_avatar);
 
@@ -135,9 +143,9 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
         }
     }
 
-    private void emptyNewRecyclerView() {
-        layoutNewApp.setVisibility(View.GONE);
-    }
+//    private void emptyNewRecyclerView() {
+//        layoutNewApp.setVisibility(View.GONE);
+//    }
 
     private void showRecyclerView(boolean newApp, boolean onApp) {
         if(!newApp && !onApp) {
@@ -193,6 +201,7 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
         viewModal.getNewAppointments().observe(getViewLifecycleOwner(), new Observer<Resource<List<Appointment>>>() {
             @Override
             public void onChanged(Resource<List<Appointment>> listResource) {
+                Log.d(TAG, "onChanged: TRIGGERED");
                 if(listResource != null) {
 
                     if(listResource.data != null) {
@@ -294,6 +303,41 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
                 showRecyclerView(isNew, isOn);
             }
         });
+
+        viewModal.acceptAppointment().observe(getViewLifecycleOwner(), new Observer<Resource<GenericResponse<Appointment>>>() {
+            @Override
+            public void onChanged(Resource<GenericResponse<Appointment>> resource) {
+                if(resource != null) {
+
+                    switch (resource.status) {
+
+                        case LOADING: {
+                            break;
+                        }
+
+                        case ERROR: {
+                            dialog.showToast(resource.message);
+                            break;
+                        }
+
+                        case SUCCESS: {
+                            if (resource.data.getStatus() == 1) {
+
+                                if (resource.data.getContent() != null) {
+                                    dialog.showToast("Successfully accepted");
+                                } else {
+                                    dialog.showAlert("Oops! Something went wrong. Please try again.");
+                                }
+
+                            } else {
+                                dialog.showAlert(resource.data.getMessage());
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void newAppointmentApi() {
@@ -312,10 +356,12 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
     public void onAppointmentClick(int position, String type) {
         Intent intent = new Intent(getContext(), AppointmentActivity.class);
         if(type.equals(NEW_APPOINTMENT)) {
+            Log.d(TAG, "onAppointmentClick: APPOINTMENT: " + newAppointmentAdapter.getSelectedAppointment(position).toString());
             intent.putExtra("appointment", newAppointmentAdapter.getSelectedAppointment(position));
             startActivity(intent);
         }
         else if(type.equals(SCHEDULED_APPOINTMENT)) {
+            Log.d(TAG, "onAppointmentClick: APPOINTMENT: " + ongoingAppointmentAdapter.getSelectedAppointment(position).toString());
             intent.putExtra("appointment", ongoingAppointmentAdapter.getSelectedAppointment(position));
             startActivity(intent);
         }
@@ -323,7 +369,18 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
 
     @Override
     public void onAppointmentAccept(int position) {
-        dialog.showToast("Clicked: " + newAppointmentAdapter.getSelectedAppointment(position).getCustomerFirstName());
-        viewModal.acceptAppointment(newAppointmentAdapter.getSelectedAppointment(position));
+        if(isOnline()) {
+            viewModal.acceptAppointmentApi(newAppointmentAdapter.getSelectedAppointment(position).getId());
+        }
+        else {
+            dialog.showToast("Check your connection and try again.");
+        }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }

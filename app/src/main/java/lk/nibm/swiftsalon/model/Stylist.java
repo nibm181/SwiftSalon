@@ -1,27 +1,66 @@
 package lk.nibm.swiftsalon.model;
 
-public class Stylist {
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "tbl_stylist")
+public class Stylist implements Parcelable {
+
+    @PrimaryKey
+    @NonNull
+    @SerializedName("id")
     private int id;
+
+    @ColumnInfo(name = "salon_id")
+    @SerializedName("salon_id")
     private int salonId;
+
+    @ColumnInfo(name = "name")
+    @SerializedName("name")
     private String name;
+
+    @ColumnInfo(name = "gender")
+    @SerializedName("gender")
     private String gender;
+
+    @ColumnInfo(name = "image")
+    @SerializedName("image")
     private String image;
-    private boolean status;
-    private boolean isDelete;
+
+    @ColumnInfo(name = "status")
+    @SerializedName("status")
+    private int status;
 
     public Stylist() {
     }
 
-    public Stylist(int id, int salonId, String name, String gender, String image, boolean status, boolean isDelete) {
-        this.id = id;
-        this.salonId = salonId;
-        this.name = name;
-        this.gender = gender;
-        this.image = image;
-        this.status = status;
-        this.isDelete = isDelete;
+    protected Stylist(Parcel in) {
+        id = in.readInt();
+        salonId = in.readInt();
+        name = in.readString();
+        gender = in.readString();
+        image = in.readString();
+        status = in.readInt();
     }
+
+    public static final Creator<Stylist> CREATOR = new Creator<Stylist>() {
+        @Override
+        public Stylist createFromParcel(Parcel in) {
+            return new Stylist(in);
+        }
+
+        @Override
+        public Stylist[] newArray(int size) {
+            return new Stylist[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -63,32 +102,26 @@ public class Stylist {
         this.image = image;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public boolean isDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(boolean delete) {
-        isDelete = delete;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    public String toString() {
-        return "Stylist{" +
-                "id=" + id +
-                ", salonId=" + salonId +
-                ", name='" + name + '\'' +
-                ", gender='" + gender + '\'' +
-                ", image='" + image + '\'' +
-                ", status=" + status +
-                ", isDelete=" + isDelete +
-                '}';
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(salonId);
+        dest.writeString(name);
+        dest.writeString(gender);
+        dest.writeString(image);
+        dest.writeInt(status);
     }
 }

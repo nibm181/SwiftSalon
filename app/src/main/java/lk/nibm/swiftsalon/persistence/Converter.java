@@ -3,7 +3,9 @@ package lk.nibm.swiftsalon.persistence;
 import androidx.room.TypeConverter;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Converter {
 

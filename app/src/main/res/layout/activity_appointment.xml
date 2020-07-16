@@ -58,7 +58,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:textSize="16sp"
                 android:textColor="@color/dark"
                 />
@@ -85,11 +84,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_face_light"
-            android:textSize="17sp"
+            android:textSize="16sp"
             android:textColor="@color/dark"
             android:layout_marginTop="3sp"
             android:layout_marginBottom="3sp"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="13dp"
             />
 
         <View
@@ -155,11 +154,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/shimmer_job" />
+            <include layout="@layout/shimmer_appointment_details" />
 
-            <include layout="@layout/shimmer_job" />
+            <include layout="@layout/shimmer_appointment_details" />
 
-            <include layout="@layout/shimmer_job" />
+            <include layout="@layout/shimmer_appointment_details" />
 
         </LinearLayout>
 
@@ -167,6 +166,7 @@
     <!-- /loading shimmer layout -->
 
     <ScrollView
+        android:id="@+id/layout_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_customer"
@@ -179,6 +179,39 @@
             android:visibility="gone"/>
 
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/layout_total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_recyclerview"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold"
+            android:text="Total"
+            />
+
+        <TextView
+            android:id="@+id/txt_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:animateLayoutChanges="true"
@@ -193,7 +226,7 @@
             android:clickable="true"
             android:id="@+id/btn_cancel"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@color/dark"
             >
@@ -214,7 +247,7 @@
                 style="?android:attr/progressBarStyleSmall"
                 android:indeterminate="true"
                 android:layout_centerInParent="true"
-                android:indeterminateTint="@color/purple"
+                android:indeterminateTint="@color/white"
                 android:visibility="gone"
                 />
 
@@ -224,7 +257,7 @@
             android:clickable="true"
             android:id="@+id/btn_accept"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@color/dark_purple"
             >
@@ -246,7 +279,7 @@
                 style="?android:attr/progressBarStyleSmall"
                 android:indeterminate="true"
                 android:layout_centerInParent="true"
-                android:indeterminateTint="@color/purple"
+                android:indeterminateTint="@color/white"
                 android:visibility="gone"
                 />
 

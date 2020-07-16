@@ -6,6 +6,7 @@ import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -131,9 +132,11 @@ public class SSFirebaseMessagingService extends FirebaseMessagingService {
         data.putString("token", token);
         data.putInt("id", id);
 
-        new OneTimeWorkRequest.Builder(RefreshTokenWorker.class)
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(RefreshTokenWorker.class)
                 .setInputData(data.build())
                 .setConstraints(constraints)
                 .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueue(request);
     }
 }

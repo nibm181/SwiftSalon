@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@color/light_grey"
-    android:layout_margin="5dp"
-    android:padding="12dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:elevation="6dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
+    android:focusable="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:background="@drawable/input_shape"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="                             "
-        android:gravity="center_vertical"
-        android:textSize="15sp"/>
+        android:background="@color/light_grey"
+        android:padding="12dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/input_shape"
-        android:gravity="center_vertical"
-        android:text="             "
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_shape"
+            android:text="    "
+            android:textSize="12sp"
+            />
 
-</RelativeLayout>
+        <TextView
+            android:layout_below="@id/txt"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:background="@drawable/input_shape"
+            android:text="                                  "
+            android:layout_alignParentStart="true"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

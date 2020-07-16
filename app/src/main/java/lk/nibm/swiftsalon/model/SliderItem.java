@@ -5,9 +5,6 @@ public class SliderItem {
     private String description;
     private String imageUrl;
 
-    public SliderItem() {
-    }
-
     public SliderItem(String description, String imageUrl) {
         this.description = description;
         this.imageUrl = imageUrl;

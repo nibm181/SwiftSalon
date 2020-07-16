@@ -3,6 +3,7 @@ package lk.nibm.swiftsalon.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,16 +17,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.util.CapitalizedTextView;
 import lk.nibm.swiftsalon.util.CustomDialog;
+import lk.nibm.swiftsalon.util.Session;
 import lk.nibm.swiftsalon.viewmodel.ProfileViewModel;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageButton btnBack, btnEditImage;
-    private LinearLayout btnName, btnType, btnEmail, btnMobile, btnAddress, btnLocation, btnTime, btnPassword;
+    private LinearLayout btnName, btnType, btnEmail, btnMobile, btnAddress, btnLocation, btnTime, btnPassword, btnLogout;
     private TextView txtName, txtEmail, txtMobile, txtAddress, txtLocation, txtTime;
     private CapitalizedTextView txtType;
     private ImageView imgSalon;
@@ -59,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnLocation = findViewById(R.id.btn_location);
         btnTime = findViewById(R.id.btn_time);
         btnPassword = findViewById(R.id.btn_password);
+        btnLogout = findViewById(R.id.btn_logout);
         txtName = findViewById(R.id.txt_name);
         txtType = findViewById(R.id.txt_type);
         txtEmail = findViewById(R.id.txt_email);
@@ -69,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         imgSalon = findViewById(R.id.img_salon);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        dialog = CustomDialog.getInstance(ProfileActivity.this);
+        dialog = new CustomDialog(ProfileActivity.this);
 
         btnBack.setOnClickListener(v -> finish());
 
@@ -134,6 +138,10 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         btnLocation.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, MapsActivity.class);
+            intent.putExtra("salon", getSalon());
+
+            startActivity(intent);
         });
 
         imgSalon.setOnClickListener(v -> {
@@ -144,6 +152,10 @@ public class ProfileActivity extends AppCompatActivity {
                     .makeSceneTransitionAnimation(this, (View) imgSalon, "image");
 
             startActivity(editImage, options.toBundle());
+        });
+
+        btnLogout.setOnClickListener(v -> {
+            logout();
         });
 
 
@@ -203,11 +215,34 @@ public class ProfileActivity extends AppCompatActivity {
         txtEmail.setText(salon.getEmail());
         txtMobile.setText(salon.getMobileNo());
         txtAddress.setText((salon.getAddr1() + ", " + salon.getAddr2()));
-        txtLocation.setText((salon.getLatitude() + ", " + salon.getLongitude()));
+        txtLocation.setText(salon.getLocation());
         txtTime.setText((openTime + " - " + closeTime));
 
         requestManager
                 .load(salon.getImage())
                 .into(imgSalon);
+    }
+
+    private void logout() {
+        SweetAlertDialog confirmDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE);
+        confirmDialog.setTitleText("Are you sure you want to logout?")
+                .setContentText("")
+                .setConfirmText("Ok")
+                .setConfirmClickListener(sDialog -> {
+                    viewModel.clearToken();
+                    Session session = new Session(ProfileActivity.this);
+                    session.clearSession();
+
+                    Intent login = new Intent(ProfileActivity.this, LoginActivity.class);
+                    login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(login);
+                })
+                .setCancelButton("Cancel", SweetAlertDialog::dismissWithAnimation)
+                .show();
+
+        Button btnConfirm = confirmDialog.findViewById(R.id.confirm_button);
+        Button btnCancel = confirmDialog.findViewById(R.id.cancel_button);
+        btnConfirm.setBackgroundResource(R.drawable.button_shape);
+        btnCancel.setBackgroundResource(R.drawable.button_shape);
     }
 }

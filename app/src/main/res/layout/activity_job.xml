@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -48,13 +48,15 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:padding="13dp">
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/title_bar"
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/title_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/grey"
             android:text="Name" />
 
         <TextView
@@ -77,13 +79,15 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:padding="13dp">
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/btn_name"
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/title_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/grey"
             android:text="Duration" />
 
         <TextView
@@ -106,13 +110,15 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:padding="13dp">
+        android:layout_below="@id/btn_duration"
+        android:layout_marginTop="8dp"
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/title_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/grey"
             android:text="Price" />
 
         <TextView
@@ -127,4 +133,29 @@
 
     </LinearLayout>
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/fab_min_margin_end"
+        android:layout_marginBottom="@dimen/fab_min_margin_bottom"
+        android:backgroundTint="@color/disable"
+        android:src="@drawable/ic_round_delete_24"
+        app:fabSize="mini"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_promote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/fab_margin_end"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:backgroundTint="@color/dark_purple"
+        android:src="@drawable/ic_fire"
+        />
+
+</RelativeLayout>

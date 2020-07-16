@@ -2,6 +2,7 @@ package lk.nibm.swiftsalon.ui.adapter;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,9 +20,10 @@ import static lk.nibm.swiftsalon.util.Constants.NORMAL_APPOINTMENT;
 
 public class AppointmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private TextView txtAppointmentData, txtDateTime, txtStatus;
+    private TextView txtAppointmentData, txtDateTime, txtStatus, txtAccept;
     private ImageView imgCustomer;
     private RelativeLayout btnAccept;
+    private ProgressBar prgAccept;
 
     private OnAppointmentListener onAppointmentListener;
     private RequestManager requestManager;
@@ -42,12 +44,9 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder implements Vi
 
         if (type.equals(NEW_APPOINTMENT)) {
             btnAccept = itemView.findViewById(R.id.btn_accept);
-            btnAccept.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onAppointmentListener.onAppointmentAccept(getAdapterPosition());
-                }
-            });
+            txtAccept = itemView.findViewById(R.id.btn_accept_text);
+            prgAccept = itemView.findViewById(R.id.btn_accept_progress);
+            btnAccept.setOnClickListener(v -> onAppointmentListener.onAppointmentAccept(getAdapterPosition()));
         }
 
         if (type.equals(NORMAL_APPOINTMENT)) {
@@ -71,7 +70,6 @@ public class AppointmentViewHolder extends RecyclerView.ViewHolder implements Vi
 
         requestManager
                 .load(appointment.getCustomerImage())
-                .apply(RequestOptions.circleCropTransform())
                 .into(imgCustomer);
     }
 

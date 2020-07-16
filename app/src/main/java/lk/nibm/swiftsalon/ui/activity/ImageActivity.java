@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Salon;
+import lk.nibm.swiftsalon.model.Stylist;
 
 public class ImageActivity extends AppCompatActivity {
     private static final String TAG = "ImageActivity";
@@ -45,6 +46,14 @@ public class ImageActivity extends AppCompatActivity {
             if(salon != null) {
                 RequestManager requestManager = initGlide();
                 requestManager.load(salon.getImage())
+                        .into(image);
+            }
+        }
+        else if(getIntent().hasExtra("stylist")) {
+            Stylist stylist = getIntent().getParcelableExtra("stylist");
+            if(stylist != null) {
+                RequestManager requestManager = initGlide();
+                requestManager.load(stylist.getImage())
                         .into(image);
             }
         }

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <dimen name="fab_margin_bottom">58dp</dimen>
+    <dimen name="fab_margin_end">32dp</dimen>
+    <dimen name="fab_min_margin_bottom">130dp</dimen>
+    <dimen name="fab_min_margin_end">40dp</dimen>
+    <dimen name="main_text">17sp</dimen>
 </resources>

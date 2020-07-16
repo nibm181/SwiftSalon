@@ -41,8 +41,8 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:layout_centerVertical="true"
-            android:text="You have no appointments yet. Promote your jobs to get appointments."
-            android:textSize="17sp" />
+            android:text="You have no completed appointments yet. Promote your jobs to get appointments."
+            />
 
     </RelativeLayout>
 

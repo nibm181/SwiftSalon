@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
 
@@ -53,6 +54,10 @@ public class Salon implements Parcelable {
     @SerializedName("latitude")
     private Double latitude;
 
+    @ColumnInfo(name = "location")
+    @SerializedName("location")
+    private String location;
+
     @ColumnInfo(name = "open_time")
     @SerializedName("open_time")
     private String openTime;
@@ -65,23 +70,11 @@ public class Salon implements Parcelable {
     @SerializedName("image")
     private String image;
 
-    public Salon() {
-    }
+    @Ignore
+    @SerializedName("fcm_token")
+    private String token;
 
-    public Salon(int id, String email, String name, String type, String mobileNo, String addr1,
-                 String addr2, Double longitude, Double latitude, String openTime, String closeTime, String image) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.type = type;
-        this.mobileNo = mobileNo;
-        this.addr1 = addr1;
-        this.addr2 = addr2;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-        this.image = image;
+    public Salon() {
     }
 
     protected Salon(Parcel in) {
@@ -102,9 +95,11 @@ public class Salon implements Parcelable {
         } else {
             latitude = in.readDouble();
         }
+        location = in.readString();
         openTime = in.readString();
         closeTime = in.readString();
         image = in.readString();
+        token = in.readString();
     }
 
     public static final Creator<Salon> CREATOR = new Creator<Salon>() {
@@ -191,6 +186,14 @@ public class Salon implements Parcelable {
         this.latitude = latitude;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getOpenTime() {
         return openTime;
     }
@@ -213,6 +216,34 @@ public class Salon implements Parcelable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Override
+    public String toString() {
+        return "Salon{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
+                ", addr1='" + addr1 + '\'' +
+                ", addr2='" + addr2 + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", location='" + location + '\'' +
+                ", openTime='" + openTime + '\'' +
+                ", closeTime='" + closeTime + '\'' +
+                ", image='" + image + '\'' +
+                ", token='" + token + '\'' +
+                '}';
     }
 
     @Override
@@ -241,26 +272,10 @@ public class Salon implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeDouble(latitude);
         }
+        dest.writeString(location);
         dest.writeString(openTime);
         dest.writeString(closeTime);
         dest.writeString(image);
-    }
-
-    @Override
-    public String toString() {
-        return "Salon{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", mobileNo='" + mobileNo + '\'' +
-                ", addr1='" + addr1 + '\'' +
-                ", addr2='" + addr2 + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                ", openTime='" + openTime + '\'' +
-                ", closeTime='" + closeTime + '\'' +
-                ", image='" + image + '\'' +
-                '}';
+        dest.writeString(token);
     }
 }

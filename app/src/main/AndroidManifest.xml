@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="lk.nibm.swiftsalon">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -21,6 +22,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,6 +35,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".ui.activity.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+        <activity android:name=".ui.activity.AddPromotionActivity" />
+        <activity android:name=".ui.activity.SelectJobActivity" />
+
         <service
             android:name=".service.SSFirebaseMessagingService"
             android:exported="false">
@@ -41,9 +49,22 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.activity.EditJobActivity"
+        <activity
+            android:name=".ui.activity.AddStylistActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".ui.activity.EditStylistActivity"
+            android:parentActivityName=".ui.activity.StylistActivity"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity android:name=".ui.activity.StylistActivity" />
+        <activity android:name=".ui.activity.StylistsActivity" />
+        <activity
+            android:name=".ui.activity.AddJobActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".ui.activity.EditJobActivity"
             android:parentActivityName=".ui.activity.JobActivity"
-            android:windowSoftInputMode="stateAlwaysVisible"/>
+            android:windowSoftInputMode="stateAlwaysVisible" />
         <activity android:name=".ui.activity.ImageActivity" />
         <activity
             android:name=".ui.activity.JobActivity"
@@ -59,6 +80,8 @@
         <activity
             android:name=".ui.activity.AppointmentActivity"
             android:parentActivityName=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.MainActivity" />
         <activity
             android:name=".ui.activity.FirstActivity"
             android:theme="@style/MyNoTitleBar">
@@ -68,8 +91,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity" />
-        <activity android:name=".ui.activity.MainActivity" />
     </application>
 
 </manifest>

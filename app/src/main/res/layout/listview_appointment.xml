@@ -22,19 +22,20 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="5dp"
+            android:layout_gravity="center"
             android:src="@mipmap/ic_launcher_round" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_gravity="center"
             android:layout_margin="15dp">
 
             <TextView
                 android:id="@+id/txt_app_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Customer Name"
                 android:textSize="16sp"
                 android:textColor="@color/white"/>
 
@@ -46,9 +47,9 @@
                     android:id="@+id/txt_date_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date Time"
                     android:textSize="14sp"
-                    android:textColor="@color/grey"/>
+                    android:alpha="0.7"
+                    android:textColor="@color/light_grey"/>
 
                 <TextView
                     android:id="@+id/txt_status"
@@ -57,7 +58,8 @@
                     android:text="Status"
                     android:layout_alignParentEnd="true"
                     android:textSize="14sp"
-                    android:textColor="@color/grey"
+                    android:alpha="0.7"
+                    android:textColor="@color/light_grey"
                     android:visibility="gone"/>
 
             </RelativeLayout>

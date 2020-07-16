@@ -1,5 +1,8 @@
 package lk.nibm.swiftsalon.ui.activity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,16 +28,22 @@ import java.util.List;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
+import lk.nibm.swiftsalon.model.Stylist;
+import lk.nibm.swiftsalon.request.response.GenericResponse;
 import lk.nibm.swiftsalon.ui.adapter.AppointmentDetailsAdapter;
 import lk.nibm.swiftsalon.util.CustomDialog;
 import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.viewmodel.AppointmentViewModel;
 
+import static lk.nibm.swiftsalon.util.Constants.STATUS_CANCELED;
+import static lk.nibm.swiftsalon.util.Constants.STATUS_ONSCHEDULE;
+import static lk.nibm.swiftsalon.util.Constants.STATUS_PENDING;
+
 public class AppointmentActivity extends AppCompatActivity {
 
     private static final String TAG = "AppointmentActivity";
 
-    private TextView txtTitle, txtDateTime, txtStatus, txtCustomer, txtStylist, txtEmpty;
+    private TextView txtTitle, txtDateTime, txtStatus, txtCustomer, txtStylist, txtEmpty, txtTotal;
     private ImageView imgCustomer;
     private RecyclerView rvAppointmentDetails;
     private ImageButton btnBack;
@@ -42,6 +51,7 @@ public class AppointmentActivity extends AppCompatActivity {
     private TextView txtAccept, txtCancel;
     private ProgressBar prgAccept, prgCancel;
     private LinearLayout layoutButtons;
+    private RelativeLayout layoutTotal;
     private ShimmerFrameLayout shimmerJobs;
 
     private Appointment appointment;
@@ -61,6 +71,7 @@ public class AppointmentActivity extends AppCompatActivity {
         txtCustomer = findViewById(R.id.txt_customer);
         txtStylist = findViewById(R.id.txt_stylist);
         txtEmpty = findViewById(R.id.txt_empty);
+        txtTotal = findViewById(R.id.txt_total);
         imgCustomer = findViewById(R.id.img_customer);
         rvAppointmentDetails = findViewById(R.id.rv_appointment_details);
         btnBack = findViewById(R.id.btn_back);
@@ -70,43 +81,32 @@ public class AppointmentActivity extends AppCompatActivity {
         txtCancel = findViewById(R.id.btn_cancel_text);
         prgAccept = findViewById(R.id.btn_accept_progress);
         prgCancel = findViewById(R.id.btn_cancel_progress);
+        layoutTotal = findViewById(R.id.layout_total);
         layoutButtons = findViewById(R.id.layout_buttons);
         shimmerJobs = findViewById(R.id.shimmer_jobs);
 
         viewModel = new ViewModelProvider(this).get(AppointmentViewModel.class);
-        dialog = CustomDialog.getInstance(getApplicationContext());
+        dialog = new CustomDialog(AppointmentActivity.this);
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        btnBack.setOnClickListener(v -> finish());
+
+        btnAccept.setOnClickListener(v -> {
+            acceptAppointmentApi();
         });
 
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAcceptProgress(true);
-                btnCancel.setVisibility(View.GONE);
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCancelProgress(true);
-                btnAccept.setVisibility(View.GONE);
-            }
+        btnCancel.setOnClickListener(v -> {
+            cancelAppointmentApi();
         });
 
         getIncomingIntent();
         initRecyclerView();
         subscribeObservers();
         appointmentDetailsApi();
+        stylistApi();
     }
 
     private void getIncomingIntent() {
-        if(getIntent().hasExtra("appointment")) {
+        if (getIntent().hasExtra("appointment")) {
 
             appointment = getIntent().getParcelableExtra("appointment");
 
@@ -114,18 +114,17 @@ public class AppointmentActivity extends AppCompatActivity {
                     .placeholder(R.drawable.sample_avatar)
                     .error(R.drawable.sample_avatar);
 
-            if(appointment != null) {
+            if (appointment != null) {
 
                 String title = appointment.getCustomerFirstName() + " (" + appointment.getId() + ")";
                 String dateTime = appointment.getDate() + " " + appointment.getTime();
                 String status = appointment.getStatus();
                 String customer = appointment.getCustomerFirstName() + " " + appointment.getCustomerLastName();
-                String stylist = " Elakiri " + appointment.getStylistId();
+                //String stylist = " (" + appointment.getStylistId() + ")";
 
-                if(status.equals("pending")) {
+                if (status.equals(STATUS_PENDING)) {
                     layoutButtons.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     layoutButtons.setVisibility(View.GONE);
                 }
 
@@ -133,7 +132,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 txtDateTime.setText(dateTime);
                 txtStatus.setText(status);
                 txtCustomer.setText(customer);
-                txtStylist.setText(stylist);
+                //txtStylist.setText(stylist);
 
                 Glide.with(this)
                         .setDefaultRequestOptions(options)
@@ -155,14 +154,14 @@ public class AppointmentActivity extends AppCompatActivity {
             @Override
             public void onChanged(Resource<List<AppointmentDetail>> listResource) {
 
-                if(listResource != null) {
-                    if(listResource.data != null) {
+                if (listResource != null) {
+                    if (listResource.data != null) {
 
                         switch (listResource.status) {
 
                             case LOADING: {
                                 Log.d(TAG, "onChanged: LOADING");
-                                showRecyclerView(false);
+                                showRecyclerView(false, listResource.data);
                                 break;
                             }
 
@@ -170,11 +169,11 @@ public class AppointmentActivity extends AppCompatActivity {
                                 Log.d(TAG, "onChanged: ERROR");
                                 Log.d(TAG, "onChanged: ERROR MSG: " + listResource.message);
 
-                                showRecyclerView(true);
+                                showRecyclerView(true, listResource.data);
                                 adapter.submitList(listResource.data);
                                 dialog.showToast(listResource.message);
 
-                                if(listResource.data.isEmpty()) {
+                                if (listResource.data.isEmpty()) {
                                     showEmpty();
                                 }
                                 break;
@@ -183,12 +182,11 @@ public class AppointmentActivity extends AppCompatActivity {
                             case SUCCESS: {
                                 Log.d(TAG, "onChanged: SUCCESS");
 
-                                if(listResource.data.isEmpty()) {
+                                if (listResource.data.isEmpty()) {
                                     txtEmpty.setText("Oops! Something went wrong. Please try again later.");
                                     showEmpty();
-                                }
-                                else {
-                                    showRecyclerView(true);
+                                } else {
+                                    showRecyclerView(true, listResource.data);
                                     adapter.submitList(listResource.data);
                                 }
                                 break;
@@ -198,49 +196,195 @@ public class AppointmentActivity extends AppCompatActivity {
                 }
             }
         });
+
+        viewModel.acceptAppointment().observe(this, new Observer<Resource<GenericResponse<Appointment>>>() {
+            @Override
+            public void onChanged(Resource<GenericResponse<Appointment>> resource) {
+                if (resource != null) {
+                    switch (resource.status) {
+
+                        case LOADING: {
+                            Log.d(TAG, "onChanged: LOADING");
+                            showAcceptProgress();
+                            break;
+                        }
+
+                        case ERROR: {
+                            Log.d(TAG, "onChanged: ERROR");
+                            showButtons();
+                            dialog.showToast(resource.message);
+                            break;
+                        }
+
+                        case SUCCESS: {
+                            if (resource.data.getStatus() == 1) {
+
+                                if (resource.data.getContent() != null) {
+                                    layoutButtons.setVisibility(View.GONE);
+                                    txtStatus.setText(STATUS_ONSCHEDULE);
+                                    dialog.showToast("Accepted");
+                                } else {
+                                    dialog.showAlert("Oops! Something went wrong. Try again later.");
+                                }
+
+                            } else {
+                                dialog.showAlert(resource.data.getMessage());
+                            }
+                            showButtons();
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        viewModel.cancelAppointment().observe(this, new Observer<Resource<GenericResponse<Appointment>>>() {
+            @Override
+            public void onChanged(Resource<GenericResponse<Appointment>> resource) {
+                if (resource != null) {
+                    switch (resource.status) {
+
+                        case LOADING: {
+                            Log.d(TAG, "onChanged: LOADING");
+                            showCancelProgress();
+                            break;
+                        }
+
+                        case ERROR: {
+                            Log.d(TAG, "onChanged: ERROR");
+                            showButtons();
+                            dialog.showToast(resource.message);
+                            break;
+                        }
+
+                        case SUCCESS: {
+                            if (resource.data.getStatus() == 1) {
+
+                                if (resource.data.getContent() != null) {
+                                    layoutButtons.setVisibility(View.GONE);
+                                    txtStatus.setText(STATUS_CANCELED);
+                                    dialog.showToast("Canceled");
+                                } else {
+                                    dialog.showAlert("Oops! Something went wrong. Try again later.");
+                                }
+
+                            } else {
+                                dialog.showAlert(resource.data.getMessage());
+                            }
+                            showButtons();
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        viewModel.getStylist().observe(this, new Observer<Resource<Stylist>>() {
+            @Override
+            public void onChanged(Resource<Stylist> stylistResource) {
+                if (stylistResource != null) {
+                    if (stylistResource.data != null) {
+
+                        switch (stylistResource.status) {
+
+                            case LOADING: {
+                                Log.d(TAG, "onChanged: STYLIST LOADING");
+                                break;
+                            }
+
+                            case ERROR:
+
+                            case SUCCESS: {
+                                String stylist = " " + stylistResource.data.getName() + " (" + stylistResource.data.getId() + ")";
+                                txtStylist.setText(stylist);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
-    private void showRecyclerView(boolean show) {
-        if(show) {
+    private void showRecyclerView(boolean show, List<AppointmentDetail> appointmentDetails) {
+        if (show) {
             rvAppointmentDetails.setVisibility(View.VISIBLE);
             shimmerJobs.setVisibility(View.GONE);
-        }
-        else {
+            layoutTotal.setVisibility(View.VISIBLE);
+
+            float total = 0;
+            for (AppointmentDetail appointmentDetail : appointmentDetails) {
+                total = total + appointmentDetail.getPrice();
+            }
+            txtTotal.setText(String.valueOf(total));
+        } else {
             rvAppointmentDetails.setVisibility(View.GONE);
             shimmerJobs.setVisibility(View.VISIBLE);
+            layoutTotal.setVisibility(View.GONE);
         }
         txtEmpty.setVisibility(View.GONE);
     }
 
-    private void showAcceptProgress(boolean show) {
-        if(show) {
-            txtAccept.setVisibility(View.GONE);
-            prgAccept.setVisibility(View.VISIBLE);
-        }
-        else {
-            txtAccept.setVisibility(View.VISIBLE);
-            prgAccept.setVisibility(View.GONE);
-        }
+    private void showAcceptProgress() {
+        txtAccept.setVisibility(View.GONE);
+        prgAccept.setVisibility(View.VISIBLE);
+        btnCancel.setVisibility(View.GONE);
     }
 
-    private void showCancelProgress(boolean show) {
-        if(show) {
-            txtCancel.setVisibility(View.GONE);
-            prgCancel.setVisibility(View.VISIBLE);
-        }
-        else {
-            txtCancel.setVisibility(View.VISIBLE);
-            prgCancel.setVisibility(View.GONE);
-        }
+    private void showCancelProgress() {
+        txtCancel.setVisibility(View.GONE);
+        prgCancel.setVisibility(View.VISIBLE);
+        btnAccept.setVisibility(View.GONE);
+    }
+
+    private void showButtons() {
+        txtCancel.setVisibility(View.VISIBLE);
+        prgCancel.setVisibility(View.GONE);
+        btnAccept.setVisibility(View.VISIBLE);
+
+
+        txtAccept.setVisibility(View.VISIBLE);
+        prgAccept.setVisibility(View.GONE);
+        btnCancel.setVisibility(View.VISIBLE);
     }
 
     private void showEmpty() {
         txtEmpty.setVisibility(View.VISIBLE);
         rvAppointmentDetails.setVisibility(View.GONE);
         shimmerJobs.setVisibility(View.GONE);
+        layoutTotal.setVisibility(View.GONE);
     }
 
     private void appointmentDetailsApi() {
         viewModel.appointmentDetailsApi(appointment.getId());
+    }
+
+    private void stylistApi() {
+        viewModel.stylistApi(appointment.getStylistId());
+    }
+
+    private void acceptAppointmentApi() {
+        if(isOnline()) {
+            viewModel.acceptAppointmentApi(appointment.getId());
+        }
+        else {
+            dialog.showToast("Check your connection and try again.");
+        }
+    }
+
+    private void cancelAppointmentApi() {
+        if(isOnline()) {
+            viewModel.cancelAppointmentApi(appointment.getId());
+        }
+        else {
+            dialog.showToast("Check your connection and try again.");
+        }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }

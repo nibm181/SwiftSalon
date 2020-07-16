@@ -89,7 +89,7 @@ public class EditProfileActivity extends AppCompatActivity {
         layoutTime = findViewById(R.id.layout_time);
 
         dateFormat = new SimpleDateFormat("HH:mm");
-        dialog = CustomDialog.getInstance(EditProfileActivity.this);
+        dialog = new CustomDialog(EditProfileActivity.this);
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
 
         btnBack.setOnClickListener(v -> finish());
