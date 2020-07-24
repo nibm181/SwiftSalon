@@ -87,7 +87,7 @@ public class StylistActivity extends AppCompatActivity {
         subscribeObservers();
         getJobsApi(stylist.getId());
 
-        btnBack.setOnClickListener(v -> supportFinishAfterTransition());
+        btnBack.setOnClickListener(v -> finish());
 
         btnName.setOnClickListener(v -> {
             Intent editJob = new Intent(StylistActivity.this, EditStylistActivity.class);
@@ -120,12 +120,13 @@ public class StylistActivity extends AppCompatActivity {
             ActivityOptionsCompat options = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this, imgStylist, "image");
 
-            startActivity(editImage, options.toBundle());
+            startActivityForResult(editImage, EDIT_STYLIST,options.toBundle());
         });
 
         btnJobs.setOnClickListener(v -> {
             Intent intent = new Intent(StylistActivity.this, SelectJobActivity.class);
             intent.putExtra("jobs", (ArrayList<Job>) selectedJobs);
+            intent.putExtra("stylistId", stylist.getId());
             intent.putExtra("edit", "edit");
             startActivityForResult(intent, SelectJobActivity.SELECT_JOB_EDIT);
         });
@@ -272,7 +273,7 @@ public class StylistActivity extends AppCompatActivity {
     private void deleteApi() {
         confirmDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE);
         confirmDialog.setTitleText("Are you sure?")
-                .setContentText("Deleting a job will remove the job from every stylist's job list.")
+                .setContentText("You want to delete.")
                 .setConfirmText("Ok")
                 .setConfirmClickListener(sDialog -> {
                     if (isOnline()) {

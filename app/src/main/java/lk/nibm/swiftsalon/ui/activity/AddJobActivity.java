@@ -136,7 +136,8 @@ public class AddJobActivity extends AppCompatActivity {
 
     private void disableSave() {
         btnSave.setEnabled(false);
-        txtName.getEditText().addTextChangedListener(new TextWatcher() {
+
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -156,51 +157,11 @@ public class AddJobActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
             }
-        });
+        };
 
-        txtDuration.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                txtDuration.setError(null);
-                if (txtName.getEditText().getText().toString().trim().isEmpty()
-                        || txtDuration.getEditText().getText().toString().trim().isEmpty()
-                        || txtPrice.getEditText().getText().toString().trim().isEmpty()) {
-                    btnSave.setEnabled(false);
-                } else {
-                    btnSave.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        txtPrice.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                txtPrice.setError(null);
-                if (txtName.getEditText().getText().toString().trim().isEmpty()
-                        || txtDuration.getEditText().getText().toString().trim().isEmpty()
-                        || txtPrice.getEditText().getText().toString().trim().isEmpty()) {
-                    btnSave.setEnabled(false);
-                } else {
-                    btnSave.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        txtName.getEditText().addTextChangedListener(textWatcher);
+        txtDuration.getEditText().addTextChangedListener(textWatcher);
+        txtPrice.getEditText().addTextChangedListener(textWatcher);
 
     }
 

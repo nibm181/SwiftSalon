@@ -22,7 +22,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_arrow_back_24"
+            android:src="@drawable/ic_round_arrow_back_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,11 +52,13 @@
         android:layout_below="@id/title_bar">
 
         <ImageView
-            android:id="@+id/btn_image"
+            android:id="@+id/img_stylist"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
+            android:background="@drawable/oval_shape"
+            android:transitionName="image"
             android:src="@drawable/sample_avatar"
             />
 
@@ -66,8 +68,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_round_add_24"
+            android:clickable="true"
             android:background="@drawable/circle_with_border"
-            />
+            android:focusable="true" />
 
     </RelativeLayout>
 
@@ -90,6 +93,7 @@
             android:maxLines="1"
             android:textColor="@color/dark"
             android:focusableInTouchMode="true"
+            android:imeOptions="actionDone"
             android:maxLength="50"/>
 
     </com.google.android.material.textfield.TextInputLayout>

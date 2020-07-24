@@ -124,6 +124,7 @@ public class SelectJobActivity extends AppCompatActivity implements OnItemListen
 
                             adapter.submitList(listResource.data);
                             dialog.showToast(listResource.message);
+                            showRecyclerView(true);
 
                             if (listResource.data.isEmpty()) {
                                 showEmpty();

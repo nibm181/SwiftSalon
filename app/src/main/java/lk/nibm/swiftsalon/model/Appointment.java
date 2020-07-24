@@ -194,4 +194,21 @@ public class Appointment implements Parcelable {
         dest.writeString(customerImage);
         dest.writeString(modifiedOn);
     }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", salonId=" + salonId +
+                ", customerId=" + customerId +
+                ", stylistId=" + stylistId +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", status='" + status + '\'' +
+                ", customerFirstName='" + customerFirstName + '\'' +
+                ", customerLastName='" + customerLastName + '\'' +
+                ", customerImage='" + customerImage + '\'' +
+                ", modifiedOn='" + modifiedOn + '\'' +
+                '}';
+    }
 }

@@ -13,25 +13,120 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_arrow_back_24"/>
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_round_arrow_back_24"/>
+
+    <ImageButton
+        android:id="@+id/btn_close_edit"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_round_close_24"
+        android:visibility="gone"/>
 
     <ImageButton
         android:id="@+id/btn_edit"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_edit_24"
+        android:src="@drawable/ic_round_edit_24"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_margin="5dp"
         android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:id="@+id/btn_save"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_round_check_24"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_margin="5dp"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/image"
         android:transitionName="image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="400dp"
+        android:maxHeight="600dp"
         android:adjustViewBounds="true"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
         />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/white"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:animateLayoutChanges="true"
+        android:elevation="10dp"
+        android:backgroundTint="@color/dark"
+        >
+
+        <LinearLayout
+            android:id="@+id/layout_edit"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:orientation="vertical"
+            android:background="@color/dark"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2sp"
+                android:background="@color/dark_purple"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_gallery"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:src="@drawable/ic_round_photo_library_24"
+                    />
+
+                <ImageButton
+                    android:id="@+id/btn_camera"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/circle_button_background"
+                    android:src="@drawable/ic_round_photo_camera_24"
+                    />
+
+                <ImageButton
+                    android:id="@+id/btn_remove"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:src="@drawable/ic_round_delete_24"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
 </RelativeLayout>

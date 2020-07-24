@@ -10,11 +10,12 @@ import androidx.room.TypeConverters;
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
 import lk.nibm.swiftsalon.model.Job;
+import lk.nibm.swiftsalon.model.Promotion;
 import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.model.Stylist;
 import lk.nibm.swiftsalon.model.StylistJob;
 
-@Database(entities = {Appointment.class, AppointmentDetail.class, Salon.class, Job.class, Stylist.class, StylistJob.class}, version = 10)
+@Database(entities = {Appointment.class, AppointmentDetail.class, Salon.class, Job.class, Stylist.class, StylistJob.class, Promotion.class}, version = 11)
 @TypeConverters({Converter.class})
 public abstract class SwiftSalonDatabase extends RoomDatabase {
 

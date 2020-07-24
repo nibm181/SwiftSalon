@@ -1,27 +1,90 @@
 package lk.nibm.swiftsalon.model;
 
-public class Promotion {
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+
+@Entity(tableName = "tbl_promotion")
+public class Promotion implements Parcelable {
+
+    @PrimaryKey
+    @NonNull
     private int id;
+
+    @ColumnInfo(name = "salon_id")
+    @SerializedName("salon_id")
+    private int salonId;
+
+    @ColumnInfo(name = "job_id")
+    @SerializedName("job_id")
     private int jobId;
+
+    @ColumnInfo(name = "description")
+    @SerializedName("description")
     private String description;
+
+    @ColumnInfo(name = "off_amount")
+    @SerializedName("off_amount")
     private float offAmount;
-    private int duration;
+
+    @ColumnInfo(name = "image")
+    @SerializedName("image")
     private String image;
-    private boolean status;
+
+    @ColumnInfo(name = "start_date")
+    @SerializedName("start_date")
+    private Date startDate;
+
+    @ColumnInfo(name = "end_date")
+    @SerializedName("end_date")
+    private Date endDate;
 
     public Promotion() {
     }
 
-    public Promotion(int id, int jobId, String description, float offAmount, int duration, String image, boolean status) {
-        this.id = id;
-        this.jobId = jobId;
-        this.description = description;
-        this.offAmount = offAmount;
-        this.duration = duration;
-        this.image = image;
-        this.status = status;
+    protected Promotion(Parcel in) {
+        id = in.readInt();
+        salonId = in.readInt();
+        jobId = in.readInt();
+        description = in.readString();
+        offAmount = in.readFloat();
+        image = in.readString();
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(salonId);
+        dest.writeInt(jobId);
+        dest.writeString(description);
+        dest.writeFloat(offAmount);
+        dest.writeString(image);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Promotion> CREATOR = new Creator<Promotion>() {
+        @Override
+        public Promotion createFromParcel(Parcel in) {
+            return new Promotion(in);
+        }
+
+        @Override
+        public Promotion[] newArray(int size) {
+            return new Promotion[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -29,6 +92,14 @@ public class Promotion {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getSalonId() {
+        return salonId;
+    }
+
+    public void setSalonId(int salonId) {
+        this.salonId = salonId;
     }
 
     public int getJobId() {
@@ -55,14 +126,6 @@ public class Promotion {
         this.offAmount = offAmount;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
     public String getImage() {
         return image;
     }
@@ -71,24 +134,35 @@ public class Promotion {
         this.image = image;
     }
 
-    public boolean isStatus() {
-        return status;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     @Override
     public String toString() {
         return "Promotion{" +
                 "id=" + id +
+                ", salonId=" + salonId +
                 ", jobId=" + jobId +
                 ", description='" + description + '\'' +
                 ", offAmount=" + offAmount +
-                ", duration=" + duration +
                 ", image='" + image + '\'' +
-                ", status=" + status +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 '}';
     }
+
+
 }

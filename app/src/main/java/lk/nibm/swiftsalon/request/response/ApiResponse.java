@@ -28,7 +28,8 @@ public class ApiResponse<T> {
             message = "Oops! something went wrong.";
         }
         else {
-            Log.d(TAG, "create: " + error.getLocalizedMessage());
+            Log.d(TAG, "ERROR create: " + error.getLocalizedMessage());
+            Log.d(TAG, "ERROR create: " + error.toString());
         }
         return new ApiErrorResponse<>(!message.equals("") ? message : "We are unable to connect you with us.");
     }

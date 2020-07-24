@@ -63,6 +63,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnSave = findViewById(R.id.btn_ok);
         progressBar = findViewById(R.id.progress_bar);
 
+        btnSave.setEnabled(false);
+
         geocoder = new Geocoder(this, Locale.getDefault());
         dialog = new CustomDialog(MapsActivity.this);
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
@@ -198,6 +200,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        btnSave.setEnabled(true);
 
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override

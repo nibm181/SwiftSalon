@@ -199,8 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
     private RequestManager initGlide() {
         RequestOptions options = new RequestOptions()
                 .placeholder(R.drawable.sample_salon)
-                .error(R.drawable.sample_salon)
-                .optionalCircleCrop();
+                .error(R.drawable.sample_salon);
 
         return Glide.with(getApplicationContext())
                 .setDefaultRequestOptions(options);
@@ -220,6 +219,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         requestManager
                 .load(salon.getImage())
+                .circleCrop()
                 .into(imgSalon);
     }
 

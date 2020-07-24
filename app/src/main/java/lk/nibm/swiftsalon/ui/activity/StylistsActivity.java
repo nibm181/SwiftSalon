@@ -156,8 +156,6 @@ public class StylistsActivity extends AppCompatActivity implements OnItemListene
 
         Intent intent = new Intent(StylistsActivity.this, StylistActivity.class);
         intent.putExtra("stylist", stylist);
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, findViewById(R.id.img_stylist), "image");
-        startActivity(intent, options.toBundle());
+        startActivity(intent);
     }
 }

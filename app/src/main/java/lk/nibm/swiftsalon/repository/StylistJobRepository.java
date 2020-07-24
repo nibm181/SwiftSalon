@@ -49,6 +49,8 @@ public class StylistJobRepository  {
             @Override
             protected void saveCallResult(@NonNull GenericResponse<List<StylistJob>> item) {
                 if(item.getContent() != null && !item.getContent().isEmpty()) {
+                    swiftSalonDao.deleteStylistJobsByStylist(item.getContent().get(0).getStylistId());
+
                     StylistJob[] arrayStylistJobs = new StylistJob[item.getContent().size()];
                     swiftSalonDao.insertStylistJobs(item.getContent().toArray(item.getContent().toArray(arrayStylistJobs)));
                 }

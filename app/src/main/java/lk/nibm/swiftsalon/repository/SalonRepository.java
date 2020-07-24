@@ -17,6 +17,7 @@ import lk.nibm.swiftsalon.util.AppExecutor;
 import lk.nibm.swiftsalon.util.NetworkBoundResource;
 import lk.nibm.swiftsalon.util.NetworkOnlyBoundResource;
 import lk.nibm.swiftsalon.util.Resource;
+import okhttp3.MultipartBody;
 
 public class SalonRepository {
 
@@ -32,7 +33,7 @@ public class SalonRepository {
         return instance;
     }
 
-    public SalonRepository(Context context) {
+    private SalonRepository(Context context) {
         swiftSalonDao = SwiftSalonDatabase.getInstance(context).getDao();
     }
 
@@ -90,6 +91,24 @@ public class SalonRepository {
             @Override
             protected LiveData<ApiResponse<GenericResponse<Salon>>> createCall() {
                 return ServiceGenerator.getSalonApi().updateSalon(salon);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Salon> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertSalon(item.getContent());
+                }
+            }
+
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<GenericResponse<Salon>>> updateSalonImageApi(int salonId, MultipartBody.Part image) {
+        return new NetworkOnlyBoundResource<Salon, GenericResponse<Salon>>(AppExecutor.getInstance()) {
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Salon>>> createCall() {
+                return ServiceGenerator.getSalonApi().updateSalonImage(salonId, image);
             }
 
             @Override

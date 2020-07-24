@@ -3,14 +3,17 @@ package lk.nibm.swiftsalon.request;
 import androidx.lifecycle.LiveData;
 import androidx.room.Delete;
 
+import java.util.HashMap;
 import java.util.List;
 
 import lk.nibm.swiftsalon.model.Job;
+import lk.nibm.swiftsalon.model.Promotion;
 import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.model.Stylist;
 import lk.nibm.swiftsalon.model.StylistJob;
 import lk.nibm.swiftsalon.request.response.ApiResponse;
 import lk.nibm.swiftsalon.request.response.GenericResponse;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -18,8 +21,10 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -56,6 +61,10 @@ public interface SalonApi {
     @DELETE("Job/{id}")
     LiveData<ApiResponse<GenericResponse<Job>>> deleteJob(@Path("id") int id);
 
+    @Multipart
+    @POST("Stylist")
+    LiveData<ApiResponse<GenericResponse<Stylist>>> saveStylist(@Part("data") HashMap<String, Object> hashMap, @Part MultipartBody.Part image);
+
     @GET("Stylist")
     LiveData<ApiResponse<GenericResponse<List<Stylist>>>> getStylists(@Query("salon_id") int salonId);
 
@@ -73,4 +82,24 @@ public interface SalonApi {
 
     @PUT("Stylist_job")
     LiveData<ApiResponse<GenericResponse<List<StylistJob>>>> updateStylistJobs(@Body List<StylistJob> stylistJobs);
+
+    @Multipart
+    @POST("Upload")
+    LiveData<ApiResponse<GenericResponse<Salon>>> updateSalonImage(@Part("salon_id") int salonId, @Part MultipartBody.Part image);
+
+    @Multipart
+    @POST("Upload")
+    LiveData<ApiResponse<GenericResponse<Stylist>>> updateStylistImage(@Part("stylist_id") int stylistId, @Part MultipartBody.Part image);
+
+    @Multipart
+    @POST("Promotion")
+    LiveData<ApiResponse<GenericResponse<Promotion>>> savePromotion(@Part("promotion") Promotion promotion, @Part MultipartBody.Part image);
+
+    @GET("Promotion")
+    LiveData<ApiResponse<GenericResponse<List<Promotion>>>> getPromotions(@Query("salon_id") int salonId);
+
+    @Multipart
+    @POST("Upload")
+    Call<ResponseBody> uploadImage(@Part("stylist") Stylist stylist,
+                                   @Part MultipartBody .Part image);
 }

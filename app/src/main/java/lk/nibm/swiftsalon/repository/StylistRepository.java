@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
+import java.util.HashMap;
 import java.util.List;
 
 import lk.nibm.swiftsalon.model.Job;
@@ -22,6 +23,7 @@ import lk.nibm.swiftsalon.util.NetworkBoundResource;
 import lk.nibm.swiftsalon.util.NetworkOnlyBoundResource;
 import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.util.Session;
+import okhttp3.MultipartBody;
 
 public class StylistRepository {
 
@@ -151,6 +153,42 @@ public class StylistRepository {
             @Override
             protected LiveData<ApiResponse<GenericResponse<List<StylistJob>>>> createCall() {
                 return ServiceGenerator.getSalonApi().getStylistJobsByStylist(id);
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<GenericResponse<Stylist>>> saveStylistApi(HashMap<String, Object> hashMap, MultipartBody.Part image) {
+        return new NetworkOnlyBoundResource<Stylist, GenericResponse<Stylist>>(AppExecutor.getInstance()) {
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Stylist>>> createCall() {
+                return ServiceGenerator.getSalonApi().saveStylist(hashMap, image);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Stylist> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertStylist(item.getContent());
+                }
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<GenericResponse<Stylist>>> updateStylistImageApi(int stylistId, MultipartBody.Part image) {
+        return new NetworkOnlyBoundResource<Stylist, GenericResponse<Stylist>>(AppExecutor.getInstance()) {
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Stylist>>> createCall() {
+                return ServiceGenerator.getSalonApi().updateStylistImage(stylistId, image);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Stylist> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertStylist(item.getContent());
+                }
             }
         }.getAsLiveData();
     }

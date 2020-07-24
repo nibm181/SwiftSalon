@@ -33,6 +33,7 @@ import lk.nibm.swiftsalon.ui.activity.JobsActivity;
 import lk.nibm.swiftsalon.ui.activity.LoginActivity;
 import lk.nibm.swiftsalon.ui.activity.ProfileActivity;
 import lk.nibm.swiftsalon.ui.activity.StylistsActivity;
+import lk.nibm.swiftsalon.ui.activity.UploadTestActivity;
 import lk.nibm.swiftsalon.ui.adapter.SliderAdapter;
 import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.util.Session;
@@ -76,6 +77,11 @@ public class DashboardFragment extends Fragment {
         btnStylists.setOnClickListener(v -> {
             Intent stylists = new Intent(getContext(), StylistsActivity.class);
             startActivity(stylists);
+        });
+
+        btnPromotions.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), UploadTestActivity.class);
+            startActivity(intent);
         });
 
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);

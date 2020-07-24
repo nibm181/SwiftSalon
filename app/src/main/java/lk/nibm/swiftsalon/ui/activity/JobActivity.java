@@ -92,6 +92,7 @@ public class JobActivity extends AppCompatActivity {
         btnPromote.setOnClickListener(v -> {
             //dialog.showAlert("Promote option coming soon!");
             Intent intent = new Intent(JobActivity.this, AddPromotionActivity.class);
+            intent.putExtra("job", job);
             startActivity(intent);
         });
     }

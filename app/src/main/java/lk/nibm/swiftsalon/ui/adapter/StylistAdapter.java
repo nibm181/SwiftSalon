@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 
+import java.util.Objects;
+
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Stylist;
 
@@ -37,8 +39,8 @@ public class StylistAdapter extends ListAdapter<Stylist, RecyclerView.ViewHolder
         public boolean areContentsTheSame(@NonNull Stylist oldItem, @NonNull Stylist newItem) {
             return oldItem.getName().equals(newItem.getName()) &&
                     oldItem.getGender().equals(newItem.getGender()) &&
-                    oldItem.getImage().equals(newItem.getImage()) &&
-                    oldItem.getStatus() == newItem.getStatus();
+                    oldItem.getStatus() == newItem.getStatus() &&
+                    Objects.equals(oldItem.getImage(), newItem.getImage());
         }
     };
 

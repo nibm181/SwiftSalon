@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,6 +10,11 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+
+        //Material Calender Themes
+        <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen</item>
+        <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>
     </style>
 
     <style name="MyNoTitleBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -43,12 +48,6 @@
         <item name="boxCornerRadiusTopEnd">50sp</item>
         <item name="errorTextColor">@color/dark_grey</item>
         <item name="errorEnabled">true</item>
-    </style>
-
-    <style name="CalenderTheme" parent="Theme.MaterialComponents.Light.Bridge">
-        <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
-        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen</item>
-        <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>
     </style>
 
 </resources>

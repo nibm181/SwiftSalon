@@ -3,14 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:theme="@style/CalenderTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:animateLayoutChanges="true"
     tools:context=".ui.activity.AddPromotionActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/app_titlebar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -19,29 +18,24 @@
 
         <ImageButton
             android:id="@+id/btn_back"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_arrow_back_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:src="@drawable/ic_round_arrow_back_24" />
 
         <TextView
             android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Promotion"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/btn_back"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.483" />
+            android:textSize="17sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,69 +44,43 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/layout_img"
-                android:layout_gravity="center"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="28dp"
-                android:layout_below="@id/title_bar">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_image"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:requiresFadingEdge="vertical"
+                app:cardCornerRadius="20dp"
+                >
 
                 <ImageView
-                    android:id="@+id/btn_image"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:id="@+id/image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/sample_salon"
+                    android:src="@drawable/sample_promo"
+                    android:transitionName="image"
                     />
 
-                <ImageButton
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_round_add_24"
-                    android:background="@drawable/circle_with_border"
-                    />
-
-            </RelativeLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_gender"
-                style="@style/MaterialOutlinedDropdown"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center"
-                android:textColorHint="@color/grey"
-                app:endIconTint="@color/disable"
-                android:hint="Select Job">
-
-                <AutoCompleteTextView
-                    android:id="@+id/dropdown_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingStart="25sp"
-                    android:paddingEnd="13sp"
-                    android:inputType="text"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/dark"
-                    android:cursorVisible='false'/>
-
-            </com.google.android.material.textfield.TextInputLayout>
+            </androidx.cardview.widget.CardView>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_description"
                 style="@style/MaterialOutlinedInputField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="17dp"
                 android:layout_gravity="center"
                 android:textColorHint="@color/grey"
+                app:counterEnabled="true"
+                app:counterMaxLength="100"
                 android:hint="Description">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -120,10 +88,14 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="25sp"
                     android:paddingEnd="13sp"
-                    android:inputType="textCapWords"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:textColor="@color/dark"
                     android:focusableInTouchMode="true"
-                    android:maxLength="200"/>
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/txt_offer"
+                    android:maxLength="100"
+                    android:maxLines="5"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +104,7 @@
                 style="@style/MaterialOutlinedInputField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="17dp"
                 android:layout_gravity="center"
                 app:helperText="Offer amount can attract more clients"
                 android:textColorHint="@color/grey"
@@ -156,7 +128,7 @@
                 style="@style/MaterialOutlinedInputField"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="17dp"
                 android:layout_gravity="center"
                 android:textColorHint="@color/grey"
                 android:hint="Promotion date range">
@@ -168,6 +140,7 @@
                     android:paddingEnd="13sp"
                     android:inputType="date"
                     android:maxLines="1"
+                    android:textAlignment="center"
                     android:textColor="@color/dark"
                     android:focusableInTouchMode="true"/>
 

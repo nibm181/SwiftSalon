@@ -12,6 +12,7 @@ import java.util.List;
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
 import lk.nibm.swiftsalon.model.Job;
+import lk.nibm.swiftsalon.model.Promotion;
 import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.model.Stylist;
 import lk.nibm.swiftsalon.model.StylistJob;
@@ -123,4 +124,17 @@ public interface SwiftSalonDao {
 
     @Query("SELECT J.* FROM tbl_job J INNER JOIN tbl_stylist_job SJ ON J.id = SJ.job_id WHERE SJ.stylist_id = :stylistId")
     LiveData<List<Job>> getJobsByStylist(int stylistId);
+
+    //Promotion
+    @Insert(onConflict = REPLACE)
+    long[] insertPromotions(Promotion... promotions);
+
+    @Insert(onConflict = REPLACE)
+    void insertPromotion(Promotion promotion);
+
+    @Query("SELECT * FROM tbl_promotion WHERE salon_id = :salonId")
+    LiveData<List<Promotion>> getPromotions(int salonId);
+
+    @Query("DELETE FROM tbl_promotion WHERE salon_id = :salonId")
+    void deletePromotions(int salonId);
 }
