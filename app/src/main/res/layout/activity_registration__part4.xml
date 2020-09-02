@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.Registration_Part3">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/app_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/custom_titlebar"
+        >
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_round_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Salon"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/btn_back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.483" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_location"
+        style="@style/MaterialOutlinedInputField"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Select Location"
+        android:textColorHint="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        app:helperText="Location used to find your place easily by clients"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            android:paddingStart="25sp"
+            android:paddingEnd="13sp"
+            android:textColor="@color/dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="left">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/time_open"
+            style="@style/MaterialOutlinedInputField"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:hint="Open Time"
+            android:textColorHint="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:inputType="textCapWords"
+                android:maxLength="50"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/dark" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/time_close"
+            style="@style/MaterialOutlinedInputField"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:hint="Close Time"
+            android:textColorHint="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:inputType="textCapWords"
+                android:maxLength="50"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/dark" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_pwd"
+        android:layout_width="300dp"
+        android:layout_marginTop="5dp"
+        style="@style/MaterialOutlinedInputField"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Password"
+        android:textColorHint="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dp"
+        tools:ignore="DuplicateIds">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:inputType="textPassword"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:paddingStart="25sp"
+            android:paddingEnd="13sp"
+            android:textColor="@color/dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_cpwd"
+        style="@style/MaterialOutlinedInputField"
+        android:layout_marginTop="5dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Confirm Password"
+        android:textColorHint="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dp"
+        tools:ignore="DuplicateIds">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:inputType="textPassword"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:paddingStart="25sp"
+            android:paddingEnd="13sp"
+            android:textColor="@color/dark" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="116dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+
+        android:background="@drawable/button2_shape"
+        android:text="Register" />
+
+
+</LinearLayout>

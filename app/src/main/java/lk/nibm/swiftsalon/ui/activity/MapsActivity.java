@@ -1,6 +1,7 @@
 package lk.nibm.swiftsalon.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -42,6 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng latLng;
     private Geocoder geocoder;
     private List<Address> addresses;
+    String address = "Unnamed Location";
 
     private CustomDialog dialog;
     private EditProfileViewModel viewModel;
@@ -75,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnBack.setOnClickListener(v -> finish());
 
         btnSave.setOnClickListener(v -> {
-            updateApi();
+            completeLocation();
         });
     }
 
@@ -153,16 +155,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void completeLocation() {
+        address = "Unnamed Location";
+        try {
+            addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            address = addresses.get(0).getAddressLine(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(salon != null) {
+            updateApi();
+        }
+        else {
+            Intent data = new Intent();
+            data.putExtra("location", address);
+            data.putExtra("latitude", marker.getPosition().latitude);
+            data.putExtra("longitude", marker.getPosition().longitude);
+            setResult(RESULT_OK, data);
+
+            finish();
+        }
+    }
+
     private void updateApi() {
         if (isOnline()) {
-            String address = "Unnamed Location";
-            try {
-                addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                address = addresses.get(0).getAddressLine(0);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             salon.setLatitude(marker.getPosition().latitude);
             salon.setLongitude(marker.getPosition().longitude);
             salon.setLocation(address);

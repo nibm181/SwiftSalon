@@ -123,6 +123,36 @@ public class SalonRepository {
         }.getAsLiveData();
     }
 
+    public LiveData<Resource<GenericResponse>> sendEmail(String email) {
+        return new NetworkOnlyBoundResource<GenericResponse, GenericResponse>(AppExecutor.getInstance()) {
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse>> createCall() {
+                return ServiceGenerator.getSalonApi2().sendEmail(email);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse item) {
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<GenericResponse>> verifyEmail(String email, int code) {
+        return new NetworkOnlyBoundResource<GenericResponse, GenericResponse>(AppExecutor.getInstance()) {
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse>> createCall() {
+                return ServiceGenerator.getSalonApi().verifyEmail(email, code);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse item) {
+            }
+        }.getAsLiveData();
+    }
+
     public LiveData<Resource<GenericResponse>> verifyPasswordApi(HashMap<Object, Object> data) {
         return new NetworkOnlyBoundResource<Object, GenericResponse>(AppExecutor.getInstance()) {
             @NonNull

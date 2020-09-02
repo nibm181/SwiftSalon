@@ -94,6 +94,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.Registration_Part4" />
+        <activity android:name=".ui.activity.Registration_Part3" />
+        <activity android:name=".ui.activity.Registration_Part2" />
+        <activity android:name=".ui.activity.Registration" />
     </application>
 
 </manifest>

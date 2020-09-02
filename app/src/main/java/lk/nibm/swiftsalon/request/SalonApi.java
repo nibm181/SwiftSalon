@@ -121,4 +121,13 @@ public interface SalonApi {
     @GET("Earning")
     LiveData<ApiResponse<GenericResponse<List<StylistEarning>>>> getStylistEarnings(@Query("salon_id") int salonId, @Query("time") String date, @Query("type") String type);
 
+
+    @FormUrlEncoded
+    @POST("Salon")
+    LiveData<ApiResponse<GenericResponse>> sendEmail(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("Salon")
+    LiveData<ApiResponse<GenericResponse>> verifyEmail(@Field("email") String email, @Field("rand_id") int code);
+
 }
