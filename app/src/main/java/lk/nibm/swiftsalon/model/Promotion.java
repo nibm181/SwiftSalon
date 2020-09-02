@@ -17,6 +17,7 @@ public class Promotion implements Parcelable {
 
     @PrimaryKey
     @NonNull
+    @SerializedName("promotion_id")
     private int id;
 
     @ColumnInfo(name = "salon_id")
@@ -26,6 +27,10 @@ public class Promotion implements Parcelable {
     @ColumnInfo(name = "job_id")
     @SerializedName("job_id")
     private int jobId;
+
+    @ColumnInfo(name = "job_name")
+    @SerializedName("job_name")
+    private String jobName;
 
     @ColumnInfo(name = "description")
     @SerializedName("description")
@@ -54,24 +59,10 @@ public class Promotion implements Parcelable {
         id = in.readInt();
         salonId = in.readInt();
         jobId = in.readInt();
+        jobName = in.readString();
         description = in.readString();
         offAmount = in.readFloat();
         image = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(salonId);
-        dest.writeInt(jobId);
-        dest.writeString(description);
-        dest.writeFloat(offAmount);
-        dest.writeString(image);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<Promotion> CREATOR = new Creator<Promotion>() {
@@ -108,6 +99,14 @@ public class Promotion implements Parcelable {
 
     public void setJobId(int jobId) {
         this.jobId = jobId;
+    }
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 
     public String getDescription() {
@@ -156,6 +155,7 @@ public class Promotion implements Parcelable {
                 "id=" + id +
                 ", salonId=" + salonId +
                 ", jobId=" + jobId +
+                ", jobName='" + jobName + '\'' +
                 ", description='" + description + '\'' +
                 ", offAmount=" + offAmount +
                 ", image='" + image + '\'' +
@@ -164,5 +164,19 @@ public class Promotion implements Parcelable {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(salonId);
+        dest.writeInt(jobId);
+        dest.writeString(jobName);
+        dest.writeString(description);
+        dest.writeFloat(offAmount);
+        dest.writeString(image);
+    }
 }

@@ -151,6 +151,10 @@ public class HomeViewModel extends AndroidViewModel {
                     if(listResource.data != null) {
                         countNewAppointments.setValue(listResource.data.size());
                     }
+                    else{
+                        countNewAppointments.setValue(0);
+                    }
+                    
                 }
                 else {
                     newAppointments.removeSource(repositorySource);

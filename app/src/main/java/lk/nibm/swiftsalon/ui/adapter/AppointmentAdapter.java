@@ -15,6 +15,7 @@ import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Appointment;
 
 import static lk.nibm.swiftsalon.util.Constants.NEW_APPOINTMENT;
+import static lk.nibm.swiftsalon.util.Constants.STATUS_PENDING;
 
 public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.ViewHolder> {
 
@@ -42,6 +43,16 @@ public class AppointmentAdapter extends ListAdapter<Appointment, RecyclerView.Vi
             return oldItem.getStatus().equals(newItem.getStatus());
         }
     };
+
+    @Override
+    public int getItemViewType(int position) {
+        if(getItem(position).getStatus().equals(STATUS_PENDING)) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
 
     @NonNull
     @Override

@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.addisonelliott.segmentedbutton.SegmentedButtonGroup;
@@ -31,9 +30,7 @@ import java.util.Date;
 
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Salon;
-import lk.nibm.swiftsalon.request.response.GenericResponse;
 import lk.nibm.swiftsalon.util.CustomDialog;
-import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.viewmodel.EditProfileViewModel;
 
 import static lk.nibm.swiftsalon.util.Constants.EMAIL_REGEX;
@@ -60,6 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormat;
     private EditProfileViewModel viewModel;
     private CustomDialog dialog;
+    private boolean isPasswordVerified;
 
     private ImageButton btnBack;
     private TextView txtTitle, txtTitle2, txtOpenTime, txtCloseTime, txtSave, txtWarning;
@@ -194,6 +192,22 @@ public class EditProfileActivity extends AppCompatActivity {
         txtEdit2.setVisibility(View.VISIBLE);
     }
 
+    private void showConfirmPasswordLayout() {
+        txtTitle.setText("Confirm Password");
+        txtEdit.setText("");
+        txtEdit.setHint("Enter new password");
+        txtEdit.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        txtEdit.setTransformationMethod(new PasswordTransformationMethod());
+        txtEdit2.setVisibility(View.VISIBLE);
+        txtEdit2.setHint("Confirm new password");
+        txtEdit2.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        txtEdit2.setTransformationMethod(new PasswordTransformationMethod());
+        txtSave.setText("Confirm");
+        txtEdit.requestFocus();
+
+        disableSave();
+    }
+
     private void showTimePicker() {
 
         txtOpenTime.setOnClickListener(v -> {
@@ -265,7 +279,9 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void disableSave() {
-        if (Arrays.asList(INPUT_NAME, INPUT_EMAIL, INPUT_MOBILE, INPUT_ADDRESS, INPUT_PASSWORD).contains(edit)) {
+
+        if (edit.equals(INPUT_PASSWORD) && isPasswordVerified) {
+            Log.d(TAG, "disableSave: 283");
             txtEdit.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -273,7 +289,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (txtEdit.getText().toString().trim().isEmpty()) {
+                    if (txtEdit.getText().toString().trim().isEmpty()
+                            || txtEdit2.getText().toString().trim().isEmpty()) {
                         btnSave.setEnabled(false);
                     } else {
                         btnSave.setEnabled(true);
@@ -284,6 +301,48 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                 }
             });
+
+            txtEdit2.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (txtEdit.getText().toString().trim().isEmpty()
+                            || txtEdit2.getText().toString().trim().isEmpty()) {
+                        btnSave.setEnabled(false);
+                    } else {
+                        btnSave.setEnabled(true);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+        } else {
+            Log.d(TAG, "disableSave: 324");
+            if (Arrays.asList(INPUT_NAME, INPUT_EMAIL, INPUT_MOBILE, INPUT_ADDRESS, INPUT_PASSWORD).contains(edit)) {
+                txtEdit.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (txtEdit.getText().toString().trim().isEmpty()) {
+                            btnSave.setEnabled(false);
+                        } else {
+                            btnSave.setEnabled(true);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
+            }
         }
     }
 
@@ -313,56 +372,127 @@ public class EditProfileActivity extends AppCompatActivity {
                 Log.d(TAG, "validate: time: " + e.getMessage());
                 return false;
             }
-
+        } else if (edit.equals(INPUT_PASSWORD) && isPasswordVerified) {
+            if (text.length() < 8) {
+                txtWarning.setVisibility(View.VISIBLE);
+                txtWarning.setText("Password should be at least 8 characters");
+                return false;
+            } else if (!text.equals(txtEdit2.getText().toString().trim())) {
+                txtWarning.setVisibility(View.VISIBLE);
+                txtWarning.setText("The confirm password does not match new password");
+                return false;
+            }
         }
 
         return true;
     }
 
     private void subscribeObservers() {
-        viewModel.updateSalon().observe(this, new Observer<Resource<GenericResponse<Salon>>>() {
-            @Override
-            public void onChanged(Resource<GenericResponse<Salon>> resource) {
+        viewModel.updateSalon().observe(this, resource -> {
 
-                if (resource != null) {
+            if (resource != null) {
 
-                    switch (resource.status) {
+                switch (resource.status) {
 
-                        case LOADING: {
-                            Log.d(TAG, "onChanged: LOADING");
-                            showProgressBar(true);
-                            break;
-                        }
-
-                        case ERROR: {
-                            Log.d(TAG, "onChanged: ERROR");
-                            showProgressBar(false);
-                            dialog.showToast(resource.message);
-                            break;
-                        }
-
-                        case SUCCESS: {
-                            Log.d(TAG, "onChanged: SUCCESS");
-
-                            if (resource.data.getStatus() == 1) {
-
-                                if (resource.data.getContent() != null) {
-                                    dialog.showToast("Successfully updated");
-                                    finish();
-                                } else {
-                                    showProgressBar(false);
-                                    dialog.showAlert("Oops! Something went wrong. Please try again.");
-                                }
-
-                            } else {
-                                showProgressBar(false);
-                                dialog.showAlert(resource.data.getMessage());
-                            }
-                            break;
-                        }
-
+                    case LOADING: {
+                        Log.d(TAG, "onChanged: LOADING");
+                        showProgressBar(true);
+                        break;
                     }
 
+                    case ERROR: {
+                        Log.d(TAG, "onChanged: ERROR");
+                        showProgressBar(false);
+                        dialog.showToast(resource.message);
+                        break;
+                    }
+
+                    case SUCCESS: {
+                        Log.d(TAG, "onChanged: SUCCESS");
+
+                        if (resource.data.getStatus() == 1) {
+
+                            if (resource.data.getContent() != null) {
+                                dialog.showToast("Successfully updated");
+                                finish();
+                            } else {
+                                showProgressBar(false);
+                                dialog.showAlert("Oops! Something went wrong. Please try again.");
+                            }
+
+                        } else {
+                            showProgressBar(false);
+                            dialog.showAlert(resource.data.getMessage());
+                        }
+                        break;
+                    }
+
+                }
+
+            }
+        });
+
+        viewModel.verifyPassword().observe(this, resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+                    case LOADING: {
+                        Log.d(TAG, "onChanged: LOADING");
+                        showProgressBar(true);
+                        break;
+                    }
+
+                    case ERROR: {
+                        Log.d(TAG, "onChanged: ERROR");
+                        showProgressBar(false);
+                        dialog.showToast(resource.message);
+                        break;
+                    }
+
+                    case SUCCESS: {
+                        Log.d(TAG, "onChanged: SUCCESS");
+
+                        if (resource.data.getStatus() == 1) {
+                            isPasswordVerified = true;
+                            showConfirmPasswordLayout();
+                        } else {
+                            isPasswordVerified = false;
+                            dialog.showAlert("Incorrect password");
+                        }
+                        showProgressBar(false);
+                        break;
+                    }
+                }
+            }
+        });
+
+        viewModel.confirmPassword().observe(this, resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+                    case LOADING: {
+                        Log.d(TAG, "onChanged: LOADING");
+                        showProgressBar(true);
+                        break;
+                    }
+
+                    case ERROR: {
+                        Log.d(TAG, "onChanged: ERROR");
+                        showProgressBar(false);
+                        dialog.showToast(resource.message);
+                        break;
+                    }
+
+                    case SUCCESS: {
+                        Log.d(TAG, "onChanged: SUCCESS");
+
+                        if (resource.data.getStatus() == 1) {
+                            dialog.showToast("Successfully updated");
+                            finish();
+                        } else {
+                            showProgressBar(false);
+                            dialog.showAlert("Incorrect password");
+                        }
+                        break;
+                    }
                 }
             }
         });
@@ -371,27 +501,35 @@ public class EditProfileActivity extends AppCompatActivity {
     private void updateApi() {
         String text = txtEdit.getText().toString().trim();
 
-        if(isOnline()) {
+        if (isOnline()) {
             switch (edit) {
 
                 case INPUT_NAME: {
                     salon.setName(text);
+
+                    viewModel.updateApi(salon);
                     break;
                 }
 
                 case INPUT_EMAIL: {
                     salon.setEmail(text);
+
+                    viewModel.updateApi(salon);
                     break;
                 }
 
                 case INPUT_MOBILE: {
                     salon.setMobileNo(text);
+
+                    viewModel.updateApi(salon);
                     break;
                 }
 
                 case INPUT_TYPE: {
                     String type = sgmType.getButton(sgmType.getPosition()).getText();
                     salon.setType(type);
+
+                    viewModel.updateApi(salon);
                     break;
                 }
 
@@ -399,6 +537,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     String text2 = txtEdit2.getText().toString().trim();
                     salon.setAddr1(text);
                     salon.setAddr2(text2);
+
+                    viewModel.updateApi(salon);
                     break;
                 }
 
@@ -407,19 +547,23 @@ public class EditProfileActivity extends AppCompatActivity {
                     String closeTime = txtCloseTime.getText().toString().trim();
                     salon.setOpenTime(openTime);
                     salon.setCloseTime(closeTime);
+
+                    viewModel.updateApi(salon);
                     break;
                 }
 
                 case INPUT_PASSWORD: {
-                    //update password
+                    if (isPasswordVerified) {
+                        viewModel.confirmApi(text);
+                    } else {
+                        viewModel.verifyApi(text);
+                    }
                     break;
                 }
             }
 
             Log.d(TAG, "onCreate: SALON: " + salon.toString());
-            viewModel.updateApi(salon);
-        }
-        else {
+        } else {
             dialog.showToast("Check your connection and try again.");
         }
 

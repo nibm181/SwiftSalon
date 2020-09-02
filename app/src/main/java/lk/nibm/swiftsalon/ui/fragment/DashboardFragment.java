@@ -2,7 +2,6 @@ package lk.nibm.swiftsalon.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,14 +27,13 @@ import java.util.List;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.model.SliderItem;
+import lk.nibm.swiftsalon.ui.activity.EarningsActivity;
 import lk.nibm.swiftsalon.ui.activity.JobsActivity;
-import lk.nibm.swiftsalon.ui.activity.LoginActivity;
 import lk.nibm.swiftsalon.ui.activity.ProfileActivity;
+import lk.nibm.swiftsalon.ui.activity.PromotionsActivity;
 import lk.nibm.swiftsalon.ui.activity.StylistsActivity;
-import lk.nibm.swiftsalon.ui.activity.UploadTestActivity;
 import lk.nibm.swiftsalon.ui.adapter.SliderAdapter;
 import lk.nibm.swiftsalon.util.Resource;
-import lk.nibm.swiftsalon.util.Session;
 import lk.nibm.swiftsalon.viewmodel.DashboardViewModel;
 
 public class DashboardFragment extends Fragment {
@@ -80,7 +77,12 @@ public class DashboardFragment extends Fragment {
         });
 
         btnPromotions.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), UploadTestActivity.class);
+            Intent intent = new Intent(getContext(), PromotionsActivity.class);
+            startActivity(intent);
+        });
+
+        btnEarnings.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), EarningsActivity.class);
             startActivity(intent);
         });
 

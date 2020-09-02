@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
+import java.util.HashMap;
+
 import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.persistence.SwiftSalonDao;
 import lk.nibm.swiftsalon.persistence.SwiftSalonDatabase;
@@ -118,6 +120,34 @@ public class SalonRepository {
                 }
             }
 
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<GenericResponse>> verifyPasswordApi(HashMap<Object, Object> data) {
+        return new NetworkOnlyBoundResource<Object, GenericResponse>(AppExecutor.getInstance()) {
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse>> createCall() {
+                return ServiceGenerator.getSalonApi().verifyPassword(data);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse item) {
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<GenericResponse>> confirmPasswordApi(HashMap<Object, Object> data) {
+        return new NetworkOnlyBoundResource<Object, GenericResponse>(AppExecutor.getInstance()) {
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse>> createCall() {
+                return ServiceGenerator.getSalonApi().confirmPassword(data);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse item) {
+            }
         }.getAsLiveData();
     }
 }

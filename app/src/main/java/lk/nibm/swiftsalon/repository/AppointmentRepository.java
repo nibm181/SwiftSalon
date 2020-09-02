@@ -1,21 +1,16 @@
 package lk.nibm.swiftsalon.repository;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
-import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.model.Stylist;
 import lk.nibm.swiftsalon.persistence.SwiftSalonDao;
 import lk.nibm.swiftsalon.persistence.SwiftSalonDatabase;
@@ -26,9 +21,6 @@ import lk.nibm.swiftsalon.util.AppExecutor;
 import lk.nibm.swiftsalon.util.NetworkBoundResource;
 import lk.nibm.swiftsalon.util.NetworkOnlyBoundResource;
 import lk.nibm.swiftsalon.util.Resource;
-import lk.nibm.swiftsalon.util.Session;
-
-import static lk.nibm.swiftsalon.util.Constants.REFRESH_TIME;
 
 public class AppointmentRepository {
 
@@ -60,24 +52,7 @@ public class AppointmentRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable Appointment data) {
-                int currentTime = (int) (System.currentTimeMillis() / 1000);
-
-                if (data != null) {
-                    try {
-                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.getModifiedOn());
-                        int modified = (int) datetime.getTime() / 1000;
-                        if ((currentTime - modified) >= REFRESH_TIME) {
-                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
-                            return true;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return true;
-                    }
-                } else {
-                    return true;
-                }
-                return false;
+                return true;
             }
 
             @NonNull
@@ -120,30 +95,7 @@ public class AppointmentRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Appointment> data) {
-                int currentTime = (int) (System.currentTimeMillis() / 1000);
-                Log.d(TAG, "shouldFetch: Data: " + data);
-
-                if (data.size() > 0) {
-                    Log.d(TAG, "shouldFetch: current time: " + currentTime);
-                    Log.d(TAG, "shouldFetch: last refresh: " + data.get(data.size() - 1).getModifiedOn());
-
-                    try {
-                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
-                        int modified = (int) datetime.getTime() / 1000;
-                        if ((currentTime - modified) >= REFRESH_TIME) {
-                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
-                            return true;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return true;
-                    }
-
-                } else {
-                    return true;
-                }
-                Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + false);
-                return false;
+                return true;
             }
 
             @NonNull
@@ -186,30 +138,7 @@ public class AppointmentRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Appointment> data) {
-                int currentTime = (int) (System.currentTimeMillis() / 1000);
-                Log.d(TAG, "shouldFetch: Data: " + data);
-
-                if (data.size() > 0) {
-                    Log.d(TAG, "shouldFetch: current time: " + currentTime);
-                    Log.d(TAG, "shouldFetch: last refresh: " + data.get(data.size() - 1).getModifiedOn());
-
-                    try {
-                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
-                        int modified = (int) datetime.getTime() / 1000;
-                        if ((currentTime - modified) >= REFRESH_TIME) {
-                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
-                            return true;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return true;
-                    }
-
-                } else {
-                    return true;
-                }
-                Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + false);
-                return false;
+                return true;
             }
 
             @NonNull
@@ -251,24 +180,7 @@ public class AppointmentRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Appointment> data) {
-                int currentTime = (int) (System.currentTimeMillis() / 1000);
-
-                if (data.size() > 0) {
-                    try {
-                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
-                        int modified = (int) datetime.getTime() / 1000;
-                        if ((currentTime - modified) >= REFRESH_TIME) {
-                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
-                            return true;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return true;
-                    }
-                } else {
-                    return true;
-                }
-                return false;
+                return true;
             }
 
             @NonNull
@@ -311,24 +223,7 @@ public class AppointmentRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Appointment> data) {
-                int currentTime = (int) (System.currentTimeMillis() / 1000);
-
-                if (data.size() > 0) {
-                    try {
-                        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.get(data.size() - 1).getModifiedOn());
-                        int modified = (int) datetime.getTime() / 1000;
-                        if ((currentTime - modified) >= REFRESH_TIME) {
-                            Log.d(TAG, "shouldFetch: SHOULD REFRESH? " + true);
-                            return true;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return true;
-                    }
-                } else {
-                    return true;
-                }
-                return false;
+                return true;
             }
 
             @NonNull
@@ -388,7 +283,7 @@ public class AppointmentRepository {
 
             @Override
             protected void saveCallResult(@NonNull GenericResponse<Appointment> item) {
-                if(item.getContent() != null) {
+                if (item.getContent() != null) {
                     swiftSalonDao.insertAppointment(item.getContent());
                 }
             }
@@ -406,7 +301,7 @@ public class AppointmentRepository {
 
             @Override
             protected void saveCallResult(@NonNull GenericResponse<Appointment> item) {
-                if(item.getContent() != null) {
+                if (item.getContent() != null) {
                     swiftSalonDao.insertAppointment(item.getContent());
                 }
             }
@@ -418,7 +313,7 @@ public class AppointmentRepository {
 
             @Override
             protected void saveCallResult(@NonNull GenericResponse<Stylist> item) {
-                if(item.getContent() != null) {
+                if (item.getContent() != null) {
                     swiftSalonDao.insertStylist(item.getContent());
                 }
             }

@@ -257,11 +257,8 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
                             case SUCCESS: {
                                 if(listResource.data.size() > 0) {
                                     showOngoingRecyclerView(true);
-                                    ongoingAppointmentAdapter.submitList(listResource.data);
                                 }
-                                else {
-
-                                }
+                                ongoingAppointmentAdapter.submitList(listResource.data);
                                 break;
                             }
                         }
@@ -275,6 +272,7 @@ public class HomeFragment extends Fragment implements OnAppointmentListener {
             public void onChanged(Integer count) {
 
                 if(count <= 0) {
+                    Log.d(TAG, "onChanged: HERE");
                     txtNewApp.setText("-");
                     isNew = false;
                 }

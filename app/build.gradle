@@ -86,5 +86,6 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation group: 'commons-io', name: 'commons-io', version: '2.7'
 
-
+    //Charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

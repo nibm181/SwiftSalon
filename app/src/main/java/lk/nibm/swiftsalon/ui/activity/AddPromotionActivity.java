@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Job;
 import lk.nibm.swiftsalon.model.Promotion;
@@ -46,10 +48,9 @@ public class AddPromotionActivity extends AppCompatActivity {
     private static final String TAG = "AddPromotionActivity";
 
     private TextInputLayout txtDescription, txtOffer, txtDate;
-    private TextView txtSave, txtTitle;
-    private ProgressBar prgSave;
+    private TextView txtTitle;
     private CardView btnImage;
-    private RelativeLayout btnSave;
+    private Button btnSave;
     private ImageButton btnBack;
     private ImageView image;
 
@@ -60,6 +61,7 @@ public class AddPromotionActivity extends AppCompatActivity {
     private Uri imageUri;
     private Job job;
     private CustomDialog dialog;
+    private SweetAlertDialog confirmDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +74,6 @@ public class AddPromotionActivity extends AppCompatActivity {
         txtOffer = findViewById(R.id.txt_offer);
         btnImage = findViewById(R.id.btn_image);
         btnSave = findViewById(R.id.btn_save);
-        txtSave = findViewById(R.id.btn_save_text);
-        prgSave = findViewById(R.id.btn_save_progress);
         btnBack = findViewById(R.id.btn_back);
         image = findViewById(R.id.image);
 
@@ -214,11 +214,13 @@ public class AddPromotionActivity extends AppCompatActivity {
 
                         if (resource.data.getStatus() == 1) {
 
+                            showProgressBar(false);
                             if (resource.data.getContent() != null) {
-                                dialog.showToast("Successfully saved");
+                                dialog.showToast("Successfully promotion created");
+                                Intent intent = new Intent(AddPromotionActivity.this, PromotionsActivity.class);
+                                startActivity(intent);
                                 finish();
                             } else {
-                                showProgressBar(false);
                                 dialog.showAlert("Oops! Something went wrong. Try again later.");
                             }
 
@@ -288,39 +290,59 @@ public class AddPromotionActivity extends AppCompatActivity {
     }
 
     private void showProgressBar(boolean show) {
-        if (show) {
-            txtSave.setVisibility(View.GONE);
-            prgSave.setVisibility(View.VISIBLE);
-        } else {
-            txtSave.setVisibility(View.VISIBLE);
-            prgSave.setVisibility(View.GONE);
+        if (confirmDialog != null) {
+            if (show) {
+                confirmDialog.setCancelable(false);
+                confirmDialog.setTitle("");
+                confirmDialog.setContentText("");
+                confirmDialog.getProgressHelper().setBarColor(R.color.dark);
+                confirmDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+
+                Button btnCancel = confirmDialog.findViewById(R.id.cancel_button);
+                btnCancel.setVisibility(View.GONE);
+            } else {
+                confirmDialog.dismiss();
+            }
         }
     }
 
     private void saveApi() {
-        if (isOnline()) {
-            Session session = new Session(AddPromotionActivity.this);
+        confirmDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE);
+        confirmDialog.setTitleText("Are you sure?")
+                .setContentText("You can not change promotion details after confirmed.")
+                .setConfirmText("Ok")
+                .setConfirmClickListener(sDialog -> {
+                    if (isOnline()) {
 
-            String description = txtDescription.getEditText().getText().toString().trim().replaceAll("\\.*$", "");
+                        String description = txtDescription.getEditText().getText().toString().trim().replaceAll("\\.*$", "");
 
-            float offer = 0;
-            if(!txtOffer.getEditText().getText().toString().trim().isEmpty()) {
-                offer = Float.parseFloat(txtOffer.getEditText().getText().toString().trim().replaceAll("\\.*$", ""));
-            }
+                        float offer = 0;
+                        if(!txtOffer.getEditText().getText().toString().trim().isEmpty()) {
+                            offer = Float.parseFloat(txtOffer.getEditText().getText().toString().trim().replaceAll("\\.*$", ""));
+                        }
 
-            Promotion promotion = new Promotion();
-            promotion.setSalonId(session.getSalonId());
-            promotion.setJobId(job.getId());
-            promotion.setDescription(description);
-            promotion.setOffAmount(offer);
-            promotion.setStartDate(startDate.getTime());
-            promotion.setEndDate(endDate.getTime());
+                        Promotion promotion = new Promotion();
+                        promotion.setJobId(job.getId());
+                        promotion.setDescription(description);
+                        promotion.setOffAmount(offer);
+                        promotion.setStartDate(startDate.getTime());
+                        promotion.setEndDate(endDate.getTime());
 
-            Log.d(TAG, "saveApi: PROMOTION: " + promotion.toString());
-            viewModel.saveApi(promotion, imageUri);
-        } else {
-            dialog.showToast("Check your connection and try again.");
-        }
+                        Log.d(TAG, "saveApi: PROMOTION: " + promotion.toString());
+                        viewModel.saveApi(promotion, imageUri);
+
+                    } else {
+                        sDialog.dismiss();
+                        dialog.showToast("Check your connection and try again.");
+                    }
+                })
+                .setCancelButton("Cancel", SweetAlertDialog::dismissWithAnimation)
+                .show();
+
+        Button btnConfirm = confirmDialog.findViewById(R.id.confirm_button);
+        Button btnCancel = confirmDialog.findViewById(R.id.cancel_button);
+        btnConfirm.setBackgroundResource(R.drawable.button_shape);
+        btnCancel.setBackgroundResource(R.drawable.button_shape);
     }
 
     public boolean isOnline() {

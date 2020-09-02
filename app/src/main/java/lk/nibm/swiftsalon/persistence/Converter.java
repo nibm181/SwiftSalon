@@ -10,16 +10,6 @@ import java.util.Date;
 public class Converter {
 
     @TypeConverter
-    public static String fromTime(Time time) {
-        return time == null ? null : time.toString();
-    }
-
-    @TypeConverter
-    public static Time fromString(String time) {
-        return time == null ? null : Time.valueOf(time);
-    }
-
-    @TypeConverter
     public static Date fromTimestamp(Long value) {
         return value == null ? null : new Date(value);
     }
@@ -28,4 +18,5 @@ public class Converter {
     public static Long dateToTimestamp(Date date) {
         return date == null ? null : date.getTime();
     }
+
 }

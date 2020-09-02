@@ -135,6 +135,9 @@ public interface SwiftSalonDao {
     @Query("SELECT * FROM tbl_promotion WHERE salon_id = :salonId")
     LiveData<List<Promotion>> getPromotions(int salonId);
 
+    @Query("SELECT * FROM tbl_promotion WHERE job_id = :jobId")
+    LiveData<Promotion> getPromotionByJob(int jobId);
+
     @Query("DELETE FROM tbl_promotion WHERE salon_id = :salonId")
     void deletePromotions(int salonId);
 }

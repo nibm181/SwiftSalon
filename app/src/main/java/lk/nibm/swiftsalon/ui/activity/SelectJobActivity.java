@@ -55,6 +55,7 @@ public class SelectJobActivity extends AppCompatActivity implements OnItemListen
 
     private List<Job> selectedJobs = new ArrayList<>();
     private int stylistId;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +88,11 @@ public class SelectJobActivity extends AppCompatActivity implements OnItemListen
 
     private void getIncomingContent() {
         if(getIntent().hasExtra("add")) {
+            type = "add";
             txtSave.setText("OK");
         }
         else if(getIntent().hasExtra("edit")) {
+            type = "edit";
             stylistId = getIntent().getIntExtra("stylistId", 0);
         }
 
@@ -136,7 +139,12 @@ public class SelectJobActivity extends AppCompatActivity implements OnItemListen
                             Log.d(TAG, "onChanged: SUCCESS");
 
                             if (listResource.data.isEmpty()) {
-                                txtWarning.setText("Add a job and come here to add a new stylist");
+                                if(type.equals("add")) {
+                                    txtWarning.setText("Add a job and come here to add a new stylist \nGo to Jobs > Add");
+                                }
+                                else {
+                                    txtWarning.setText("Add a job and come here to select jobs for stylist \nGo to Jobs > Add");
+                                }
                                 showEmpty();
                             } else {
                                 showRecyclerView(true);

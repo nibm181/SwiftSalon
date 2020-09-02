@@ -200,6 +200,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        marker = mMap.addMarker(new MarkerOptions().title("I am here").position(latLng));
         btnSave.setEnabled(true);
 
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {

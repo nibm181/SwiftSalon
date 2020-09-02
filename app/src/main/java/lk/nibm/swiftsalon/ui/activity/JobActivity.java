@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,7 +23,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import lk.nibm.swiftsalon.R;
 import lk.nibm.swiftsalon.model.Job;
+import lk.nibm.swiftsalon.model.Promotion;
 import lk.nibm.swiftsalon.util.CustomDialog;
+import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.viewmodel.JobViewModel;
 
 public class JobActivity extends AppCompatActivity {
@@ -32,6 +36,7 @@ public class JobActivity extends AppCompatActivity {
     private LinearLayout btnName, btnDuration, btnPrice;
     private ImageButton btnBack;
     private FloatingActionButton btnDelete, btnPromote;
+    private ProgressBar prgLoading;
 
     private CustomDialog dialog;
     private Job job;
@@ -53,6 +58,7 @@ public class JobActivity extends AppCompatActivity {
         btnPrice = findViewById(R.id.btn_price);
         btnDelete = findViewById(R.id.btn_delete);
         btnPromote = findViewById(R.id.btn_promote);
+        prgLoading = findViewById(R.id.prg_loading);
 
         viewModel = new ViewModelProvider(this).get(JobViewModel.class);
         dialog = new CustomDialog(JobActivity.this);
@@ -90,10 +96,7 @@ public class JobActivity extends AppCompatActivity {
         });
 
         btnPromote.setOnClickListener(v -> {
-            //dialog.showAlert("Promote option coming soon!");
-            Intent intent = new Intent(JobActivity.this, AddPromotionActivity.class);
-            intent.putExtra("job", job);
-            startActivity(intent);
+            openAddPromotionApi();
         });
     }
 
@@ -133,9 +136,7 @@ public class JobActivity extends AppCompatActivity {
     private void subscribeObservers() {
         viewModel.deleteJob().observe(this, resource -> {
             if (resource != null) {
-
                 switch (resource.status) {
-
                     case LOADING: {
                         Log.d(TAG, "onChanged: LOADING");
                         showProgressBar(true);
@@ -157,12 +158,11 @@ public class JobActivity extends AppCompatActivity {
 
                         if (resource.data.getStatus() == 1) {
 
+                            showProgressBar(false);
                             if (resource.data.getContent() != null) {
-                                showProgressBar(false);
                                 dialog.showToast("Successfully deleted.");
                                 finish();
                             } else {
-                                showProgressBar(false);
                                 dialog.showAlert("Oops! Something went wrong. Try again later.");
                             }
 
@@ -172,7 +172,40 @@ public class JobActivity extends AppCompatActivity {
                         }
                         break;
                     }
+                }
+            }
+        });
 
+        viewModel.checkPromotionForJob().observe(this, resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+
+                    case LOADING: {
+                        Log.d(TAG, "onChanged: LOADING");
+                        showPromotionCheckLoading(true);
+                        break;
+                    }
+
+                    case ERROR: {
+                        Log.d(TAG, "onChanged: ERROR");
+                        showPromotionCheckLoading(false);
+                        dialog.showToast(resource.message);
+                        break;
+                    }
+
+                    case SUCCESS: {
+                        Log.d(TAG, "onChanged: SUCCESS");
+
+                        showPromotionCheckLoading(false);
+                        if (resource.data == null) {
+                            Intent intent = new Intent(JobActivity.this, AddPromotionActivity.class);
+                            intent.putExtra("job", job);
+                            startActivity(intent);
+                        } else {
+                            dialog.showAlert("Already there is a valid promotion for this job");
+                        }
+                        break;
+                    }
                 }
 
             }
@@ -202,6 +235,16 @@ public class JobActivity extends AppCompatActivity {
 
     }
 
+    private void openAddPromotionApi() {
+        viewModel.checkPromotionForJobApi(job.getId());
+//        if(isOnline()) {
+//            viewModel.checkPromotionForJobApi(job.getId());
+//        }
+//        else {
+//            dialog.showToast("Check your connection and try again.");
+//        }
+    }
+
     private void showProgressBar(boolean show) {
         if (confirmDialog != null) {
             if (show) {
@@ -218,6 +261,23 @@ public class JobActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void showPromotionCheckLoading(boolean show) {
+        if(show) {
+            prgLoading.setVisibility(View.VISIBLE);
+            btnName.setEnabled(false);
+            btnDuration.setEnabled(false);
+            btnPrice.setEnabled(false);
+            btnDelete.setEnabled(false);
+        }
+        else {
+            prgLoading.setVisibility(View.GONE);
+            btnName.setEnabled(true);
+            btnDuration.setEnabled(true);
+            btnPrice.setEnabled(true);
+            btnDelete.setEnabled(true);
+        }
     }
 
     public boolean isOnline() {

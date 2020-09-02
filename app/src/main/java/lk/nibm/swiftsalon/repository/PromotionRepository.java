@@ -51,7 +51,7 @@ public class PromotionRepository {
                     //delete items for insert latest data
                     swiftSalonDao.deletePromotions(salonId);
 
-                    swiftSalonDao.insertPromotions(promotions);
+                    swiftSalonDao.insertPromotions(item.getContent().toArray(promotions));
                 }
 
             }
@@ -89,6 +89,35 @@ public class PromotionRepository {
                 if (item.getContent() != null) {
                     swiftSalonDao.insertPromotion(item.getContent());
                 }
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<Resource<Promotion>> getPromotionForJobApi(int jobId) {
+        return new NetworkBoundResource<Promotion, GenericResponse<Promotion>>(AppExecutor.getInstance()) {
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Promotion> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertPromotion(item.getContent());
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable Promotion data) {
+                return data == null;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Promotion> loadFromDb() {
+                return swiftSalonDao.getPromotionByJob(jobId);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Promotion>>> createCall() {
+                return ServiceGenerator.getSalonApi().getPromotionByJob(jobId);
             }
         }.getAsLiveData();
     }

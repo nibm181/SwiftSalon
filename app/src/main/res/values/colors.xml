@@ -12,5 +12,12 @@
     <color name="grey">#AFAFAF</color>
     <color name="dark_grey">#4C4B4B</color>
     <color name="disable">#535C68</color>
-    <color name="red">#A43C26</color>
+
+    <color name="light_blue">#8B78E6</color>
+    <color name="matt_black">#47535E</color>
+    <color name="orange">#EA7773</color>
+
+    <color name="default_text_color">#808080</color>
+    <color name="transparent_white">#66FFFFFF</color>
+    <color name="transparent_purple">#805B1A82</color>
 </resources>

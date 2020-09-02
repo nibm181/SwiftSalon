@@ -10,6 +10,10 @@ import androidx.work.WorkManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
+import lk.nibm.swiftsalon.model.NotificationData;
 import lk.nibm.swiftsalon.repository.SalonRepository;
 import lk.nibm.swiftsalon.request.ServiceGenerator;
 import lk.nibm.swiftsalon.util.Session;
@@ -57,7 +61,11 @@ public class SSFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            if (/* Check if data needs to be processed by long running job */ true) {
+            Gson gson = new Gson();
+            JsonElement jsonElement = gson.toJsonTree(remoteMessage.getData());
+            NotificationData notificationData = gson.fromJson(jsonElement, NotificationData.class);
+
+            if (notificationData.getAppointmentId() > 0) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
                 scheduleJob();
             } else {
@@ -87,11 +95,9 @@ public class SSFirebaseMessagingService extends FirebaseMessagingService {
      * Schedule async work using WorkManager.
      */
     private void scheduleJob() {
-        // [START dispatch_job]
 //        OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class)
 //                .build();
 //        WorkManager.getInstance().beginWith(work).enqueue();
-        // [END dispatch_job]
     }
 
 

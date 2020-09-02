@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -225,6 +226,7 @@ public class StylistActivity extends AppCompatActivity {
 
                             case LOADING: {
                                 Log.d(TAG, "onChanged: LOADING");
+                                txtJobs.setText("Loading...");
                                 break;
                             }
 
@@ -233,12 +235,19 @@ public class StylistActivity extends AppCompatActivity {
                                 Log.d(TAG, "onChanged: MSG: " + listResource.message);
                                 selectedJobs = listResource.data;
                                 txtJobs.setText(getJobNames(listResource.data));
+
+                                if(selectedJobs.isEmpty()) {
+                                    btnJobs.setEnabled(false);
+                                    txtJobs.setText("We couldn't load the jobs. Check your connection.");
+                                    txtJobs.setTextColor(getResources().getColor(R.color.default_text_color));
+                                }
                                 break;
                             }
 
                             case SUCCESS: {
                                 Log.d(TAG, "onChanged: SUCCESS");
                                 Log.d(TAG, "onChanged: DATA: " + listResource.data.size());
+                                btnJobs.setEnabled(true);
                                 selectedJobs = listResource.data;
                                 txtJobs.setText(getJobNames(listResource.data));
                                 break;

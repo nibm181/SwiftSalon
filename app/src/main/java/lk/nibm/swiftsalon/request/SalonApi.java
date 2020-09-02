@@ -3,13 +3,16 @@ package lk.nibm.swiftsalon.request;
 import androidx.lifecycle.LiveData;
 import androidx.room.Delete;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import lk.nibm.swiftsalon.model.Earnings;
 import lk.nibm.swiftsalon.model.Job;
 import lk.nibm.swiftsalon.model.Promotion;
 import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.model.Stylist;
+import lk.nibm.swiftsalon.model.StylistEarning;
 import lk.nibm.swiftsalon.model.StylistJob;
 import lk.nibm.swiftsalon.request.response.ApiResponse;
 import lk.nibm.swiftsalon.request.response.GenericResponse;
@@ -42,6 +45,12 @@ public interface SalonApi {
 
     @PUT("Salon")
     Call<ResponseBody> updateToken(@Body Salon salon);
+
+    @PUT("Salon")
+    LiveData<ApiResponse<GenericResponse>> verifyPassword(@Body HashMap<Object, Object> data);
+
+    @PUT("Salon")
+    LiveData<ApiResponse<GenericResponse>> confirmPassword(@Body HashMap<Object, Object> data);
 
     @GET("Job")
     LiveData<ApiResponse<GenericResponse<List<Job>>>> getJobs(@Query("salon_id") int salonId);
@@ -98,8 +107,18 @@ public interface SalonApi {
     @GET("Promotion")
     LiveData<ApiResponse<GenericResponse<List<Promotion>>>> getPromotions(@Query("salon_id") int salonId);
 
+    @GET("Promotion")
+    LiveData<ApiResponse<GenericResponse<Promotion>>> getPromotionByJob(@Query("job_id") int jobId);
+
     @Multipart
     @POST("Upload")
     Call<ResponseBody> uploadImage(@Part("stylist") Stylist stylist,
                                    @Part MultipartBody .Part image);
+
+    @GET("Earning")
+    LiveData<ApiResponse<GenericResponse<Earnings>>> getEarnings(@Query("salon_id") int salonId, @Query("time") String date, @Query("type") String type);
+
+    @GET("Earning")
+    LiveData<ApiResponse<GenericResponse<List<StylistEarning>>>> getStylistEarnings(@Query("salon_id") int salonId, @Query("time") String date, @Query("type") String type);
+
 }
