@@ -1,6 +1,7 @@
 package lk.nibm.swiftsalon.service;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -8,6 +9,7 @@ import androidx.work.WorkerParameters;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.persistence.SwiftSalonDao;
@@ -22,15 +24,12 @@ public class SyncWorker extends Worker {
 
     private static final String TAG = "SyncWorker";
     private SwiftSalonDao swiftSalonDao;
-    private Session session;
-    private int salonId;
+    private Context context;
 
     public SyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        this.context = context;
         swiftSalonDao = SwiftSalonDatabase.getInstance(context).getDao();
-
-        session = new Session(context);
-        salonId = session.getSalonId();
     }
 
     @NonNull
@@ -42,26 +41,28 @@ public class SyncWorker extends Worker {
     private Result syncAppointments() {
 
         try {
-            Call<GenericResponse<List<Appointment>>> call = ServiceGenerator.getAppointmentApi().getWorkerNewAppointments(salonId);
-            Response<GenericResponse<List<Appointment>>> response = call.execute();
+
+            int appointmentId = getInputData().getInt("appointment_id", 0);
+            String status = getInputData().getString("status");
+
+            Call<GenericResponse<Appointment>> call = ServiceGenerator.getAppointmentApi().getWorkerAppointment(appointmentId);
+            Response<GenericResponse<Appointment>> response = call.execute();
 
             if (response.isSuccessful()) {
+                Log.d(TAG, "syncAppointments: RESPONSE: " + response.body().getMessage());
                 if (response.body().getStatus() == 1) {
 
                     if (response.body().getContent() != null) {
 
-                        Appointment[] appointments = new Appointment[response.body().getContent().size()];
+                        Appointment appointment = response.body().getContent();
 
-                        int index = 0;
-                        for (long rowId : swiftSalonDao.insertAppointments((Appointment[]) (response.body().getContent().toArray(appointments)))) {
+                        swiftSalonDao.insertAppointment(appointment);
 
-                            if (rowId == -1) {
-                                swiftSalonDao.updateAppointmentStatus(
-                                        appointments[index].getId(),
-                                        appointments[index].getStatus(),
-                                        appointments[index].getModifiedOn());
-                            }
-                            index++;
+                        if(Objects.equals(status, "not accepted")) {
+                            NotificationHelper.showCancelNotification(context, appointment);
+                        }
+                        else {
+                            NotificationHelper.showNotification(context, appointment);
                         }
 
                         return Result.success();

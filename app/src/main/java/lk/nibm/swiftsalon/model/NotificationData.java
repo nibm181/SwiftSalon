@@ -7,36 +7,33 @@ import com.google.gson.annotations.SerializedName;
 
 public class NotificationData implements Parcelable {
 
+    @SerializedName("body")
+    private String body;
+
+    @SerializedName("title")
+    private String title;
+
     //appointment or anything else
+    @SerializedName("type")
     private String type;
 
     //pending, completed, canceled
-    @SerializedName("appointment_status")
+    @SerializedName("status")
     private String appointmentStatus;
 
     //appointment id
-    @SerializedName("appointment_id")
+    @SerializedName("id")
     private int appointmentId;
 
     public NotificationData() {
     }
 
     protected NotificationData(Parcel in) {
+        body = in.readString();
+        title = in.readString();
         type = in.readString();
         appointmentStatus = in.readString();
         appointmentId = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(type);
-        dest.writeString(appointmentStatus);
-        dest.writeInt(appointmentId);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<NotificationData> CREATOR = new Creator<NotificationData>() {
@@ -50,6 +47,22 @@ public class NotificationData implements Parcelable {
             return new NotificationData[size];
         }
     };
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getType() {
         return type;
@@ -73,5 +86,30 @@ public class NotificationData implements Parcelable {
 
     public void setAppointmentId(int appointmentId) {
         this.appointmentId = appointmentId;
+    }
+
+    @Override
+    public String toString() {
+        return "NotificationData{" +
+                "body='" + body + '\'' +
+                ", title='" + title + '\'' +
+                ", type='" + type + '\'' +
+                ", appointmentStatus='" + appointmentStatus + '\'' +
+                ", appointmentId=" + appointmentId +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(body);
+        dest.writeString(title);
+        dest.writeString(type);
+        dest.writeString(appointmentStatus);
+        dest.writeInt(appointmentId);
     }
 }

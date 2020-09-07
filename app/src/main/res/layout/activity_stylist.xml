@@ -42,160 +42,189 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout_img"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_margin="15dp"
-        android:layout_below="@id/title_bar">
-
-        <ImageView
-            android:id="@+id/img_stylist"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
-            android:transitionName="image"
-            />
-
-        <ImageButton
-            android:id="@+id/btn_edit_image"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_baseline_edit_small"
-            android:background="@drawable/circle_with_border"
-            />
-
-    </RelativeLayout>
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="2sp"
-        android:layout_below="@id/layout_img"
-        android:background="@color/light_grey"
-        android:layout_marginBottom="5dp"/>
-
-    <LinearLayout
-        android:id="@+id/btn_name"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/view"
-        android:background="@drawable/ripple_background"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="15dp">
+        android:layout_below="@id/title_bar"
+        >
 
-        <TextView
-            android:id="@+id/title_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grey"
-            android:text="Name" />
-
-        <TextView
-            android:id="@+id/txt_name"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:textColor="@color/dark"
-            android:textSize="16sp" />
+            >
 
-    </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/layout_img"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_margin="15dp">
 
-    <LinearLayout
-        android:id="@+id/btn_gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_name"
-        android:background="@drawable/ripple_background"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="15dp">
+                <ImageView
+                    android:id="@+id/img_stylist"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:transitionName="image"
+                    />
 
-        <TextView
-            android:id="@+id/title_gender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grey"
-            android:text="Gender" />
+                <ImageButton
+                    android:id="@+id/btn_edit_image"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_baseline_edit_small"
+                    android:background="@drawable/circle_with_border"
+                    />
 
-        <TextView
-            android:id="@+id/txt_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:textColor="@color/dark"
-            android:textSize="16sp" />
+            </RelativeLayout>
 
-    </LinearLayout>
+            <RatingBar
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_alignParentRight="true"
+                android:layout_above="@+id/view"
+                android:layout_margin="20dp"
+                android:isIndicator="true"
+                android:focusable="false"
+                android:stepSize="0.1"
+                android:progressTint="@color/dark_purple"
+                />
 
-    <LinearLayout
-        android:id="@+id/btn_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_gender"
-        android:background="@drawable/ripple_background"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="15dp">
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="2sp"
+                android:layout_below="@id/layout_img"
+                android:background="@color/light_grey"
+                android:layout_marginBottom="5dp"/>
 
-        <TextView
-            android:id="@+id/title_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grey"
-            android:text="Availability" />
+            <LinearLayout
+                android:id="@+id/btn_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/view"
+                android:background="@drawable/ripple_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="15dp">
 
-        <TextView
-            android:id="@+id/txt_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:textColor="@color/dark"
-            android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/title_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:text="Name" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/txt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="@color/dark"
+                    android:textSize="16sp" />
 
-    <LinearLayout
-        android:id="@+id/btn_jobs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_status"
-        android:background="@drawable/ripple_background"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="15dp">
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/title_jobs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grey"
-            android:text="Jobs" />
+            <LinearLayout
+                android:id="@+id/btn_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btn_name"
+                android:background="@drawable/ripple_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="15dp">
 
-        <TextView
-            android:id="@+id/txt_jobs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:text="Loading..."
-            android:textColor="@color/dark"
-            android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/title_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:text="Gender" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/txt_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="@color/dark"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btn_gender"
+                android:background="@drawable/ripple_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/title_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:text="Availability" />
+
+                <TextView
+                    android:id="@+id/txt_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="@color/dark"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_jobs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btn_status"
+                android:background="@drawable/ripple_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/title_jobs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:text="Jobs" />
+
+                <TextView
+                    android:id="@+id/txt_jobs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="Loading..."
+                    android:textColor="@color/dark"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_delete"

@@ -49,6 +49,7 @@ public class Registration_Part2 extends AppCompatActivity {
         btnVerify = findViewById(R.id.btn_verify);
         txtVerify = findViewById(R.id.btn_verify_text);
         prgVerify = findViewById(R.id.btn_verify_progress);
+        txtVCode.requestFocus();
 
         viewModel = new ViewModelProvider(this).get(VerifyEmailViewModel.class);
         dialog = new CustomDialog(Registration_Part2.this);

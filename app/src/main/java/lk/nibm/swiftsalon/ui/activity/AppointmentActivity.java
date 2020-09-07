@@ -23,6 +23,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import lk.nibm.swiftsalon.R;
@@ -36,6 +41,7 @@ import lk.nibm.swiftsalon.util.Resource;
 import lk.nibm.swiftsalon.viewmodel.AppointmentViewModel;
 
 import static lk.nibm.swiftsalon.util.Constants.STATUS_CANCELED;
+import static lk.nibm.swiftsalon.util.Constants.STATUS_COMPLETED;
 import static lk.nibm.swiftsalon.util.Constants.STATUS_ONSCHEDULE;
 import static lk.nibm.swiftsalon.util.Constants.STATUS_PENDING;
 
@@ -59,6 +65,7 @@ public class AppointmentActivity extends AppCompatActivity {
 
     private CustomDialog dialog;
     private AppointmentViewModel viewModel;
+    private boolean toComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +98,15 @@ public class AppointmentActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnAccept.setOnClickListener(v -> {
-            acceptAppointmentApi();
+            if(toComplete) {
+                completeAppointmentApi();
+            }
+            else {
+                acceptAppointmentApi();
+            }
         });
 
-        btnCancel.setOnClickListener(v -> {
-            cancelAppointmentApi();
-        });
+        btnCancel.setOnClickListener(v -> cancelAppointmentApi());
 
         getIncomingIntent();
         initRecyclerView();
@@ -124,7 +134,12 @@ public class AppointmentActivity extends AppCompatActivity {
 
                 if (status.equals(STATUS_PENDING)) {
                     layoutButtons.setVisibility(View.VISIBLE);
-                } else {
+                }
+                else if(status.equals(STATUS_ONSCHEDULE) && isGreaterThanNow(dateTime.substring(0, 16))) {
+                    showComplete();
+                    toComplete = true;
+                }
+                else {
                     layoutButtons.setVisibility(View.GONE);
                 }
 
@@ -132,7 +147,6 @@ public class AppointmentActivity extends AppCompatActivity {
                 txtDateTime.setText(dateTime);
                 txtStatus.setText(status);
                 txtCustomer.setText(customer);
-                //txtStylist.setText(stylist);
 
                 Glide.with(this)
                         .setDefaultRequestOptions(options)
@@ -279,6 +293,47 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         });
 
+        viewModel.completeAppointment().observe(this, new Observer<Resource<GenericResponse<Appointment>>>() {
+            @Override
+            public void onChanged(Resource<GenericResponse<Appointment>> resource) {
+                if (resource != null) {
+                    switch (resource.status) {
+
+                        case LOADING: {
+                            Log.d(TAG, "onChanged: LOADING");
+                            showAcceptProgress();
+                            break;
+                        }
+
+                        case ERROR: {
+                            Log.d(TAG, "onChanged: ERROR");
+                            showCompleteButton();
+                            dialog.showToast(resource.message);
+                            break;
+                        }
+
+                        case SUCCESS: {
+                            if (resource.data.getStatus() == 1) {
+
+                                if (resource.data.getContent() != null) {
+                                    layoutButtons.setVisibility(View.GONE);
+                                    txtStatus.setText(STATUS_COMPLETED);
+                                    dialog.showToast("Completed");
+                                } else {
+                                    dialog.showAlert("Oops! Something went wrong. Try again later.");
+                                }
+
+                            } else {
+                                dialog.showAlert(resource.data.getMessage());
+                            }
+                            showCompleteButton();
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
         viewModel.getStylist().observe(this, new Observer<Resource<Stylist>>() {
             @Override
             public void onChanged(Resource<Stylist> stylistResource) {
@@ -355,6 +410,17 @@ public class AppointmentActivity extends AppCompatActivity {
         layoutTotal.setVisibility(View.GONE);
     }
 
+    private void showComplete() {
+        layoutButtons.setVisibility(View.VISIBLE);
+        btnCancel.setVisibility(View.GONE);
+        txtAccept.setText("Complete");
+    }
+
+    private void showCompleteButton() {
+        txtAccept.setVisibility(View.VISIBLE);
+        prgAccept.setVisibility(View.GONE);
+    }
+
     private void appointmentDetailsApi() {
         viewModel.appointmentDetailsApi(appointment.getId());
     }
@@ -381,10 +447,30 @@ public class AppointmentActivity extends AppCompatActivity {
         }
     }
 
+    private void completeAppointmentApi() {
+        if(isOnline()) {
+            viewModel.completeAppointmentApi(appointment.getId());
+        }
+        else {
+            dialog.showToast("Check your connection and try again.");
+        }
+    }
+
     public boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    private boolean isGreaterThanNow(String appointmentTime) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            Date date = df.parse(appointmentTime);
+            return new Date().after(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

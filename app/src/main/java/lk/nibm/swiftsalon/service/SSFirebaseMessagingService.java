@@ -64,19 +64,18 @@ public class SSFirebaseMessagingService extends FirebaseMessagingService {
             Gson gson = new Gson();
             JsonElement jsonElement = gson.toJsonTree(remoteMessage.getData());
             NotificationData notificationData = gson.fromJson(jsonElement, NotificationData.class);
+            Log.d(TAG, "onMessageReceived: NOTIF: " + notificationData.toString());
 
             if (notificationData.getAppointmentId() > 0) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob();
+                scheduleJob(notificationData.getAppointmentId(), notificationData.getAppointmentStatus());
             } else {
                 // Handle message within 10 seconds
                 handleNow();
             }
 
         }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
+        else if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
 
             String title = remoteMessage.getNotification().getTitle();
@@ -85,19 +84,26 @@ public class SSFirebaseMessagingService extends FirebaseMessagingService {
             NotificationHelper.showNotification(getApplicationContext(), title, body);
         }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
-    // [END receive_message]
 
 
     /**
      * Schedule async work using WorkManager.
      */
-    private void scheduleJob() {
-//        OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class)
-//                .build();
-//        WorkManager.getInstance().beginWith(work).enqueue();
+    private void scheduleJob(int appointmentId, String status) {
+        // Passing params
+        Data.Builder data = new Data.Builder();
+        data.putInt("appointment_id", appointmentId);
+        data.putString("status", status);
+
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+
+        OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(SyncWorker.class)
+                .setConstraints(constraints)
+                .setInputData(data.build())
+                .build();
+
+        WorkManager.getInstance(this).enqueue(work);
     }
 
 

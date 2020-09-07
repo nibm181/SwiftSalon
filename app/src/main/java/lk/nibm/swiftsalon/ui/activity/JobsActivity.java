@@ -125,6 +125,7 @@ public class JobsActivity extends AppCompatActivity implements OnItemListener {
     }
 
     private void showRecyclerView(boolean show) {
+        txtEmpty.setVisibility(View.GONE);
         if (show) {
             recyclerView.setVisibility(View.VISIBLE);
             shimmerJobs.setVisibility(View.GONE);

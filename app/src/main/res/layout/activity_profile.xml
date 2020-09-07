@@ -50,27 +50,46 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_width="85dp"
-                android:layout_height="85dp"
-                android:layout_margin="15dp" >
-
-                <ImageView
-                    android:id="@+id/img_salon"
+                android:layout_width="match_parent"
+                android:layout_height="115dp"
+                >
+                <RelativeLayout
                     android:layout_width="85dp"
                     android:layout_height="85dp"
-                    android:transitionName="image"
-                    />
+                    android:layout_margin="15dp" >
 
-                <ImageButton
-                    android:id="@+id/btn_edit_image"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_alignParentBottom="true"
+                    <ImageView
+                        android:id="@+id/img_salon"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:transitionName="image"
+                        />
+
+                    <ImageButton
+                        android:id="@+id/btn_edit_image"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_baseline_edit_small"
+                        android:background="@drawable/circle_with_border"
+                        />
+
+                </RelativeLayout>
+
+                <RatingBar
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/ratingBarStyleSmall"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_baseline_edit_small"
-                    android:background="@drawable/circle_with_border"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="20dp"
+                    android:isIndicator="true"
+                    android:focusable="false"
+                    android:stepSize="0.1"
+                    android:progressTint="@color/dark_purple"
                     />
-
             </RelativeLayout>
 
             <View

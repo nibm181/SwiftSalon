@@ -14,15 +14,7 @@
         android:layout_height="55dp"
         android:background="@drawable/custom_titlebar"
         >
-        <ImageButton
-            android:id="@+id/btn_back"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_round_arrow_back_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/txt_title"
             android:layout_width="wrap_content"
@@ -32,23 +24,44 @@
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/btn_back"
+            app:layout_constraintHorizontal_bias="0.049"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.483" />
+            app:layout_constraintVertical_bias="0.516" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <ImageView
-        android:id="@+id/dp"
-        android:layout_width="165dp"
-        android:layout_height="165dp"
+    <RelativeLayout
+        android:id="@+id/layout_img"
         android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:transitionName="image"
-        android:src="@drawable/sample_salon"
-        android:scaleType="centerCrop"
-         />
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="28dp"
+        android:layout_below="@id/title_bar">
+
+        <ImageView
+            android:id="@+id/img_salon"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@drawable/oval_shape"
+            android:transitionName="image"
+            android:src="@drawable/sample_salon"
+            />
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_round_add_24"
+            android:clickable="true"
+            android:background="@drawable/circle_with_border"
+            android:focusable="true" />
+
+    </RelativeLayout>
+
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_name"
@@ -57,6 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:hint="Name"
+        android:layout_marginTop="28dp"
         android:textColorHint="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,6 +138,7 @@
             android:textColor="@color/dark" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_addr1"
         android:layout_width="300dp"

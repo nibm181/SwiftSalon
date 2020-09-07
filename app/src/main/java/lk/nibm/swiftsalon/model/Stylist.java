@@ -38,6 +38,10 @@ public class Stylist implements Parcelable {
     @SerializedName("status")
     private int status;
 
+    @ColumnInfo(name = "rating")
+    @SerializedName("rating")
+    private float rating;
+
     public Stylist() {
     }
 
@@ -48,6 +52,7 @@ public class Stylist implements Parcelable {
         gender = in.readString();
         image = in.readString();
         status = in.readInt();
+        rating = in.readFloat();
     }
 
     public static final Creator<Stylist> CREATOR = new Creator<Stylist>() {
@@ -110,6 +115,14 @@ public class Stylist implements Parcelable {
         this.status = status;
     }
 
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -123,6 +136,7 @@ public class Stylist implements Parcelable {
         dest.writeString(gender);
         dest.writeString(image);
         dest.writeInt(status);
+        dest.writeFloat(rating);
     }
 
     @Override
@@ -134,6 +148,7 @@ public class Stylist implements Parcelable {
                 ", gender='" + gender + '\'' +
                 ", image='" + image + '\'' +
                 ", status=" + status +
+                ", rating='" + rating + '\'' +
                 '}';
     }
 }

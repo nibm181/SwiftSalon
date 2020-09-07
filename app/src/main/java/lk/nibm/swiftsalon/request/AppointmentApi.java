@@ -37,10 +37,13 @@ public interface AppointmentApi {
     @GET("Appointment_details")
     LiveData<ApiResponse<GenericResponse<List<AppointmentDetail>>>> getAppointmentDetails(@Query("appointment_id") int appointmentId);
 
-    @GET("Appointment?status=pending")
-    Call<GenericResponse<List<Appointment>>> getWorkerNewAppointments(@Query("salon_id") int salon_id);
+    @GET("Appointment")
+    Call<GenericResponse<List<Appointment>>> getWorkerAppointments(@Query("salon_id") int salon_id);
 
-    @PUT("Appointment")
+    @GET("Appointment")
+    Call<GenericResponse<Appointment>> getWorkerAppointment(@Query("appointment_id") int id);
+
+    @PUT("Appointment?who=salon")
     LiveData<ApiResponse<GenericResponse<Appointment>>> updateAppointmentStatus(@Body Appointment appointment);
 
 }

@@ -19,7 +19,6 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_round_arrow_back_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +26,7 @@
             android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Job"
+            android:text="New Salon"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,25 +36,46 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.483" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/dp"
-                android:layout_width="175dp"
-                android:layout_height="175dp"
+            // all the views currently in your ScrollView
+            <RelativeLayout
+                android:id="@+id/layout_img"
                 android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:background="@drawable/sample_salon"
-                android:scaleType="centerCrop"
-                />
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="28dp"
+                android:layout_below="@id/title_bar">
+
+                <ImageView
+                    android:id="@+id/img_salon"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/oval_shape"
+                    android:transitionName="image"
+                    android:src="@drawable/sample_salon"
+                    />
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_round_add_24"
+                    android:clickable="true"
+                    android:background="@drawable/circle_with_border"
+                    android:focusable="true" />
+
+            </RelativeLayout>
+
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_name"
@@ -64,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:hint="Name"
+                android:layout_marginTop="28dp"
                 android:textColorHint="@color/grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,22 +105,23 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_gender"
+                android:id="@+id/txt_type"
                 style="@style/MaterialOutlinedDropdown"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:hint="Select Gender"
+                android:hint="Select Type"
                 android:textColorHint="@color/grey"
                 app:endIconTint="@color/disable">
 
                 <AutoCompleteTextView
-                    android:id="@+id/dropdown_gender"
+                    android:id="@+id/dropdown_type"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:backgroundTint="@color/white"
                     android:cursorVisible='false'
                     android:inputType="text"
+                    android:enabled="false"
                     android:paddingStart="25sp"
                     android:paddingEnd="13sp"
                     android:textColor="@color/dark" />
@@ -130,6 +152,7 @@
                     android:textColor="@color/dark" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_addr1"
                 android:layout_width="300dp"
@@ -182,42 +205,18 @@
                     android:textColor="@color/dark" />
 
             </com.google.android.material.textfield.TextInputLayout>
-            <RelativeLayout
+
+            <Button
                 android:id="@+id/btn_nxt"
                 android:layout_width="116dp"
                 android:layout_height="46dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
+                android:textColor="@color/white"
                 android:background="@drawable/button2_shape"
-                android:clickable="true"
-                android:focusable="true">
-                <TextView
-                    android:id="@+id/btn_save_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Next"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-                <ProgressBar
-                    android:id="@+id/btn_save_progress"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerInParent="true"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/white"
-                    android:visibility="gone" />
-            </RelativeLayout>
-
+                android:text="Next"
+                android:layout_marginBottom="20dp"/>
         </LinearLayout>
-
-
     </ScrollView>
-
-
 
 
 

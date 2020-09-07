@@ -1,7 +1,9 @@
 package lk.nibm.swiftsalon.ui.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -25,11 +27,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import lk.nibm.swiftsalon.R;
@@ -46,12 +51,14 @@ public class ImageActivity extends AppCompatActivity {
     public static final int ADD = 2;
     public static final int REQUEST_GALLERY = 0;
     public static final int REQUEST_CAMERA = 1;
+    private boolean IS_PERMISSION_GRANTED;
 
     private ImageView image;
     private ImageButton btnBack, btnEdit, btnSave, btnCloseEdit, btnGallery, btnCamera, btnRemove;
     private LinearLayout layoutEdit;
     private ProgressBar prgSave;
 
+    private int openMode;
     private Salon salon;
     private Stylist stylist;
     private String type;
@@ -66,6 +73,8 @@ public class ImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
+
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 
         image = findViewById(R.id.image);
         btnBack = findViewById(R.id.btn_back);
@@ -109,14 +118,13 @@ public class ImageActivity extends AppCompatActivity {
         });
 
         btnCamera.setOnClickListener(v -> {
-            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePicture, REQUEST_CAMERA);
+            openMode = REQUEST_CAMERA;
+            readFile();
         });
 
         btnGallery.setOnClickListener(v -> {
-            Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT);
-            pickPhoto.setType("image/*");
-            startActivityForResult(pickPhoto, REQUEST_GALLERY);
+            openMode = REQUEST_GALLERY;
+            readFile();
         });
 
         btnSave.setOnClickListener(v -> {
@@ -139,6 +147,45 @@ public class ImageActivity extends AppCompatActivity {
             showRemove();
         });
 
+    }
+
+    private void requestPermission() {
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("Grant permission to upload images at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+    }
+
+    PermissionListener permissionlistener = new PermissionListener() {
+        @Override
+        public void onPermissionGranted() {
+            IS_PERMISSION_GRANTED = true;
+            readFile();
+        }
+
+        @Override
+        public void onPermissionDenied(List<String> deniedPermissions) {
+        }
+    };
+
+    public void readFile(){
+        if(openMode == REQUEST_CAMERA){
+            if(IS_PERMISSION_GRANTED){
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, REQUEST_CAMERA);
+            }else{
+                requestPermission();
+            }
+        }else if(openMode == REQUEST_GALLERY){
+            if(IS_PERMISSION_GRANTED){
+                Intent pickPhoto = new Intent(Intent.ACTION_GET_CONTENT);
+                pickPhoto.setType("image/*");
+                startActivityForResult(pickPhoto, REQUEST_GALLERY);
+            }else{
+                requestPermission();
+            }
+        }
     }
 
     private void getIncomingContents() {

@@ -43,138 +43,151 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout_img"
-        android:layout_gravity="center"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="28dp"
-        android:layout_below="@id/title_bar">
-
-        <ImageView
-            android:id="@+id/img_stylist"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:background="@drawable/oval_shape"
-            android:transitionName="image"
-            android:src="@drawable/sample_avatar"
-            />
-
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_round_add_24"
-            android:clickable="true"
-            android:background="@drawable/circle_with_border"
-            android:focusable="true" />
-
-    </RelativeLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txt_name"
-        style="@style/MaterialOutlinedInputField"
-        android:layout_width="300dp"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_gravity="center"
-        android:textColorHint="@color/grey"
-        android:hint="Name">
+        >
 
-        <com.google.android.material.textfield.TextInputEditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="25sp"
-            android:paddingEnd="13sp"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:textColor="@color/dark"
-            android:focusableInTouchMode="true"
-            android:imeOptions="actionDone"
-            android:maxLength="50"/>
+            android:orientation="vertical">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <RelativeLayout
+                android:id="@+id/layout_img"
+                android:layout_gravity="center"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="28dp"
+                android:layout_below="@id/title_bar">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txt_gender"
-        style="@style/MaterialOutlinedDropdown"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="center"
-        android:textColorHint="@color/grey"
-        app:endIconTint="@color/disable"
-        android:hint="Select Gender">
+                <ImageView
+                    android:id="@+id/img_stylist"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/oval_shape"
+                    android:transitionName="image"
+                    android:src="@drawable/sample_avatar"
+                    />
 
-        <AutoCompleteTextView
-            android:id="@+id/dropdown_gender"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:paddingStart="25sp"
-            android:paddingEnd="13sp"
-            android:inputType="text"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/dark"
-            android:cursorVisible='false'/>
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_round_add_24"
+                    android:clickable="true"
+                    android:background="@drawable/circle_with_border"
+                    android:focusable="true" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+            </RelativeLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txt_jobs"
-        style="@style/MaterialOutlinedInputField"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="center"
-        android:textColorHint="@color/grey"
-        android:hint="Jobs">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_name"
+                style="@style/MaterialOutlinedInputField"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_gravity="center"
+                android:textColorHint="@color/grey"
+                android:hint="Name">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="25sp"
-            android:paddingEnd="13sp"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:textColor="@color/dark"
-            android:focusableInTouchMode="true"
-            android:maxLength="50"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="25sp"
+                    android:paddingEnd="13sp"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    android:textColor="@color/dark"
+                    android:focusableInTouchMode="true"
+                    android:imeOptions="actionDone"
+                    android:maxLength="50"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <RelativeLayout
-        android:id="@+id/btn_save"
-        android:layout_width="116dp"
-        android:layout_height="46dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/button2_shape"
-        android:clickable="true"
-        android:focusable="true">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_gender"
+                style="@style/MaterialOutlinedDropdown"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:textColorHint="@color/grey"
+                app:endIconTint="@color/disable"
+                android:hint="Select Gender">
 
-        <TextView
-            android:id="@+id/btn_save_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Save"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingStart="25sp"
+                    android:paddingEnd="13sp"
+                    android:inputType="text"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/dark"
+                    android:cursorVisible='false'/>
 
-        <ProgressBar
-            android:id="@+id/btn_save_progress"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerInParent="true"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/white"
-            android:visibility="gone" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </RelativeLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_jobs"
+                style="@style/MaterialOutlinedInputField"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:textColorHint="@color/grey"
+                android:hint="Jobs">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="25sp"
+                    android:paddingEnd="13sp"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    android:textColor="@color/dark"
+                    android:focusableInTouchMode="true"
+                    android:maxLength="50"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <RelativeLayout
+                android:id="@+id/btn_save"
+                android:layout_width="116dp"
+                android:layout_height="46dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/button2_shape"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/btn_save_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Save"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/btn_save_progress"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

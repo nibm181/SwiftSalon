@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class Registration extends AppCompatActivity {
 
     private static final String TAG = "Registration";
 
+    private ImageButton btnBack;
     private TextInputLayout txtEmail;
     private RelativeLayout btnNext;
     private TextView txtNext;
@@ -44,14 +46,18 @@ public class Registration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        btnBack = findViewById(R.id.btn_back);
         txtEmail = findViewById(R.id.txt_email);
         btnNext = findViewById(R.id.btn_next);
         txtNext = findViewById(R.id.btn_next_text);
         prgNext = findViewById(R.id.btn_next_progress);
+        txtEmail.requestFocus();
 
         viewModel = new ViewModelProvider(this).get(RegistrationViewModel.class);
         subscribeObservers();
         dialog = new CustomDialog(Registration.this);
+
+        btnBack.setOnClickListener(v -> finish());
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,50 +80,46 @@ public class Registration extends AppCompatActivity {
     }
 
     private void subscribeObservers() {
-        viewModel.sendEmail().observe(this, new Observer<Resource<GenericResponse>>() {
-            @Override
-            public void onChanged(Resource<GenericResponse> resource) {
-                switch (resource.status) {
+        viewModel.sendEmail().observe(this, resource -> {
+            switch (resource.status) {
 
-                    case LOADING: {
-                        Log.d(TAG, "onChanged: LOADING");
+                case LOADING: {
+                    Log.d(TAG, "onChanged: LOADING");
 
-                        showProgressBar(true);
-                        break;
-                    }
-
-                    case ERROR: {
-                        Log.d(TAG, "onChanged: ERROR");
-                        Log.d(TAG, "onChanged: ERROR MSG: " + resource.data);
-
-                        showProgressBar(false);
-
-                        if (resource.data != null) {
-                            dialog.showAlert(resource.data.getMessage());
-                        } else {
-                            dialog.showToast("Oops! Something went wrong. Try again later. " + resource.status);
-                        }
-                        break;
-                    }
-
-                    case SUCCESS: {
-                        Log.d(TAG, "onChanged: SUCCESS");
-
-                        if (resource.data.getStatus() == 1) {
-
-                            Intent intent = new Intent(Registration.this, Registration_Part2.class);
-                            intent.putExtra("email", email);
-                            startActivity(intent);
-                            finish();
-
-                        } else {
-                            dialog.showAlert("Something went wrong.");
-                        }
-                        showProgressBar(false);
-                        break;
-                    }
-
+                    showProgressBar(true);
+                    break;
                 }
+
+                case ERROR: {
+                    Log.d(TAG, "onChanged: ERROR");
+                    Log.d(TAG, "onChanged: ERROR MSG: " + resource.data);
+
+                    showProgressBar(false);
+
+                    if (resource.data != null) {
+                        dialog.showAlert(resource.data.getMessage());
+                    } else {
+                        dialog.showToast("Oops! Something went wrong. Try again later. ");
+                    }
+                    break;
+                }
+
+                case SUCCESS: {
+                    Log.d(TAG, "onChanged: SUCCESS");
+
+                    if (resource.data.getStatus() == 1) {
+
+                        Intent intent = new Intent(Registration.this, Registration_Part2.class);
+                        intent.putExtra("email", email);
+                        startActivity(intent);
+
+                    } else {
+                        dialog.showAlert(resource.data.getMessage());
+                    }
+                    showProgressBar(false);
+                    break;
+                }
+
             }
         });
     }

@@ -130,4 +130,7 @@ public interface SalonApi {
     @POST("Salon")
     LiveData<ApiResponse<GenericResponse>> verifyEmail(@Field("email") String email, @Field("rand_id") int code);
 
+    @Multipart
+    @POST("Salon")
+    LiveData<ApiResponse<GenericResponse<Salon>>> saveSalon(@Part("data") Salon salon, @Part MultipartBody.Part image);
 }

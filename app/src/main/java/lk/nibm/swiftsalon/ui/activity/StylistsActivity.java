@@ -124,6 +124,7 @@ public class StylistsActivity extends AppCompatActivity implements OnItemListene
     }
 
     private void showRecyclerView(boolean show) {
+        txtEmpty.setVisibility(View.GONE);
         if (show) {
             recyclerView.setVisibility(View.VISIBLE);
             shimmerStylists.setVisibility(View.GONE);

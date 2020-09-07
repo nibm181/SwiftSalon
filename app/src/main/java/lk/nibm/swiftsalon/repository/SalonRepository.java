@@ -180,4 +180,22 @@ public class SalonRepository {
             }
         }.getAsLiveData();
     }
+
+    public LiveData<Resource<GenericResponse<Salon>>> saveSalonApi(Salon salon, MultipartBody.Part image) {
+        return new NetworkOnlyBoundResource<Salon, GenericResponse<Salon>>(AppExecutor.getInstance()) {
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<GenericResponse<Salon>>> createCall() {
+                return ServiceGenerator.getSalonApi().saveSalon(salon, image);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull GenericResponse<Salon> item) {
+                if(item.getContent() != null) {
+                    swiftSalonDao.insertSalon(item.getContent());
+                }
+            }
+        }.getAsLiveData();
+    }
 }

@@ -125,7 +125,13 @@ public class DashboardFragment extends Fragment {
         SliderItem item = new SliderItem("", "https://www.softwaresuggest.com/blog/wp-content/uploads/2019/10/salon-business-1.png");
         items.add(item);
 
-        item = new SliderItem("", "https://www.coredna.com/web_images/blogs/71/961/ecommerce-promotion-strategies-discounts-coupons.png");
+        item = new SliderItem("", "http://swiftsalon.space/uploads/salon_banner_1.png");
+        items.add(item);
+
+        item = new SliderItem("", "http://swiftsalon.space/uploads/salon_banner_2.png");
+        items.add(item);
+
+        item = new SliderItem("", "http://swiftsalon.space/uploads/salon_banner_3.png");
         items.add(item);
 
         return items;

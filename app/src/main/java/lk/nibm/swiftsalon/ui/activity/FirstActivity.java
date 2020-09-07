@@ -12,8 +12,8 @@ import lk.nibm.swiftsalon.util.Session;
 
 public class FirstActivity extends AppCompatActivity {
 
-
     Session session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

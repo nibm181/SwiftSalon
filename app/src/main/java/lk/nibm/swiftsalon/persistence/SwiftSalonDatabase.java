@@ -15,7 +15,7 @@ import lk.nibm.swiftsalon.model.Salon;
 import lk.nibm.swiftsalon.model.Stylist;
 import lk.nibm.swiftsalon.model.StylistJob;
 
-@Database(entities = {Appointment.class, AppointmentDetail.class, Salon.class, Job.class, Stylist.class, StylistJob.class, Promotion.class}, version = 12)
+@Database(entities = {Appointment.class, AppointmentDetail.class, Salon.class, Job.class, Stylist.class, StylistJob.class, Promotion.class}, version = 13)
 @TypeConverters({Converter.class})
 public abstract class SwiftSalonDatabase extends RoomDatabase {
 

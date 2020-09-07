@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView txtName, txtEmail, txtMobile, txtAddress, txtLocation, txtTime;
     private CapitalizedTextView txtType;
     private ImageView imgSalon;
+    private RatingBar ratingBar;
 
 
     private CustomDialog dialog;
@@ -71,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtLocation = findViewById(R.id.txt_location);
         txtTime = findViewById(R.id.txt_time);
         imgSalon = findViewById(R.id.img_salon);
+        ratingBar = findViewById(R.id.rating);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         dialog = new CustomDialog(ProfileActivity.this);
@@ -94,11 +97,12 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         btnEmail.setOnClickListener(v -> {
-            Intent editProfile = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            editProfile.putExtra("salon", getSalon());
-            editProfile.putExtra("edit", EditProfileActivity.INPUT_EMAIL);
-
-            startActivity(editProfile);
+//            Intent editProfile = new Intent(ProfileActivity.this, EditProfileActivity.class);
+//            editProfile.putExtra("salon", getSalon());
+//            editProfile.putExtra("edit", EditProfileActivity.INPUT_EMAIL);
+//
+//            startActivity(editProfile);
+            dialog.showAlert("Email cannot be modified.");
         });
 
         btnMobile.setOnClickListener(v -> {
@@ -216,6 +220,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtAddress.setText((salon.getAddr1() + ", " + salon.getAddr2()));
         txtLocation.setText(salon.getLocation());
         txtTime.setText((openTime + " - " + closeTime));
+        ratingBar.setRating(salon.getRating());
 
         requestManager
                 .load(salon.getImage())
@@ -232,6 +237,7 @@ public class ProfileActivity extends AppCompatActivity {
                     viewModel.clearToken();
                     Session session = new Session(ProfileActivity.this);
                     session.clearSession();
+                    confirmDialog.dismiss();
 
                     Intent login = new Intent(ProfileActivity.this, LoginActivity.class);
                     login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

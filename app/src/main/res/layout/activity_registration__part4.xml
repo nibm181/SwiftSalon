@@ -182,16 +182,38 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+
+    <RelativeLayout
         android:id="@+id/btn_register"
         android:layout_width="116dp"
         android:layout_height="46dp"
-        android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:textColor="@color/white"
-
+        android:layout_marginTop="15dp"
         android:background="@drawable/button2_shape"
-        android:text="Register" />
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/btn_register_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Register"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/btn_register_progress"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

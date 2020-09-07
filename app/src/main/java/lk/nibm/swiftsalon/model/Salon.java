@@ -70,9 +70,16 @@ public class Salon implements Parcelable {
     @SerializedName("image")
     private String image;
 
+    @ColumnInfo(name = "rating")
+    @SerializedName("rating")
+    private float rating;
+
     @Ignore
     @SerializedName("fcm_token")
     private String token;
+
+    @Ignore
+    private String password;
 
     public Salon() {
     }
@@ -100,6 +107,7 @@ public class Salon implements Parcelable {
         closeTime = in.readString();
         image = in.readString();
         token = in.readString();
+        rating = in.readFloat();
     }
 
     public static final Creator<Salon> CREATOR = new Creator<Salon>() {
@@ -226,6 +234,22 @@ public class Salon implements Parcelable {
         this.token = token;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
     @Override
     public String toString() {
         return "Salon{" +
@@ -243,6 +267,7 @@ public class Salon implements Parcelable {
                 ", closeTime='" + closeTime + '\'' +
                 ", image='" + image + '\'' +
                 ", token='" + token + '\'' +
+                ", rating='" + rating + '\'' +
                 '}';
     }
 
@@ -277,5 +302,6 @@ public class Salon implements Parcelable {
         dest.writeString(closeTime);
         dest.writeString(image);
         dest.writeString(token);
+        dest.writeFloat(rating);
     }
 }

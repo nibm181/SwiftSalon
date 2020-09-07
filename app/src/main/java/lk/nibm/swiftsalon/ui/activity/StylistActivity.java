@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -49,6 +50,7 @@ public class StylistActivity extends AppCompatActivity {
     private ImageView imgStylist;
     private ImageButton btnBack, btnEditImage;
     private FloatingActionButton btnDelete;
+    private RatingBar ratingBar;
 
     private CustomDialog dialog;
     private Stylist stylist;
@@ -75,6 +77,7 @@ public class StylistActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btn_back);
         btnEditImage = findViewById(R.id.btn_edit_image);
         btnDelete = findViewById(R.id.btn_delete);
+        ratingBar = findViewById(R.id.rating);
 
         viewModel = new ViewModelProvider(this).get(StylistViewModel.class);
         selectedJobs = new ArrayList<>();
@@ -157,6 +160,7 @@ public class StylistActivity extends AppCompatActivity {
                 txtName.setText(stylist.getName());
                 txtGender.setText(stylist.getGender());
                 txtStatus.setText(status);
+                ratingBar.setRating(stylist.getRating());
 
                 Glide.with(this)
                         .setDefaultRequestOptions(options)

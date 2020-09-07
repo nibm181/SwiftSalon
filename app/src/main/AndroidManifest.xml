@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".ui.activity.EarningsActivity"></activity>
+        <activity android:name=".ui.activity.EarningsActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,6 +34,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
 
         <activity
             android:name=".ui.activity.PromotionsActivity"
@@ -68,7 +70,8 @@
             android:name=".ui.activity.EditJobActivity"
             android:parentActivityName=".ui.activity.JobActivity"
             android:windowSoftInputMode="stateAlwaysVisible" />
-        <activity android:name=".ui.activity.ImageActivity" />
+        <activity
+            android:name=".ui.activity.ImageActivity" />
         <activity
             android:name=".ui.activity.JobActivity"
             android:parentActivityName=".ui.activity.JobsActivity" />
@@ -96,8 +99,10 @@
         </activity>
         <activity android:name=".ui.activity.Registration_Part4" />
         <activity android:name=".ui.activity.Registration_Part3" />
-        <activity android:name=".ui.activity.Registration_Part2" />
-        <activity android:name=".ui.activity.Registration" />
+        <activity android:name=".ui.activity.Registration_Part2"
+            android:windowSoftInputMode="stateAlwaysVisible"/>
+        <activity android:name=".ui.activity.Registration"
+            android:windowSoftInputMode="stateAlwaysVisible"/>
     </application>
 
 </manifest>

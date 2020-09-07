@@ -322,7 +322,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Log.d(TAG, "disableSave: 324");
             if (Arrays.asList(INPUT_NAME, INPUT_EMAIL, INPUT_MOBILE, INPUT_ADDRESS, INPUT_PASSWORD).contains(edit)) {
                 txtEdit.addTextChangedListener(new TextWatcher() {
                     @Override

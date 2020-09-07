@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 13,
-    "identityHash": "66193b2221ebc103451a48cd88a1c511",
+    "identityHash": "680d7a71a18126700ac3fce27e3c12a8",
     "entities": [
       {
         "tableName": "tbl_appointment",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `salon_id` INTEGER NOT NULL, `customer_id` INTEGER NOT NULL, `stylist_id` INTEGER NOT NULL, `date` TEXT, `time` TEXT, `status` TEXT, `customer_first_name` TEXT, `customer_last_name` TEXT, `customer_image` TEXT, `modified_on` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `salon_id` INTEGER NOT NULL, `customer_id` INTEGER NOT NULL, `stylist_id` INTEGER NOT NULL, `date` TEXT, `time` TEXT, `status` TEXT, `customer_first_name` TEXT, `customer_last_name` TEXT, `customer_image` TEXT, `modified_on` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -71,7 +71,7 @@
           {
             "fieldPath": "modifiedOn",
             "columnName": "modified_on",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -130,7 +130,7 @@
       },
       {
         "tableName": "tbl_salon",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `email` TEXT, `name` TEXT, `type` TEXT, `mobile_no` TEXT, `addr1` TEXT, `addr2` TEXT, `longitude` REAL, `latitude` REAL, `location` TEXT, `open_time` TEXT, `close_time` TEXT, `image` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `email` TEXT, `name` TEXT, `type` TEXT, `mobile_no` TEXT, `addr1` TEXT, `addr2` TEXT, `longitude` REAL, `latitude` REAL, `location` TEXT, `open_time` TEXT, `close_time` TEXT, `image` TEXT, `rating` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -209,6 +209,12 @@
             "columnName": "image",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "rating",
+            "columnName": "rating",
+            "affinity": "REAL",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -266,7 +272,7 @@
       },
       {
         "tableName": "tbl_stylist",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `salon_id` INTEGER NOT NULL, `name` TEXT, `gender` TEXT, `image` TEXT, `status` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `salon_id` INTEGER NOT NULL, `name` TEXT, `gender` TEXT, `image` TEXT, `status` INTEGER NOT NULL, `rating` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -302,6 +308,12 @@
             "fieldPath": "status",
             "columnName": "status",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rating",
+            "columnName": "rating",
+            "affinity": "REAL",
             "notNull": true
           }
         ],
@@ -424,7 +436,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '66193b2221ebc103451a48cd88a1c511')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '680d7a71a18126700ac3fce27e3c12a8')"
     ]
   }
 }

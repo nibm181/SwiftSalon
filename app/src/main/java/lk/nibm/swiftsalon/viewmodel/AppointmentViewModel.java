@@ -18,6 +18,7 @@ import lk.nibm.swiftsalon.request.response.GenericResponse;
 import lk.nibm.swiftsalon.util.Resource;
 
 import static lk.nibm.swiftsalon.util.Constants.STATUS_CANCELED;
+import static lk.nibm.swiftsalon.util.Constants.STATUS_COMPLETED;
 import static lk.nibm.swiftsalon.util.Constants.STATUS_ONSCHEDULE;
 
 public class AppointmentViewModel extends AndroidViewModel {
@@ -28,6 +29,7 @@ public class AppointmentViewModel extends AndroidViewModel {
     private MediatorLiveData<Resource<Stylist>> stylist = new MediatorLiveData<>();
     private MediatorLiveData<Resource<GenericResponse<Appointment>>> acceptedAppointment = new MediatorLiveData<>();
     private MediatorLiveData<Resource<GenericResponse<Appointment>>> canceledAppointment = new MediatorLiveData<>();
+    private MediatorLiveData<Resource<GenericResponse<Appointment>>> completedAppointment = new MediatorLiveData<>();
 
     private boolean isFetchingDetails;
     private boolean isFetchingStylist;
@@ -52,6 +54,10 @@ public class AppointmentViewModel extends AndroidViewModel {
 
     public LiveData<Resource<GenericResponse<Appointment>>> cancelAppointment() {
         return canceledAppointment;
+    }
+
+    public LiveData<Resource<GenericResponse<Appointment>>> completeAppointment() {
+        return completedAppointment;
     }
 
     public void appointmentDetailsApi(int appointmentId) {
@@ -83,6 +89,16 @@ public class AppointmentViewModel extends AndroidViewModel {
             appointment.setStatus(STATUS_CANCELED);
 
             executeCancelAppointment(appointment);
+        }
+    }
+
+    public void completeAppointmentApi(int appointmentId) {
+        if(!isUpdating) {
+            Appointment appointment = new Appointment();
+            appointment.setId(appointmentId);
+            appointment.setStatus(STATUS_COMPLETED);
+
+            executeCompleteAppointment(appointment);
         }
     }
 
@@ -188,6 +204,33 @@ public class AppointmentViewModel extends AndroidViewModel {
                 }
                 else {
                     canceledAppointment.removeSource(repositorySource);
+                }
+            }
+        });
+    }
+
+    private void executeCompleteAppointment(Appointment appointment) {
+        isUpdating = true;
+
+        final LiveData<Resource<GenericResponse<Appointment>>> repositorySource = repository.acceptAppointmentApi(appointment);
+
+        completedAppointment.addSource(repositorySource, new Observer<Resource<GenericResponse<Appointment>>>() {
+            @Override
+            public void onChanged(Resource<GenericResponse<Appointment>> appointmentResource) {
+                if(appointmentResource != null) {
+                    completedAppointment.setValue(appointmentResource);
+                    Log.d(TAG, "onChanged: resource: " + appointmentResource.message);
+
+                    if(appointmentResource.status == Resource.Status.ERROR) {
+                        completedAppointment.removeSource(repositorySource);
+                        isUpdating = false;
+                    }
+                    else if(appointmentResource.status == Resource.Status.SUCCESS) {
+                        isUpdating = false;
+                    }
+                }
+                else {
+                    completedAppointment.removeSource(repositorySource);
                 }
             }
         });

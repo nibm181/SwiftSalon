@@ -88,4 +88,7 @@ dependencies {
 
     //Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //Easy Ask Permission
+    implementation 'gun0912.ted:tedpermission:2.2.3'
 }
