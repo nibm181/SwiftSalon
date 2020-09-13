@@ -12,6 +12,7 @@ import java.util.List;
 
 import lk.nibm.swiftsalon.model.Appointment;
 import lk.nibm.swiftsalon.model.AppointmentDetail;
+import lk.nibm.swiftsalon.model.Customer;
 import lk.nibm.swiftsalon.model.Stylist;
 import lk.nibm.swiftsalon.repository.AppointmentRepository;
 import lk.nibm.swiftsalon.request.response.GenericResponse;

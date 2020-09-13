@@ -26,6 +26,10 @@ public class Appointment implements Parcelable {
     @SerializedName("customer_id")
     private int customerId;
 
+    @ColumnInfo(name = "customer_mobile")
+    @SerializedName("customer_mobile")
+    private String customerMobile;
+
     @ColumnInfo(name = "stylist_id")
     @SerializedName("stylist_id")
     private int stylistId;
@@ -65,6 +69,7 @@ public class Appointment implements Parcelable {
         id = in.readInt();
         salonId = in.readInt();
         customerId = in.readInt();
+        customerMobile = in.readString();
         stylistId = in.readInt();
         date = in.readString();
         time = in.readString();
@@ -109,6 +114,14 @@ public class Appointment implements Parcelable {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCustomerMobile() {
+        return customerMobile;
+    }
+
+    public void setCustomerMobile(String customerMobile) {
+        this.customerMobile = customerMobile;
     }
 
     public int getStylistId() {
@@ -185,6 +198,7 @@ public class Appointment implements Parcelable {
         dest.writeInt(id);
         dest.writeInt(salonId);
         dest.writeInt(customerId);
+        dest.writeString(customerMobile);
         dest.writeInt(stylistId);
         dest.writeString(date);
         dest.writeString(time);
@@ -201,6 +215,7 @@ public class Appointment implements Parcelable {
                 "id=" + id +
                 ", salonId=" + salonId +
                 ", customerId=" + customerId +
+                ", customerMobile=" + customerMobile +
                 ", stylistId=" + stylistId +
                 ", date='" + date + '\'' +
                 ", time='" + time + '\'' +

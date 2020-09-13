@@ -20,11 +20,13 @@ import lk.nibm.swiftsalon.util.Session;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class SyncWorker extends Worker {
+public class
+SyncWorker extends Worker {
 
     private static final String TAG = "SyncWorker";
     private SwiftSalonDao swiftSalonDao;
     private Context context;
+    private Session session;
 
     public SyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -54,15 +56,18 @@ public class SyncWorker extends Worker {
 
                     if (response.body().getContent() != null) {
 
+                        session = new Session(context);
                         Appointment appointment = response.body().getContent();
 
                         swiftSalonDao.insertAppointment(appointment);
 
-                        if(Objects.equals(status, "not accepted")) {
-                            NotificationHelper.showCancelNotification(context, appointment);
-                        }
-                        else {
-                            NotificationHelper.showNotification(context, appointment);
+                        if(appointment.getSalonId() == session.getSalonId()) {
+                            if(Objects.equals(status, "not accepted")) {
+                                NotificationHelper.showCancelNotification(context, appointment);
+                            }
+                            else {
+                                NotificationHelper.showNotification(context, appointment);
+                            }
                         }
 
                         return Result.success();

@@ -112,13 +112,26 @@
 
             <TextView
                 android:id="@+id/txt_customer"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
+                android:lines="1"
                 android:text=""
+                android:ellipsize="end"
                 android:textColor="@color/dark"
                 android:textSize="17sp" />
+
+            <ImageButton
+                android:id="@+id/btn_phone"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_round_phone_24_purple"
+                android:visibility="gone"
+                />
+
 
         </LinearLayout>
 

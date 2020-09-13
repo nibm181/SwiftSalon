@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -23,9 +24,15 @@ public class ApiResponse<T> {
         if (error instanceof SocketTimeoutException) {
             message = "Time out. Check your connection and try again.";
         } else if (error instanceof UnknownHostException) {
-            message = "Oops! something went wrong.";
+            Log.d(TAG, "create: UNKNOWN HOST EXCEPTION");
+            message = "We are unable to connect you with us.";
         } else if(error instanceof IllegalStateException) {
+            Log.d(TAG, "create: ILLEGAL STATE EXCEPTION");
             message = "Oops! something went wrong.";
+        } else if(error instanceof EOFException) {
+            Log.d(TAG, "create: EOF EXCEPTION");
+            Log.d(TAG, "ERROR create: " + error.getLocalizedMessage());
+            message = "Something went wrong. Try again.";
         }
         else {
             Log.d(TAG, "ERROR create: " + error.getLocalizedMessage());

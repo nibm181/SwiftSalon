@@ -23,6 +23,7 @@ public class ServiceGenerator {
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             //time between each byte sent to the server
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .build();
 
 

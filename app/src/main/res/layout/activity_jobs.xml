@@ -40,20 +40,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_jobs"
         android:layout_marginTop="55dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        >
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_jobs"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
-    </ScrollView>
+        />
 
     <TextView
         android:id="@+id/txt_empty"

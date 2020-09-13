@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    tools:context=".ui.activity.AddPromotionActivity">
+
+    <LinearLayout
+        android:id="@+id/app_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/custom_titlebar"
+        >
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:src="@drawable/ic_round_arrow_back_24" />
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_image"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center"
+                android:requiresFadingEdge="vertical"
+                app:cardCornerRadius="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_promo"
+                    android:transitionName="image"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_description"
+                style="@style/MaterialOutlinedInputField"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:layout_gravity="center"
+                android:textColorHint="@color/grey"
+                app:counterEnabled="true"
+                app:counterMaxLength="100"
+                android:hint="Description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="25sp"
+                    android:paddingEnd="13sp"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:textColor="@color/dark"
+                    android:focusableInTouchMode="true"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/txt_offer"
+                    android:maxLength="100"
+                    android:maxLines="5"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_offer"
+                style="@style/MaterialOutlinedInputField"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:layout_gravity="center"
+                app:helperText="Offer amount can attract more clients"
+                android:textColorHint="@color/grey"
+                android:hint="Offer amount">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="25sp"
+                    android:paddingEnd="13sp"
+                    android:inputType="number|numberDecimal"
+                    android:maxLines="1"
+                    android:textColor="@color/dark"
+                    android:focusableInTouchMode="true"
+                    android:maxLength="9"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_date"
+                style="@style/MaterialOutlinedInputField"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:layout_gravity="center"
+                android:textColorHint="@color/grey"
+                android:hint="Promotion date range">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="25sp"
+                    android:paddingEnd="13sp"
+                    android:inputType="date"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark"
+                    android:focusableInTouchMode="true"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="116dp"
+                android:layout_height="46dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/button2_shape"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

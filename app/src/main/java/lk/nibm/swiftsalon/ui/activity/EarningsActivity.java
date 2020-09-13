@@ -367,9 +367,13 @@ public class EarningsActivity extends AppCompatActivity {
     private void setDataValue(List<StylistEarning> stylistEarnings) {
 
         pieEntries = new ArrayList<>();
+        int i = 0;
         for(StylistEarning stylistEarning : stylistEarnings) {
-            if(stylistEarning.getStylistEarning() > 0)
+            if(stylistEarning.getStylistEarning() > 0) {
                 pieEntries.add(new PieEntry(stylistEarning.getStylistEarning(), stylistEarning.getStylistName()));
+                if(++i == 14)
+                    break;
+            }
         }
 
         dataSet.setValues(pieEntries);

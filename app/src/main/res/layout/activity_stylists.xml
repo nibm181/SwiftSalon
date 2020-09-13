@@ -73,21 +73,13 @@
     </com.facebook.shimmer.ShimmerFrameLayout>
     <!-- /loading shimmer layout -->
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_stylists"
         android:layout_marginTop="55dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        >
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_stylists"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            />
-
-    </ScrollView>
+        android:visibility="gone"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add"

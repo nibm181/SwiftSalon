@@ -33,8 +33,8 @@ public interface SwiftSalonDao {
     @Update
     void updateAppointment(Appointment appointment);
 
-    @Query("UPDATE tbl_appointment SET status = :status, modified_on = :modifiedOn WHERE id = :id")
-    void updateAppointmentStatus(int id, String status, String modifiedOn);
+    @Query("UPDATE tbl_appointment SET status = :status, customer_first_name = :customerFirstName, customer_last_name = :customerLastName, customer_image = :customerImage, modified_on = :modifiedOn WHERE id = :id")
+    void updateAppointmentStatus(int id, String status, String customerFirstName, String customerLastName, String customerImage, String modifiedOn);
 
     @Query("SELECT * FROM tbl_appointment WHERE id = :id")
     LiveData<Appointment> getAppointment(int id);

@@ -22,8 +22,8 @@ public class NotificationHelper {
 
     public static void showNotification(Context context, Appointment appointment) {
 
-        String title = "";
-        String body = "";
+        String title = "Swift Salon";
+        String body = "You have a notification. Tap to check it out";
 
         if(appointment.getStatus().equals(STATUS_PENDING)) {
             title = "New appointment";

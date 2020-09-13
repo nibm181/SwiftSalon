@@ -86,6 +86,9 @@ public class AppointmentRepository {
                             swiftSalonDao.updateAppointmentStatus(
                                     appointments[index].getId(),
                                     appointments[index].getStatus(),
+                                    appointments[index].getCustomerFirstName(),
+                                    appointments[index].getCustomerLastName(),
+                                    appointments[index].getCustomerImage(),
                                     appointments[index].getModifiedOn());
                         }
                         index++;
@@ -129,6 +132,9 @@ public class AppointmentRepository {
                             swiftSalonDao.updateAppointmentStatus(
                                     appointments[index].getId(),
                                     appointments[index].getStatus(),
+                                    appointments[index].getCustomerFirstName(),
+                                    appointments[index].getCustomerLastName(),
+                                    appointments[index].getCustomerImage(),
                                     appointments[index].getModifiedOn());
                         }
                         index++;
@@ -171,6 +177,9 @@ public class AppointmentRepository {
                             swiftSalonDao.updateAppointmentStatus(
                                     appointments[index].getId(),
                                     appointments[index].getStatus(),
+                                    appointments[index].getCustomerFirstName(),
+                                    appointments[index].getCustomerLastName(),
+                                    appointments[index].getCustomerImage(),
                                     appointments[index].getModifiedOn());
                         }
                         index++;
@@ -214,6 +223,9 @@ public class AppointmentRepository {
                             swiftSalonDao.updateAppointmentStatus(
                                     appointments[index].getId(),
                                     appointments[index].getStatus(),
+                                    appointments[index].getCustomerFirstName(),
+                                    appointments[index].getCustomerLastName(),
+                                    appointments[index].getCustomerImage(),
                                     appointments[index].getModifiedOn());
                         }
                         index++;

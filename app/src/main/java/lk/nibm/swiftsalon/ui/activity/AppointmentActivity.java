@@ -1,8 +1,10 @@
 package lk.nibm.swiftsalon.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +54,7 @@ public class AppointmentActivity extends AppCompatActivity {
     private TextView txtTitle, txtDateTime, txtStatus, txtCustomer, txtStylist, txtEmpty, txtTotal;
     private ImageView imgCustomer;
     private RecyclerView rvAppointmentDetails;
-    private ImageButton btnBack;
+    private ImageButton btnBack, btnPhone;
     private RelativeLayout btnAccept, btnCancel;
     private TextView txtAccept, txtCancel;
     private ProgressBar prgAccept, prgCancel;
@@ -91,6 +93,7 @@ public class AppointmentActivity extends AppCompatActivity {
         layoutTotal = findViewById(R.id.layout_total);
         layoutButtons = findViewById(R.id.layout_buttons);
         shimmerJobs = findViewById(R.id.shimmer_jobs);
+        btnPhone = findViewById(R.id.btn_phone);
 
         viewModel = new ViewModelProvider(this).get(AppointmentViewModel.class);
         dialog = new CustomDialog(AppointmentActivity.this);
@@ -153,6 +156,10 @@ public class AppointmentActivity extends AppCompatActivity {
                         .load(appointment.getCustomerImage())
                         .apply(RequestOptions.circleCropTransform())
                         .into(imgCustomer);
+
+                if(appointment.getCustomerMobile() != null) {
+                    showPhone(appointment.getCustomerMobile());
+                }
             }
         }
     }
@@ -419,6 +426,20 @@ public class AppointmentActivity extends AppCompatActivity {
     private void showCompleteButton() {
         txtAccept.setVisibility(View.VISIBLE);
         prgAccept.setVisibility(View.GONE);
+    }
+
+    private void showPhone(String mobileNo) {
+        btnPhone.setVisibility(View.VISIBLE);
+        btnPhone.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + mobileNo));
+                startActivity(intent);
+            }
+            catch (Exception e) {
+                dialog.showToast("Can not make phone call");
+            }
+        });
     }
 
     private void appointmentDetailsApi() {
